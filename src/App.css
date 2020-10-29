@@ -1,0 +1,45 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+:root{
+ --admin-first-color:rgb(36, 59, 85);
+ --admin-second-color: rgb(36, 80, 107);
+ --button-confirm:#ff0000;
+ --buton-admin-confirm: #ffffff;
+ --primary-background:linear-gradient(to right, #e76b45, #eea849,#e76b45);
+ --card-meal-color-body:linear-gradient(to bottom, #283048, #859398);
+ --card-meal-color-text: #ffffff;
+}
+
+
+
+.btn_group{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu_grid{
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat( auto-fill, minmax(335px, 3fr) );
+    grid-gap: 20px;
+
+}
+.admin_card{
+    height: 310px;
+    color:#ffffff;
+    border: none;
+    margin-top: 10px;
+    background: transparent;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    transition: box-shadow 300ms ease-in-out;
+    cursor: pointer;
+}
+.admin_card:hover {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+
