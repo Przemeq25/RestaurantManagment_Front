@@ -9,6 +9,7 @@ import Orders from "./pages/Admin/Orders";
 import Workers from "./pages/Admin/Workers";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
+import PersonalData from "./pages/Auth/PersonalData";
 
 
 const App =()=>{
@@ -17,6 +18,7 @@ const App =()=>{
             <Route exact path="/" component={Home}/>
             <Route exact path="/login" component={Login}/>
             <Route exact path="/register" component={Register}/>
+            <Route exact path="/:login/personal-data" component={PersonalData}/>
             <AdminPanelPage>
                 <Route path="/admin" exact render={(props)=>(
                     <Dashboard {...props}/>

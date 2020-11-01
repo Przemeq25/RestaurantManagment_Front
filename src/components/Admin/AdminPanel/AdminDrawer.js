@@ -8,8 +8,8 @@ import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import PeopleIcon from '@material-ui/icons/People';
 import {makeStyles} from "@material-ui/core/styles";
-import {Desktop, Mobile} from "../../../_helpers";
-import appLogo from "../../../_helpers";
+import {Desktop, Mobile} from "../../../helpers/_helpers";
+import appLogo from "../../../helpers/_helpers";
 
 
 
@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
 
     },
     drawerOpen: {
-        minWidth: drawerWidth,
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
@@ -48,12 +47,6 @@ const useStyles = makeStyles((theme) => ({
         }),
         overflowX: 'hidden',
         width: theme.spacing(11) ,
-    },
-    drawerPaper: {
-        width: drawerWidth,
-    },
-    drawerContainer: {
-        overflow: 'auto',
     },
     toolbar:theme.mixins.toolbar,
     logo:{

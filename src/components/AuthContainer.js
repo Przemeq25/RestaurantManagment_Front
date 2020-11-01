@@ -1,5 +1,5 @@
 import React from 'react';
-import {Typography, Box, Paper, TextField, Button} from '@material-ui/core';
+import {Typography, Box, Paper } from '@material-ui/core';
 import {makeStyles,useTheme} from "@material-ui/core/styles";
 import authImage from '../images/cheeseburger-34314_1280.png';
 import Hidden from "@material-ui/core/Hidden";
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme=>({
     }
 }));
 
-const AuthContainer = ({title, children, error, personalData}) =>{
+const AuthContainer = ({title, children, personalData}) =>{
     const classes = useStyles();
     const theme = useTheme();
     const history = useHistory();
@@ -59,11 +59,6 @@ const AuthContainer = ({title, children, error, personalData}) =>{
                                 <Paper elevation={2}>
                                     <Box display = "flex" alignItems = "center" justifyContent = "center" p = {4} flexDirection = "column">
                                         <Typography variant = "h2" className ={classes.logoText} paragraph> {title} </Typography>
-                                        {error &&
-                                            <Box mt = {1} mb = {1}>
-                                                <Typography variant="subtitle2" color="error">{error}</Typography>
-                                            </Box>
-                                        }
                                         {children}
                                     </Box>
                                 </Paper>

@@ -3,12 +3,13 @@ import AuthContainer from "../../components/AuthContainer";
 import {Box, Button, TextField, Typography,RadioGroup,FormControlLabel,Radio} from "@material-ui/core";
 import ProgressButton from "../../components/ProgressButton";
 import {Formik} from "formik";
+import {register} from "../../services/auth.service";
 
 const Register =({history})=>{
     return(
         <AuthContainer title = "Zarejestruj się" error="">
             <Formik
-                initialValues={{ login: '', email:'',password: '', confirmPassword:'',userType:'client' }}
+                initialValues={{ login: '', email:'',password: '', confirmPassword:'',userType:'CLIENT' }}
                 validate={(values) => {
                     const errors = {};
                     if (!values.login) {
@@ -32,11 +33,17 @@ const Register =({history})=>{
                     }
                     return errors;
                 }}
-                onSubmit={(values, { setSubmitting }) => {
+                onSubmit={(values, { setSubmitting,setErrors }) => {
                     setTimeout(() => {
-                        alert(JSON.stringify(values, null, 2));
-                        setSubmitting(false);
-                    }, 400);
+                        register(values.email, values.login, values.password, values.userType)
+                            .then(()=> {
+                                   history.push(`${values.login}/personal-data`);
+                            }).catch(()=>{
+                                setErrors({responseError:"Takie dane są już zajęte"})
+                                setSubmitting(false);
+                            })
+
+                    }, 200);
                 }}
             >
                 {({
@@ -48,72 +55,78 @@ const Register =({history})=>{
                       handleSubmit,
                       isSubmitting,
                   }) => (
+                    <>
+                        {errors.responseError &&
+                            <Box mt={1} mb={1}>
+                                <Typography variant="subtitle2" color="error">{errors.responseError}</Typography>
+                            </Box>
+                        }
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                label = "Login"
+                                margin="dense"
+                                fullWidth
+                                error = { errors.login && touched.login ? true : false }
+                                helperText={touched.login && errors.login}
+                                value={values.login}
+                                onChange = {handleChange}
+                                onBlur={handleBlur}
+                                name="login"
+                            />
+                            <TextField
+                                label = "Email"
+                                margin="dense"
+                                fullWidth
+                                error = { errors.email && touched.email ? true : false }
+                                helperText={touched.email && errors.email}
+                                value={values.email}
+                                onChange = {handleChange}
+                                onBlur={handleBlur}
+                                name="email"
+                            />
+                            <TextField
+                                label = "Hasło"
+                                margin="dense"
+                                fullWidth
+                                error = { errors.password && touched.password ? true : false }
+                                helperText={touched.password && errors.password}
+                                value={values.password}
+                                onChange = {handleChange}
+                                onBlur={handleBlur}
+                                name="password"
+                                type="password"
+                            />
+                            <TextField
+                                label = "Potwierdź hasło"
+                                margin="dense"
+                                fullWidth
+                                error = { errors.confirmPassword && touched.confirmPassword ? true : false }
+                                helperText={touched.confirmPassword && errors.confirmPassword}
+                                value={values.confirmPassword}
+                                onChange = {handleChange}
+                                onBlur={handleBlur}
+                                name="confirmPassword"
+                                type="password"
+                            />
+                            <Box mt={1}>
+                                <RadioGroup row value={values.userType} onChange={handleChange} name="userType">
+                                    <FormControlLabel value="CLIENT" control={<Radio />} label="Klient" />
+                                    <FormControlLabel value="WORKER" control={<Radio />} label="Pracownik" />
+                                    <FormControlLabel value="OWNER" control={<Radio />} label="Właściciel" />
+                                </RadioGroup>
+                            </Box>
 
-                    <form onSubmit={handleSubmit}>
-                        <TextField
-                            label = "Login"
-                            margin="dense"
-                            fullWidth
-                            error = { errors.login && touched.login ? true : false }
-                            helperText={touched.login && errors.login}
-                            value={values.login}
-                            onChange = {handleChange}
-                            onBlur={handleBlur}
-                            name="login"
-                        />
-                        <TextField
-                            label = "Email"
-                            margin="dense"
-                            fullWidth
-                            error = { errors.email && touched.email ? true : false }
-                            helperText={touched.email && errors.email}
-                            value={values.email}
-                            onChange = {handleChange}
-                            onBlur={handleBlur}
-                            name="email"
-                        />
-                        <TextField
-                            label = "Hasło"
-                            margin="dense"
-                            fullWidth
-                            error = { errors.password && touched.password ? true : false }
-                            helperText={touched.password && errors.password}
-                            value={values.password}
-                            onChange = {handleChange}
-                            onBlur={handleBlur}
-                            name="password"
-                            type="password"
-                        />
-                        <TextField
-                            label = "Potwierdź hasło"
-                            margin="dense"
-                            fullWidth
-                            error = { errors.confirmPassword && touched.confirmPassword ? true : false }
-                            helperText={touched.confirmPassword && errors.confirmPassword}
-                            value={values.confirmPassword}
-                            onChange = {handleChange}
-                            onBlur={handleBlur}
-                            name="confirmPassword"
-                            type="password"
-                        />
-                        <Box mt={1}>
-                            <RadioGroup row value={values.userType} onChange={handleChange} name="userType">
-                                <FormControlLabel value="client" control={<Radio />} label="Klient" />
-                                <FormControlLabel value="worker" control={<Radio />} label="Pracownik" />
-                                <FormControlLabel value="owner" control={<Radio />} label="Właściciel" />
-                            </RadioGroup>
-                        </Box>
-
-                        <Box mt={3} mb={1} width="100%">
-                           <ProgressButton label = "Zarejestruj się" loading={isSubmitting}/>
-                        </Box>
-                        <Box display = "flex" alignItems="center" justifyContent="center">
-                            <Typography variant = "subtitle2">Masz już konto? </Typography>
-                            <Button variant = "text" color="secondary" onClick = {()=>history.push('/login')}>
-                                <Typography variant = "subtitle2" color="secondary">Zaloguj sie!</Typography>
-                            </Button>
-                        </Box>
-                    </form>
+                            <Box mt={3} mb={1} width="100%">
+                               <ProgressButton label = "Zarejestruj się" loading={isSubmitting}/>
+                            </Box>
+                            <Box display = "flex" alignItems="center" justifyContent="center">
+                                <Typography variant = "subtitle2">Masz już konto? </Typography>
+                                <Button variant = "text" color="secondary" onClick = {()=>history.push('/login')}>
+                                    <Typography variant = "subtitle2" color="secondary">Zaloguj się!</Typography>
+                                </Button>
+                            </Box>
+                        </form>
+                    </>
                     )}
             </Formik>
         </AuthContainer>

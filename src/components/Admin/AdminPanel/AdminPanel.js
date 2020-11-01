@@ -9,7 +9,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import {AccountCircle} from "@material-ui/icons";
-import appLogo from "../../../_helpers";
+import appLogo from "../../../helpers/_helpers";
 import {Link} from "react-router-dom";
 import AdminDrawer from "./AdminDrawer";
 

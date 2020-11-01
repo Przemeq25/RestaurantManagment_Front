@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Typography,Card,CardActionArea,CardContent,CardMedia, Grid, Fab} from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
-import appLogo from '../../_helpers';
+import appLogo from '../../helpers/_helpers';
 import AddRestaurantStepper from "../../components/Admin/AddRestaurant/AddRestaurantStepper";
 const useStyles = makeStyles(theme=>({
     fab: {
