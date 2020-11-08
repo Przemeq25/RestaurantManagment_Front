@@ -12,11 +12,9 @@ import store from "./redux/store";
 
 ReactDOM.render(
     <Provider store={store}>
-        <Router>
             <ThemeProvider theme={theme}>
                 <App/>
             </ThemeProvider>
-        </Router>
     </Provider>,
     document.getElementById('root'));
 serviceWorker.unregister();

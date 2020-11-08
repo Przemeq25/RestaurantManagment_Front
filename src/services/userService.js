@@ -2,7 +2,7 @@ import axios from 'axios';
 import {appUrl} from "../config/app.config";
 
 
-export const login = (login, password) =>{
+const login = (login, password) =>{
     return axios.post(`${appUrl}/user-api/login`,{},{
         params:{
             "grant_type": "password",
@@ -16,15 +16,15 @@ export const login = (login, password) =>{
             }
     })
 }
-export const register = (email,login,password,role) =>{
+const register = (email,login,password,role) =>{
     return axios.post(`${appUrl}/user-api/register`,{
         email,
-        login,
         password,
+        login,
         role
     })
 }
-export const postPersonalData = (personalData,login) =>{
+const postPersonalData = (personalData,login) =>{
     const {forename,surname,city,street,postCode,houseNumber,phoneNumber} = personalData;
     return axios.post(`${appUrl}/${login}/personal-data`,{
         forename,
@@ -36,3 +36,8 @@ export const postPersonalData = (personalData,login) =>{
         phoneNumber,
     })
 }
+export const userService = {
+    login,
+    register,
+    postPersonalData,
+};

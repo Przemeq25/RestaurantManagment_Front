@@ -3,9 +3,14 @@ import AuthContainer from "../../components/AuthContainer";
 import {Box, Button, TextField, Typography,RadioGroup,FormControlLabel,Radio} from "@material-ui/core";
 import ProgressButton from "../../components/ProgressButton";
 import {Formik} from "formik";
-import {register} from "../../services/auth.service";
+import {history} from "../../helpers/_helpers";
+import {register} from "../../redux/actions/register";
+import {useDispatch, useSelector} from "react-redux";
 
-const Register =({history})=>{
+const Register =()=>{
+    const dispatch = useDispatch();
+    const error = useSelector(state => state.register.error);
+    const isLoading = useSelector(state =>state.register.isRequesting);
     return(
         <AuthContainer title = "Zarejestruj się" error="">
             <Formik
@@ -33,17 +38,8 @@ const Register =({history})=>{
                     }
                     return errors;
                 }}
-                onSubmit={(values, { setSubmitting,setErrors }) => {
-                    setTimeout(() => {
-                        register(values.email, values.login, values.password, values.userType)
-                            .then(()=> {
-                                   history.push(`${values.login}/personal-data`);
-                            }).catch(()=>{
-                                setErrors({responseError:"Takie dane są już zajęte"})
-                                setSubmitting(false);
-                            })
-
-                    }, 200);
+                onSubmit={(values) => {
+                    dispatch(register(values.email,values.login,values.password, values.userType));
                 }}
             >
                 {({
@@ -53,12 +49,11 @@ const Register =({history})=>{
                       handleChange,
                       handleBlur,
                       handleSubmit,
-                      isSubmitting,
                   }) => (
                     <>
-                        {errors.responseError &&
+                        {error &&
                             <Box mt={1} mb={1}>
-                                <Typography variant="subtitle2" color="error">{errors.responseError}</Typography>
+                                <Typography variant="subtitle2" color="error">{error}</Typography>
                             </Box>
                         }
                         <form onSubmit={handleSubmit}>
@@ -117,7 +112,7 @@ const Register =({history})=>{
                             </Box>
 
                             <Box mt={3} mb={1} width="100%">
-                               <ProgressButton label = "Zarejestruj się" loading={isSubmitting}/>
+                               <ProgressButton label = "Zarejestruj się" loading={isLoading}/>
                             </Box>
                             <Box display = "flex" alignItems="center" justifyContent="center">
                                 <Typography variant = "subtitle2">Masz już konto? </Typography>

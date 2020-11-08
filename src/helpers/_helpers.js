@@ -1,5 +1,8 @@
 import logo from "../images/logo2.png";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { createBrowserHistory } from 'history';
+
+export const history = createBrowserHistory();
 
 export default logo;
 

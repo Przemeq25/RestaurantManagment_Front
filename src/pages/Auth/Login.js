@@ -3,10 +3,15 @@ import AuthContainer from "../../components/AuthContainer";
 import {Box, Button, TextField, Typography} from "@material-ui/core";
 import ProgressButton from "../../components/ProgressButton";
 import {Formik} from "formik";
-import {login} from '../../services/auth.service';
+import {useDispatch,useSelector} from "react-redux";
+import {login} from "../../redux/actions/auth";
+import {history} from "../../helpers/_helpers";
 
 
-const Login =({history})=>{
+const Login =()=>{
+    const dispatch = useDispatch();
+    const error = useSelector(state => state.auth.error);
+    const isLoading = useSelector(state =>state.auth.isLoading);
     return(
         <AuthContainer title = "Zaloguj się" >
             <Formik
@@ -21,16 +26,9 @@ const Login =({history})=>{
                     }
                     return errors;
                 }}
-                onSubmit={(values, { setSubmitting,setErrors }) => {
+                onSubmit={(values) => {
                     setTimeout(()=>{
-                        login(values.login,values.password)
-                            .then((response)=>{
-                                history.push('/');
-                            })
-                            .catch(()=>{
-                                setErrors( {response:"Podane login lub hasło są niepoprawne" });
-                                setSubmitting(false);
-                            });
+                        dispatch(login(values.login,values.password));
                     },200)
                 }}
             >
@@ -41,12 +39,11 @@ const Login =({history})=>{
                       handleChange,
                       handleBlur,
                       handleSubmit,
-                      isSubmitting,
                   }) => (
                     <>
-                        {errors.responseError &&
+                        {error &&
                             <Box mt={1} mb={1}>
-                            <Typography variant="subtitle2" color="error">{errors.responseError}</Typography>
+                            <Typography variant="subtitle2" color="error">{error}</Typography>
                             </Box>
                         }
                         <form onSubmit={handleSubmit}>
@@ -74,7 +71,7 @@ const Login =({history})=>{
                                 type="password"
                             />
                             <Box mt={3} mb={1} width="100%">
-                                <ProgressButton label = "Zaloguj się" loading={isSubmitting} />
+                                <ProgressButton label = "Zaloguj się" loading={isLoading} />
                             </Box>
                             <Box display = "flex" justifyContent="center" alignItems = "center">
                                 <Typography variant = "subtitle2">Nie masz konta? </Typography>
