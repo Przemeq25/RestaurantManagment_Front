@@ -36,8 +36,16 @@ const postPersonalData = (personalData,login) =>{
         phoneNumber,
     })
 }
+const getUserData = (access_token) =>{
+    return axios.get(`${appUrl}/resource-api/me`,{
+        headers:{
+            Authorization:`bearer ${access_token}`
+        }
+    })
+}
 export const userService = {
     login,
     register,
     postPersonalData,
+    getUserData
 };

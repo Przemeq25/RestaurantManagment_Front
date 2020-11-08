@@ -1,6 +1,7 @@
 import {userService} from "../../services/userService";
 import {registerConstants} from "../types";
 import {history} from "../../helpers/_helpers";
+import {routes} from "../../config/routes";
 
 export const register = (email,login,password,role) =>{
     return dispatch =>{
@@ -8,13 +9,13 @@ export const register = (email,login,password,role) =>{
         userService.register(email,login,password,role)
             .then(()=>{
                 dispatch(success());
-                history.push('/login')
+                history.push(routes.LOGIN)
             })
             .catch(errorMessage=>{
-                if(errorMessage.response.status === 409){
+                if(errorMessage.response && errorMessage.response.status === 409){
                     dispatch(error("Taki login lub email jest już zajęty"));
                 }
-                else if(errorMessage.response.status === 401){
+                else if(errorMessage.response && errorMessage.response.status === 401){
                     dispatch(error("Wpisz poprawne dane"));
                 }else{
                     dispatch(error("Brak połączenia z serwerem, spróbuj jeszcze raz"));

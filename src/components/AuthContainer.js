@@ -3,7 +3,7 @@ import {Typography, Box, Paper,Container } from '@material-ui/core';
 import {makeStyles,useTheme} from "@material-ui/core/styles";
 import authImage from '../images/cheeseburger-34314_1280.png';
 import Hidden from "@material-ui/core/Hidden";
-import {useHistory} from "react-router-dom";
+import AppLogo from "./AppLogo";
 
 const useStyles = makeStyles(theme=>({
     authBackground:{
@@ -26,7 +26,6 @@ const useStyles = makeStyles(theme=>({
 const AuthContainer = ({title, children}) =>{
     const classes = useStyles();
     const theme = useTheme();
-    const history = useHistory();
 
     return(
         <>
@@ -39,10 +38,7 @@ const AuthContainer = ({title, children}) =>{
                 </div>
                 <Container fixed>
                     <Box height="calc(100vh - 150px)">
-                        <Box  mb={4} mt = {6} style={{cursor:'pointer'}} onClick={()=>history.push('/')}>
-                            <Typography variant = "h2" className ={classes.logoText}>management</Typography>
-                            <Typography variant = "h2" className ={classes.logoText}>restaurant.</Typography>
-                        </Box>
+                       <AppLogo size={28} marginBottom={4} marginTop={6}/>
                         <Box display = "flex" height="100%">
                             <Box width="40%" display="flex" alignItems = "center" justifyContent = "center">
                                 <img src={authImage} alt="login"/>

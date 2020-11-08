@@ -6,7 +6,7 @@ const initialState = {
     token:null,
     isLoading: false,
     error: null,
-    user:{},
+    userType:null,
 };
 export const authReducer = (state = initialState, action) =>{
     switch(action.type){
@@ -20,7 +20,7 @@ export const authReducer = (state = initialState, action) =>{
             return {
                 ...state,
                 isLoggedIn: true,
-                token:action.payload.token,
+                token:action.payload,
                 isLoading: false,
                 error: null,
 

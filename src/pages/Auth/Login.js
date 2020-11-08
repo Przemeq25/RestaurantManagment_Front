@@ -6,6 +6,7 @@ import {Formik} from "formik";
 import {useDispatch,useSelector} from "react-redux";
 import {login} from "../../redux/actions/auth";
 import {history} from "../../helpers/_helpers";
+import {routes} from "../../config/routes";
 
 
 const Login =()=>{
@@ -75,7 +76,7 @@ const Login =()=>{
                             </Box>
                             <Box display = "flex" justifyContent="center" alignItems = "center">
                                 <Typography variant = "subtitle2">Nie masz konta? </Typography>
-                                <Button variant = "text" color="secondary" onClick = {()=>history.push('/register')}>
+                                <Button variant = "text" color="secondary" onClick = {()=>history.push(routes.REGISTER)}>
                                     <Typography variant = "subtitle2" color="secondary">Zarejestruj się!</Typography>
                                 </Button>
                             </Box>

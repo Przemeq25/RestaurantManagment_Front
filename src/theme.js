@@ -11,7 +11,7 @@ const theme = createMuiTheme({
             contrastText:"#fff"
         },
         text:{
-            primary:'#000',
+            primary:'#243b55',
             secondary:'#3b3b3b',
             disabled:'#6C6C6C'
         },
@@ -36,10 +36,10 @@ const theme = createMuiTheme({
             },
         },
         h5:{
-            fontSize:'1rem',
-            color:'var(--admin-first-color)',
+            fontSize:'0.9rem',
+            fontWeight:400,
             '@media (max-width:960px)': {
-                fontSize: '0.9rem',
+                fontSize: '1rem',
             },
         },
         subtitle2:{

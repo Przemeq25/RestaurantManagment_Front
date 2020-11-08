@@ -6,6 +6,7 @@ import {Formik} from "formik";
 import {history} from "../../helpers/_helpers";
 import {register} from "../../redux/actions/register";
 import {useDispatch, useSelector} from "react-redux";
+import {routes} from "../../config/routes";
 
 const Register =()=>{
     const dispatch = useDispatch();
@@ -116,7 +117,7 @@ const Register =()=>{
                             </Box>
                             <Box display = "flex" alignItems="center" justifyContent="center">
                                 <Typography variant = "subtitle2">Masz już konto? </Typography>
-                                <Button variant = "text" color="secondary" onClick = {()=>history.push('/login')}>
+                                <Button variant = "text" color="secondary" onClick = {()=>history.push(routes.LOGIN)}>
                                     <Typography variant = "subtitle2" color="secondary">Zaloguj się!</Typography>
                                 </Button>
                             </Box>
