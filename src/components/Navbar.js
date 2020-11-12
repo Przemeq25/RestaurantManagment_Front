@@ -42,8 +42,7 @@ const useStyles = makeStyles(theme=>({
         minWidth:'35px'
     },
     selectedItem:{
-        backgroundColor: theme.palette.action.selected,
-        color:theme.palette.secondary.dark,
+        color:theme.palette.primary.main,
 
     },
     menuItem:{
@@ -74,7 +73,6 @@ const Navbar = () =>{
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
     const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
-    const userType = useSelector(state=>state.auth.userType)
     const dispatch = useDispatch();
 
 
@@ -107,7 +105,13 @@ const Navbar = () =>{
                     >
                         <AccountCircle />
                     </IconButton>
-                    <Popper open={open} anchorEl={anchorRef.current}  placement="bottom-end" transition disablePortal>
+                    <Popper
+                        open={open}
+                        anchorEl={anchorRef.current}
+                        placement="bottom-end"
+                        transition
+                        disablePortal
+                    >
                         {({ TransitionProps }) => (
                             <Grow
                                 {...TransitionProps}
@@ -140,22 +144,18 @@ const Navbar = () =>{
                                                 </ListItemIcon>
                                                 <Typography variant="h5" color = "inherit">Zamówienia</Typography>
                                             </MenuItem>
-                                            {
-                                                isLoggedIn && (userType === "OWNER" || userType === "WORKER") ? (
-                                                    <MenuItem
-                                                        onClick={handleClose}
-                                                        component={NavLink}
-                                                        to={routes.ADMIN_PANEL}
-                                                        activeClassName={classes.selectedItem}
-                                                        className={classes.menuItem}
-                                                    >
-                                                        <ListItemIcon className={classes.menuIcon}>
-                                                            <RestaurantIcon fontSize="small" />
-                                                        </ListItemIcon>
-                                                        <Typography variant="h5" color = "inherit">Admin panel</Typography>
-                                                    </MenuItem>
-                                                ):null
-                                            }
+                                            <MenuItem
+                                                onClick={handleClose}
+                                                component={NavLink}
+                                                to={routes.ADMIN_PANEL}
+                                                activeClassName={classes.selectedItem}
+                                                className={classes.menuItem}
+                                            >
+                                                <ListItemIcon className={classes.menuIcon}>
+                                                    <RestaurantIcon fontSize="small" />
+                                                </ListItemIcon>
+                                                <Typography variant="h5" color = "inherit">Panel zarządzania</Typography>
+                                            </MenuItem>
                                             <Divider/>
                                             {
                                                 isLoggedIn ? (

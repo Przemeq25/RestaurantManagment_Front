@@ -3,6 +3,7 @@ export const authConstants = {
     LOGIN_SUCCESS : "LOGIN_SUCCESS",
     LOGIN_ERROR: "LOGIN_ERROR",
     LOGOUT: "LOGOUT",
+    AUTHORIZATION:"AUTHORIZATION"
 }
 export const registerConstants = {
     REGISTER_REQUEST: "REGISTER_REQUEST",

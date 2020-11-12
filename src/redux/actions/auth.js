@@ -42,6 +42,16 @@ export const logout = () =>{
 export const checkIsLoggedIn =()=>{
     return dispatch =>{
         localStorage.getItem('access_token') &&  dispatch(isLoggedIn( localStorage.getItem('access_token')))
-    }
+    };
     function isLoggedIn(authData){return {type:authConstants.LOGIN_SUCCESS, payload:authData}};
+}
+export const authorization = (access_token) =>{
+    return dispatch =>{
+        userService.getUserData(access_token)
+            .then(response=>{
+                console.log(response.data)
+                dispatch(getUserType(response.data))})
+            .catch(()=>history.push(routes.LOGIN))
+    }
+    function getUserType(user){ return {type:authConstants.AUTHORIZATION, payload:{role: user.authorities[0], user:user.principal }}}
 }

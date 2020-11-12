@@ -1,6 +1,6 @@
 import React from "react";
 import AuthContainer from "../../components/AuthContainer";
-import {Box, Button, TextField, Typography,RadioGroup,FormControlLabel,Radio} from "@material-ui/core";
+import {Box, Button, TextField, Typography} from "@material-ui/core";
 import ProgressButton from "../../components/ProgressButton";
 import {Formik} from "formik";
 import {history} from "../../helpers/_helpers";
@@ -15,7 +15,7 @@ const Register =()=>{
     return(
         <AuthContainer title = "Zarejestruj się" error="">
             <Formik
-                initialValues={{ login: '', email:'',password: '', confirmPassword:'',userType:'CLIENT' }}
+                initialValues={{ login: '', email:'',password: '', confirmPassword:'' }}
                 validate={(values) => {
                     const errors = {};
                     if (!values.login) {
@@ -40,7 +40,7 @@ const Register =()=>{
                     return errors;
                 }}
                 onSubmit={(values) => {
-                    dispatch(register(values.email,values.login,values.password, values.userType));
+                    dispatch(register(values.email,values.login,values.password));
                 }}
             >
                 {({
@@ -104,13 +104,6 @@ const Register =()=>{
                                 name="confirmPassword"
                                 type="password"
                             />
-                            <Box mt={1}>
-                                <RadioGroup row value={values.userType} onChange={handleChange} name="userType">
-                                    <FormControlLabel value="CLIENT" control={<Radio />} label="Klient" />
-                                    <FormControlLabel value="WORKER" control={<Radio />} label="Pracownik" />
-                                    <FormControlLabel value="OWNER" control={<Radio />} label="Właściciel" />
-                                </RadioGroup>
-                            </Box>
 
                             <Box mt={3} mb={1} width="100%">
                                <ProgressButton label = "Zarejestruj się" loading={isLoading}/>

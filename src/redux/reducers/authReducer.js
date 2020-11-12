@@ -7,6 +7,7 @@ const initialState = {
     isLoading: false,
     error: null,
     userType:null,
+    userData:{},
 };
 export const authReducer = (state = initialState, action) =>{
     switch(action.type){
@@ -40,7 +41,12 @@ export const authReducer = (state = initialState, action) =>{
                 isLoading: false,
                 error: null,
             };
-
+        case authConstants.AUTHORIZATION:
+            return {
+                ...state,
+                userType: action.payload.role,
+                userData: action.payload.user
+            }
         default:
             return {...state};
 

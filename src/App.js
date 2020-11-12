@@ -10,19 +10,15 @@ import Workers from "./pages/Admin/Workers";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import {history} from "./helpers/_helpers";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {checkIsLoggedIn} from "./redux/actions/auth";
-import {userService} from "./services/userService";
 
 
 const App =()=>{
     const dispatch = useDispatch();
-    const token = useSelector(state=>state.auth.token)
-
     useEffect(()=>{
         dispatch(checkIsLoggedIn());
-        token && userService.getUserData(token).then(res=>console.log(res)).catch(err=>console.log(err));
-    },[token])
+    },[])
     return (
         <Router history = {history}>
             <Switch>

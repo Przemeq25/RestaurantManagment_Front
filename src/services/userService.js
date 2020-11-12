@@ -16,12 +16,11 @@ const login = (login, password) =>{
             }
     })
 }
-const register = (email,login,password,role) =>{
+const register = (email,login,password) =>{
     return axios.post(`${appUrl}/user-api/register`,{
         email,
         password,
         login,
-        role
     })
 }
 const postPersonalData = (personalData,login) =>{

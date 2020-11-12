@@ -13,6 +13,7 @@
     "clsx": "^1.1.1",
     "formik": "^2.2.1",
     "history": "^4.10.1",
+    "prop-types": "latest",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-redux": "^7.2.1",
@@ -22,7 +23,7 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "rxjs": "^6.5.5",
-    "prop-types": "latest"
+    "yup": "^0.29.3"
   },
   "scripts": {
     "start": "react-scripts start",

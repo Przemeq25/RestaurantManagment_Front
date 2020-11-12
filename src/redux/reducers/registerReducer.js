@@ -4,9 +4,6 @@ const initialState = {
     isRequesting:false,
     registerSuccess:false,
     error:null,
-
-
-
 }
 
 export const registerReducer = (state = initialState,action) =>{

@@ -3,10 +3,10 @@ import {registerConstants} from "../types";
 import {history} from "../../helpers/_helpers";
 import {routes} from "../../config/routes";
 
-export const register = (email,login,password,role) =>{
+export const register = (email,login,password) =>{
     return dispatch =>{
         dispatch(request());
-        userService.register(email,login,password,role)
+        userService.register(email,login,password)
             .then(()=>{
                 dispatch(success());
                 history.push(routes.LOGIN)
