@@ -10,14 +10,16 @@ import {
     TextField
 } from "@material-ui/core";
 import {useFormikContext} from "formik";
-import {makeStyles} from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
-}));
 
 const RestaurantOpeningHours = ()=>{
-    const classes = useStyles();
-    const {values,handleSubmit, handleChange,errors,handleBlur,touched,setFieldValue } = useFormikContext();
+    const {values,handleChange,setFieldValue } = useFormikContext();
+
+
+    const handleClear = (nameFrom,nameTo) =>{
+        setFieldValue(nameFrom,"");
+        setFieldValue(nameTo,"");
+    }
     return(
         <Box  p={2}>
             <TableContainer >
@@ -31,216 +33,50 @@ const RestaurantOpeningHours = ()=>{
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow>
-                            <TableCell>Poniedziałek</TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="time"
-                                    defaultValue="07:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="time"
-                                    defaultValue="20:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell align="right">
-                                <Button color="primary" variant="outlined">Zamknięte</Button>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Wtorek</TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="time"
-                                    defaultValue="07:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="time"
-                                    defaultValue="20:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell align="right">
-                                <Button color="primary" variant="outlined">Zamknięte</Button>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Środa</TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="time"
-                                    defaultValue="07:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="time"
-                                    defaultValue="20:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell align="right">
-                                <Button color="primary" variant="outlined">Zamknięte</Button>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Czwartek</TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="time"
-                                    defaultValue="07:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="time"
-                                    defaultValue="20:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell align="right">
-                                <Button color="primary" variant="outlined">Zamknięte</Button>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Piątek</TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="time"
-                                    defaultValue="07:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="time"
-                                    defaultValue="20:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell align="right">
-                                <Button color="primary" variant="outlined">Zamknięte</Button>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Sobota</TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="time"
-                                    defaultValue="07:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="time"
-                                    defaultValue="20:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell align="right">
-                                <Button color="primary" variant="outlined">Zamknięte</Button>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Niedziela</TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="time"
-                                    defaultValue="07:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="time"
-                                    defaultValue="20:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell align="right">
-                                <Button color="primary" variant="outlined">Zamknięte</Button>
-                            </TableCell>
-                        </TableRow>
+                        {
+                            values.openingHours.map(({label,openFrom,openTo},index)=>(
+                                <TableRow key ={label}>
+                                    <TableCell>{label}</TableCell>
+                                    <TableCell>
+                                        <TextField
+                                            type="time"
+                                            name={`openingHours[${index}].openFrom`}
+                                            value={values.openingHours[index].openFrom}
+                                            onChange={handleChange}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            inputProps={{
+                                                step: 60,
+                                            }}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <TextField
+                                            type="time"
+                                            name={`openingHours[${index}].openUntil`}
+                                            value={values.openingHours[index].openUntil}
+                                            onChange={handleChange}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            inputProps={{
+                                                step: 60,
+                                            }}
+                                        />
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <Button
+                                            color="primary"
+                                            variant="outlined"
+                                            onClick={()=>handleClear(`openingHours[${index}].openFrom`, `openingHours[${index}].openUntil`)}
+                                        >Zamknięte</Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        }
+
+
                     </TableBody>
                 </Table>
             </TableContainer>

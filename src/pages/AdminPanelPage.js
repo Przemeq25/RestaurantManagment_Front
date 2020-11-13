@@ -1,7 +1,6 @@
-import React, {useEffect,useState} from 'react'
+import React from 'react'
 import AdminPanel from "../components/Admin/AdminPanel/AdminPanel";
 import {useSelector} from "react-redux";
-import {Redirect} from 'react-router-dom';
 import {routes} from "../config/routes";
 import AddRestaurantStepper from "../components/Admin/AddRestaurant/AddRestaurantStepper";
 import DelayedRedirect from "../components/DelayedRedirect";

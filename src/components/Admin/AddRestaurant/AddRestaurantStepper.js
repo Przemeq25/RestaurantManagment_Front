@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React,{ useState} from "react";
 import {
     Dialog,
     Stepper,
@@ -7,7 +7,8 @@ import {
     Button,
     useTheme,
     useMediaQuery,
-    DialogActions
+    DialogActions,
+    DialogTitle
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {history} from "../../../helpers/_helpers";
@@ -18,7 +19,6 @@ import RestaurantContact from "./RestaurantContact";
 import RestaurantOpeningHours from "./RestaurantOpeningHours";
 import ProgressButton from "../../ProgressButton";
 import * as Yup from 'yup';
-import {isValidNip} from "../../../helpers/_validation";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -73,9 +73,11 @@ const AddRestaurantStepper = ({isDialogOpen,setDialogOpen,firstRegister}) => {
             .required('Pole wymagane'),
         category: Yup.string()
             .required('Pole wymagane'),
-        nip: Yup.number()
+        nip: Yup.string()
+            .min(10, "Podany nip jest za krótki")
             .required('Pole wymagane'),
-        regon: Yup.number()
+        regon: Yup.string()
+            .min(9, "Podany nip jest za krótki")
             .required('Pole wymagane'),
         country: Yup.string()
             .required('Pole wymagane'),
@@ -83,15 +85,16 @@ const AddRestaurantStepper = ({isDialogOpen,setDialogOpen,firstRegister}) => {
             .required('Pole wymagane'),
         city:Yup.string()
             .required('Pole wymagane'),
-        postCode:Yup.number()
+        postCode:Yup.string()
+            .matches(/^[0-9]{2}-[0-9]{3}$/, "Podany kod pocztowy jest błędny")
             .required('Pole wymagane'),
-        phoneNumber:Yup.number()
+        phoneNumber:Yup.string()
+            .matches(/(?<!\w)(\(?(\+|00)?([0-9]{2})\)?)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}(?!\w)/, "Podany numer telefonu jest błędny")
             .required('Pole wymagane'),
         houseNumber:Yup.string()
             .required('Pole wymagane'),
 
     });
-
 
     const stepperTable = ['Dane restauracji','Dane kontaktowe','Godziny otwarcia'];
 
@@ -122,6 +125,10 @@ const AddRestaurantStepper = ({isDialogOpen,setDialogOpen,firstRegister}) => {
             onClose={()=>!firstRegister && setDialogOpen()}
             classes={{paperFullWidth: classes.dialogMobile, paper: classes.dialogMobilePaper}}
         >
+            {
+                firstRegister &&
+                    <DialogTitle>Stwórz swoją restaurację!</DialogTitle>
+            }
             <Stepper activeStep={activeStep} alternativeLabel >
                 {stepperTable.map((label) => (
                     <Step key={label}>
@@ -133,21 +140,67 @@ const AddRestaurantStepper = ({isDialogOpen,setDialogOpen,firstRegister}) => {
                 initialValues={{
                     restaurantName: '',
                     category: [],
+                    categoryEnum:[],
                     description:'',
                     nip:'',
                     regon:'',
                     image:'',
-                    country:'',
                     street:'',
                     city:'',
                     postCode:'',
                     phoneNumber:'',
                     houseNumber:'',
+                    openingHours:[
+                        {
+                            label:"Poniedziałek",
+                            day:'MONDAY',
+                            openFrom:'07:00',
+                            openUntil:'20:00',
+                        },
+                        {
+                            label:"Wtorek",
+                            day:'TUESDAY',
+                            openFrom:'07:00',
+                            openUntil:'20:00',
+                        },
+                        {
+                            label:"Środa",
+                            day:'WEDNESDAY',
+                            openFrom:'07:00',
+                            openUntil:'20:00',
+                        },
+                        {
+                            label:'Czwartek',
+                            day:'THURSDAY',
+                            openFrom:'07:00',
+                            openUntil:'20:00',
+                        },
+                        {
+                            label:"Piątek",
+                            day:'FRIDAY',
+                            openFrom:'07:00',
+                            openUntil:'20:00',
+                        },
+                        {
+                            label:"Sobota",
+                            day:'SATURDAY',
+                            openFrom:'07:00',
+                            openUntil:'20:00',
+                        },
+                        {
+                            label:'Niedziela',
+                            day:'SUNDAY',
+                            openFrom:'07:00',
+                            openUntil:'20:00',
+                        },
+                    ]
+
+
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, {setSubmitting }) => {
                     setTimeout(()=> {
-                        console.log("123")
+                        console.log(values)
                         setSubmitting(false);
                     },300)
 
@@ -194,17 +247,17 @@ const AddRestaurantStepper = ({isDialogOpen,setDialogOpen,firstRegister}) => {
                                                 }
                                             }
                                             if(activeStep === 1){
-                                                setFieldTouched("country");
                                                 setFieldTouched("city");
                                                 setFieldTouched("street");
                                                 setFieldTouched("postCode");
                                                 setFieldTouched("houseNumber");
                                                 setFieldTouched("phoneNumber");
-                                                if (errors['country'] || errors['city'] || errors['street'] || errors['postCode'] || errors['houseNumber'] || errors['phoneNumber'] || !dirty) {
+                                                if (errors['city'] || errors['street'] || errors['postCode'] || errors['houseNumber'] || errors['phoneNumber'] || !dirty) {
                                                     setActiveStep(1)
                                                 } else {
                                                     handleNext()
                                                 }
+
                                             }
                                         }}
 

@@ -10,7 +10,7 @@ export const onlyLetters = (e)=>{
     e.target.value = e.target.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+/g, '');
 }
 export const postCodeIsValid = (postCode) =>{
-    let postCodeRegEx =  /^[0-9]{2}-[0-9]{3}$/;
+    let postCodeRegEx =  /(^[0-9]{2}-)?(^[0-9]{2})[0-9]{3}$/;
     return  postCode.length ? postCodeRegEx.test(postCode) : true;
 }
 export const isValidNip =(nip)=> {

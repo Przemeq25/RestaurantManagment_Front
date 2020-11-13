@@ -4,6 +4,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
 import {onlyNumbers} from "../../../helpers/_validation";
 import {useFormikContext} from "formik";
 import {makeStyles} from "@material-ui/core/styles";
+import {cuisineType, getCuisineTypeKey} from "../../../helpers/_helpers";
 
 const useStyles = makeStyles(() => ({
     input: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles(() => ({
 const RestaurantData = ()=>{
     const classes = useStyles();
     const {values, handleChange,errors,handleBlur,touched,setFieldValue } = useFormikContext();
-    const [category] = useState(["Kuchnia polska", "Kuchnia francuska","Kuchnia chińska",'123','124','412124','124134','134134']);
+
     return(
         <Box display="flex" flexDirection="column" p={2}>
                 <TextField
@@ -38,10 +39,13 @@ const RestaurantData = ()=>{
                 <Autocomplete
                     multiple
                     style={{maxHeight:400}}
-                    onChange={(item,value)=>setFieldValue("category",value)}
+                    onChange={(item,value)=>{
+                        setFieldValue("category",value)
+                        setFieldValue("categoryEnum",getCuisineTypeKey(value))
+                    }}
                     onBlur={handleBlur}
                     noOptionsText="Brak opcji"
-                    options={category}
+                    options={cuisineType.cusineTypeOptions}
                     value={values.category}
 
                     renderInput={(params) => (
@@ -66,6 +70,7 @@ const RestaurantData = ()=>{
                     error = { errors.nip && touched.nip ? true : false }
                     helperText={touched.nip  && errors.nip}
                     onBlur={handleBlur}
+                    inputProps={{maxLength:10}}
 
                 />
                 <TextField
@@ -90,6 +95,7 @@ const RestaurantData = ()=>{
                     onChange={handleChange}
                     value={values.description}
                     name="description"
+                    inputProps={{style:{textTransform:"capitalize"}}}
                 />
                 <Box mt={2}/>
                 <div>
