@@ -4,6 +4,7 @@ import {authConstants} from '../types';
 const initialState = {
     isLoggedIn: false,
     token:null,
+    refreshToken:null,
     isLoading: false,
     error: null,
     userType:null,
@@ -21,7 +22,8 @@ export const authReducer = (state = initialState, action) =>{
             return {
                 ...state,
                 isLoggedIn: true,
-                token:action.payload,
+                token:action.payload.access_token,
+                refreshToken:action.payload.refresh_token,
                 isLoading: false,
                 error: null,
 
@@ -38,6 +40,7 @@ export const authReducer = (state = initialState, action) =>{
                 ...state,
                 isLoggedIn: false,
                 token:null,
+                refreshToken:null,
                 isLoading: false,
                 error: null,
             };
@@ -48,7 +51,7 @@ export const authReducer = (state = initialState, action) =>{
                 userData: action.payload.user
             }
         default:
-            return {...state};
+            return state;
 
     }
-}
+};

@@ -18,7 +18,7 @@ const App =()=>{
     const dispatch = useDispatch();
     useEffect(()=>{
         dispatch(checkIsLoggedIn());
-       //dispatch(authorization(localStorage.getItem("access_token")));
+       dispatch(authorization(localStorage.getItem("access_token")));
     },[])
     return (
         <Router history = {history}>

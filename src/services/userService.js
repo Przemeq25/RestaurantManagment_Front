@@ -16,6 +16,19 @@ const login = (login, password) =>{
             }
     })
 }
+const refreshLogin = (refreshToken)=>{
+    return axios.post(`${appUrl}/user-api/login`,{},{
+        params:{
+            "grant_type": "refresh_token",
+            "refresh_token":refreshToken
+        }
+        ,
+        auth: {
+            'username': 'app',
+            'password': '1234'
+        }
+    })
+}
 const register = (email,login,password) =>{
     return axios.post(`${appUrl}/user-api/register`,{
         email,
@@ -46,5 +59,6 @@ export const userService = {
     login,
     register,
     postPersonalData,
-    getUserData
+    getUserData,
+    refreshLogin
 };

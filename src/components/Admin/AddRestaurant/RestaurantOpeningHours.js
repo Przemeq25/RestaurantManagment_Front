@@ -34,14 +34,14 @@ const RestaurantOpeningHours = ()=>{
                     </TableHead>
                     <TableBody>
                         {
-                            values.openingHours.map(({label,openFrom,openTo},index)=>(
+                            values.openingHours.map(({label},index)=>(
                                 <TableRow key ={label}>
                                     <TableCell>{label}</TableCell>
                                     <TableCell>
                                         <TextField
                                             type="time"
-                                            name={`openingHours[${index}].openFrom`}
-                                            value={values.openingHours[index].openFrom}
+                                            name={`openingHours[${index}].from`}
+                                            value={values.openingHours[index].from}
                                             onChange={handleChange}
                                             InputLabelProps={{
                                                 shrink: true,
@@ -54,8 +54,8 @@ const RestaurantOpeningHours = ()=>{
                                     <TableCell>
                                         <TextField
                                             type="time"
-                                            name={`openingHours[${index}].openUntil`}
-                                            value={values.openingHours[index].openUntil}
+                                            name={`openingHours[${index}].to`}
+                                            value={values.openingHours[index].to}
                                             onChange={handleChange}
                                             InputLabelProps={{
                                                 shrink: true,
@@ -69,7 +69,7 @@ const RestaurantOpeningHours = ()=>{
                                         <Button
                                             color="primary"
                                             variant="outlined"
-                                            onClick={()=>handleClear(`openingHours[${index}].openFrom`, `openingHours[${index}].openUntil`)}
+                                            onClick={()=>handleClear(`openingHours[${index}].from`, `openingHours[${index}].to`)}
                                         >Zamknięte</Button>
                                     </TableCell>
                                 </TableRow>

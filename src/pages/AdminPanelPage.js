@@ -9,7 +9,7 @@ import DelayedRedirect from "../components/DelayedRedirect";
 
 const AdminPanelPage = ({children,location}) => {
 
-    const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
+    const isLoggedIn = true ;//useSelector(state=>state.auth.isLoggedIn);
     const userType = useSelector(state=>state.auth.userType);
 
         return (

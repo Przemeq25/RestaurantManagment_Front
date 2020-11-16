@@ -19,6 +19,8 @@ import RestaurantContact from "./RestaurantContact";
 import RestaurantOpeningHours from "./RestaurantOpeningHours";
 import ProgressButton from "../../ProgressButton";
 import * as Yup from 'yup';
+import {addRestaurant} from "../../../redux/actions/restaurant";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -54,6 +56,7 @@ const AddRestaurantStepper = ({isDialogOpen,setDialogOpen,firstRegister}) => {
     const classes = useStyles();
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.down('sm'))
+    const dispatch = useDispatch();
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -78,8 +81,6 @@ const AddRestaurantStepper = ({isDialogOpen,setDialogOpen,firstRegister}) => {
             .required('Pole wymagane'),
         regon: Yup.string()
             .min(9, "Podany nip jest za krótki")
-            .required('Pole wymagane'),
-        country: Yup.string()
             .required('Pole wymagane'),
         street:Yup.string()
             .required('Pole wymagane'),
@@ -154,44 +155,44 @@ const AddRestaurantStepper = ({isDialogOpen,setDialogOpen,firstRegister}) => {
                         {
                             label:"Poniedziałek",
                             day:'MONDAY',
-                            openFrom:'07:00',
-                            openUntil:'20:00',
+                            from:'07:00:00',
+                            to:'20:00:00',
                         },
                         {
                             label:"Wtorek",
                             day:'TUESDAY',
-                            openFrom:'07:00',
-                            openUntil:'20:00',
+                            from:'07:00:00',
+                            to:'20:00:00',
                         },
                         {
                             label:"Środa",
                             day:'WEDNESDAY',
-                            openFrom:'07:00',
-                            openUntil:'20:00',
+                            from:'07:00:00',
+                            to:'20:00:00',
                         },
                         {
                             label:'Czwartek',
                             day:'THURSDAY',
-                            openFrom:'07:00',
-                            openUntil:'20:00',
+                            from:'07:00:00',
+                            to:'20:00:00',
                         },
                         {
                             label:"Piątek",
                             day:'FRIDAY',
-                            openFrom:'07:00',
-                            openUntil:'20:00',
+                            from:'07:00:00',
+                            to:'20:00:00',
                         },
                         {
                             label:"Sobota",
                             day:'SATURDAY',
-                            openFrom:'07:00',
-                            openUntil:'20:00',
+                            from:'07:00:00',
+                            to:'20:00:00',
                         },
                         {
                             label:'Niedziela',
                             day:'SUNDAY',
-                            openFrom:'07:00',
-                            openUntil:'20:00',
+                            from:'07:00:00',
+                            to:'20:00:00',
                         },
                     ]
 
@@ -199,12 +200,8 @@ const AddRestaurantStepper = ({isDialogOpen,setDialogOpen,firstRegister}) => {
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, {setSubmitting }) => {
-                    setTimeout(()=> {
-                        console.log(values)
-                        setSubmitting(false);
-                    },300)
-
-                }}
+                    dispatch(addRestaurant(values, localStorage.getItem('refresh_token')));
+            }}
             >
                 {({
                       errors,
