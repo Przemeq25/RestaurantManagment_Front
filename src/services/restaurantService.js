@@ -24,8 +24,45 @@ const addRestaurant = (restaurantData)=>{
         }
     }
     )
+};
+const addMeal = (restaurantID,meal) =>{
+    return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantID}/meals`,{
+        "name": meal.name,
+        "price": meal.price,
+        "image": meal.image,
+        "ingredients": meal.ingredients,
+        "timeToDo": meal.timeToDo
+    },
+    {
+        headers:{
+            Authorization:`bearer ${token}`
+        }
+    })
 }
+
+const getRestaurants = () =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants?size=99`,
+{
+            headers: {
+                Authorization: `bearer ${token}`
+            }
+        })
+
+}
+const getSingleRestaurant = (restaurantID) =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}`,
+        {
+            headers: {
+                Authorization: `bearer ${token}`
+            }
+        })
+
+}
+
 
 export const restaurantService ={
     addRestaurant,
+    getRestaurants,
+    getSingleRestaurant,
+    addMeal
 }

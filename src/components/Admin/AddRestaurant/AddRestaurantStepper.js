@@ -20,7 +20,7 @@ import RestaurantOpeningHours from "./RestaurantOpeningHours";
 import ProgressButton from "../../ProgressButton";
 import * as Yup from 'yup';
 import {addRestaurant} from "../../../redux/actions/restaurant";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,12 +51,14 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const AddRestaurantStepper = ({isDialogOpen,setDialogOpen,firstRegister}) => {
+const AddRestaurantStepper = ({setDialogOpen,firstRegister}) => {
     const [activeStep, setActiveStep] = useState(0);
     const classes = useStyles();
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.down('sm'))
     const dispatch = useDispatch();
+    const isRequesting = useSelector(state=>state.restaurant.isRequesting);
+    const isDialogOpen = useSelector(state=>state.restaurant.isStepperOpen);
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -199,14 +201,13 @@ const AddRestaurantStepper = ({isDialogOpen,setDialogOpen,firstRegister}) => {
 
                 }}
                 validationSchema={validationSchema}
-                onSubmit={(values, {setSubmitting }) => {
+                onSubmit={(values) => {
                     dispatch(addRestaurant(values, localStorage.getItem('refresh_token')));
             }}
             >
                 {({
                       errors,
                       handleSubmit,
-                      isSubmitting,
                       setFieldTouched,
                       dirty
                   }) => (
@@ -225,7 +226,7 @@ const AddRestaurantStepper = ({isDialogOpen,setDialogOpen,firstRegister}) => {
                                         label="Zatwierdź"
                                         variant="contained"
                                         color="secondary"
-                                        loading={isSubmitting}
+                                        loading={isRequesting}
                                     />
                                 ) : (
                                     <Button

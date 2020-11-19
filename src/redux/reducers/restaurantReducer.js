@@ -2,7 +2,8 @@ import {restaurantConstants} from '../types';
 
 
 const initialState = {
-    isRequesting:true,
+    isRequesting:false,
+    isStepperOpen:false,
     restaurants:[],
     error:null,
     selectedRestaurant:null
@@ -10,7 +11,17 @@ const initialState = {
 
 export const restaurantReducer = (state = initialState, action)=>{
     switch(action.type){
-        case restaurantConstants.ADD_RESTAURANT_REQUEST:
+        case restaurantConstants.ADD_RESTAURANT_OPEN_STEPPER:
+            return {
+                ...state,
+                isStepperOpen: true,
+            }
+        case restaurantConstants.ADD_RESTAURANT_CLOSE_STEPPER:
+            return {
+                ...state,
+                isStepperOpen: false,
+            }
+        case restaurantConstants.RESTAURANT_REQUEST:
             return {
                 ...state,
                 isRequesting: true,
@@ -20,7 +31,8 @@ export const restaurantReducer = (state = initialState, action)=>{
             return {
                 ...state,
                 isRequesting: false,
-                restaurants: state.restaurants.push(action.payload)
+                restaurants: [...state.restaurants, action.payload],
+                isStepperOpen: false,
             }
         case restaurantConstants.ADD_RESTAURANT_ERROR:
             return {
@@ -28,6 +40,19 @@ export const restaurantReducer = (state = initialState, action)=>{
                 isRequesting: false,
                 error: action.payload,
             }
+        case restaurantConstants.GET_RESTAURANTS_FOR_ADMIN_SUCCESS:
+            return {
+                ...state,
+                isRequesting:false,
+                restaurants: action.payload,
+            }
+        case restaurantConstants.GET_RESTAURANTS_FOR_ADMIN_ERROR:
+            return {
+                ...state,
+                isRequesting:false,
+                error: action.payload,
+            }
+
         default:
             return {...state}
     }

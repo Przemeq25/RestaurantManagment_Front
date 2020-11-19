@@ -11,14 +11,14 @@ import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import {history} from "./helpers/_helpers";
 import {useDispatch} from "react-redux";
-import {authorization, checkIsLoggedIn} from "./redux/actions/auth";
+import {checkIsLoggedIn} from "./redux/actions/auth";
 
 
 const App =()=>{
     const dispatch = useDispatch();
     useEffect(()=>{
         dispatch(checkIsLoggedIn());
-       dispatch(authorization(localStorage.getItem("access_token")));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
     return (
         <Router history = {history}>

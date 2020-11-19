@@ -9,14 +9,13 @@ const useStyles = makeStyles(theme=>({
         fontSize:size=>size.size,
         fontWeight:700,
         letterSpacing: '0.085rem',
-        color:theme.palette.primary.main,
     },
     boxStyle:{
         cursor:'pointer'
     }
 }))
 
-const AppLogo = ({size, marginTop, marginBottom}) =>{
+const AppLogo = ({size, marginTop, marginBottom,color}) =>{
     const classes = useStyles({size:size});
     return (
         <Box
@@ -25,8 +24,8 @@ const AppLogo = ({size, marginTop, marginBottom}) =>{
             onClick={()=>history.push('/')}
             className={classes.boxStyle}
         >
-            <Typography variant = "h2" className ={classes.logoText}>management</Typography>
-            <Typography variant = "h2" className ={classes.logoText}>restaurant.</Typography>
+            <Typography variant = "h2" className ={classes.logoText} color={color}>management</Typography>
+            <Typography variant = "h2" className ={classes.logoText} color={color}>restaurant.</Typography>
         </Box>
     )
 }
@@ -36,9 +35,11 @@ AppLogo.propTypes = {
     size: PropTypes.number,
     marginTop:PropTypes.number,
     marginBottom:PropTypes.number,
+    color: PropTypes.string,
 };
 AppLogo.defaultProps = {
     size: 18,
     marginTop:0,
     marginBottom:0,
+    color:"primary",
 }

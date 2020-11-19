@@ -95,7 +95,6 @@ const RestaurantData = ()=>{
                     onChange={handleChange}
                     value={values.description}
                     name="description"
-                    inputProps={{style:{textTransform:"capitalize"}}}
                 />
                 <Box mt={2}/>
                 <div>

@@ -72,7 +72,7 @@ const Login =()=>{
                                 type="password"
                             />
                             <Box mt={3} mb={1} width="100%">
-                                <ProgressButton label = "Zaloguj się" loading={isLoading} />
+                                <ProgressButton label = "Zaloguj się" loading={isLoading}/>
                             </Box>
                             <Box display = "flex" justifyContent="center" alignItems = "center">
                                 <Typography variant = "subtitle2">Nie masz konta? </Typography>

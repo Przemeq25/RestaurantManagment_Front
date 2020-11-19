@@ -38,4 +38,17 @@ export const getCuisineTypeKey=(value)=>{
     return value.map(item => Object.keys(cuisineType).find(key=>cuisineType[key] === item))
 }
 
+export const getAdminType = (types, restaurantId) => {
+    const typeFound = types.find(item => item.id === restaurantId);
+
+    switch(typeFound && typeFound.role){
+        case "OWNER" :
+            return "Właściciel";
+        case "WORKER" :
+            return "Pracownik";
+        default :
+            return null
+    }
+}
+
 
