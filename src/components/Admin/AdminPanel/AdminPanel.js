@@ -16,9 +16,10 @@ import {ClickAwayListener, Grow, ListItemIcon, MenuList, Paper, Popper} from "@m
 import {NavLink} from "react-router-dom";
 import {routes} from "../../../config/routes";
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import HomeIcon from '@material-ui/icons/Home';
+import RestaurantIcon from '@material-ui/icons/Restaurant';
 import {logout} from "../../../redux/actions/auth";
 import {history} from "../../../helpers/_helpers";
+import {unselectRestaurant} from "../../../redux/actions/restaurant";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -115,7 +116,7 @@ const AdminPanel = (props) => {
     const switchTitlePage = (title)=>{
         //const splitedTitle = title.split("/")[2] ? props.location.pathname.split("/")[2]: "admin";
         switch(title){
-            case 'admin':
+            case 'dashboard':
                 return 'Strona startowa';
             case 'menu':
                 return 'Menu';
@@ -139,7 +140,7 @@ const AdminPanel = (props) => {
                                 <IconButton
                                     color="inherit"
                                     aria-label="open drawer"
-                                    onClick={handleMenuToggle}
+                                    onClick={handleDrawerToggle}
                                     edge="start"
                                     className={classes.menuButton}
                                 >
@@ -199,16 +200,18 @@ const AdminPanel = (props) => {
                                                     <Typography variant="h5" color = "inherit">Zamówienia</Typography>
                                                 </MenuItem>
                                                 <MenuItem
-                                                    onClick={handleClose}
+                                                    onClick={(e)=> {
+                                                        handleClose(e);
+                                                    }}
                                                     component={NavLink}
-                                                    to={routes.HOMEPAGE}
+                                                    to={routes.ADMIN_PANEL}
                                                     activeClassName={classes.selectedItem}
                                                     className={classes.menuItem}
                                                 >
                                                     <ListItemIcon className={classes.menuIcon}>
-                                                        <HomeIcon fontSize="small" />
+                                                        <RestaurantIcon fontSize="small" />
                                                     </ListItemIcon>
-                                                    <Typography variant="h5" color = "inherit">Strona główna</Typography>
+                                                    <Typography variant="h5" color = "inherit">Twoje restauracje</Typography>
                                                 </MenuItem>
                                                 {
                                                     isLoggedIn ? (
@@ -243,7 +246,7 @@ const AdminPanel = (props) => {
                     </div>
                 </Toolbar>
             </AppBar>
-            {selectedRestaurant && <AdminDrawer isDrawerOpen={isDrawerOpen} closeMenu={handleDrawerToggle}/>}
+            {selectedRestaurant && <AdminDrawer isDrawerOpen={isDrawerOpen} closeDrawer={handleDrawerToggle}/>}
             <main className={classes.content}>
                 <Toolbar />
                {props.children}

@@ -52,6 +52,28 @@ export const restaurantReducer = (state = initialState, action)=>{
                 isRequesting:false,
                 error: action.payload,
             }
+        case restaurantConstants.SELECT_RESTAURANT:
+            return {
+                ...state,
+                selectedRestaurant: action.payload
+            }
+        case restaurantConstants.UNSELECT_RESTAURANT:
+            return {
+                ...state,
+                selectedRestaurant: null,
+            }
+        case restaurantConstants.GET_SINGLE_RESTAURANT_FOR_ADMIN_SUCCESS:
+            return {
+                ...state,
+                selectedRestaurant: action.payload,
+                isRequesting: false,
+            }
+        case restaurantConstants.GET_SINGLE_RESTAURANT_FOR_ADMIN_ERROR:
+            return {
+                ...state,
+                error:action.payload,
+                isRequesting: false,
+            }
 
         default:
             return {...state}

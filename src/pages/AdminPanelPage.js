@@ -15,6 +15,7 @@ const AdminPanelPage = ({children,location}) => {
     useEffect(()=>{
         isLoggedIn && !userType && authorization(localStorage.getItem("access_token"),dispatch);
         // eslint-disable-next-line react-hooks/exhaustive-deps
+
     },[isLoggedIn])
 
 

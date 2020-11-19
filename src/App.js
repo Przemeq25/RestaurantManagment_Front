@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import "./App.css";
 import Home from "./pages/HomePage";
-import Dashboard from "./pages/Admin/Dashboard";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
 import {Switch,Route,Router} from "react-router-dom";
 import AdminPanelPage from "./pages/AdminPanelPage";
 import Menu from "./pages/Admin/Menu";
@@ -12,6 +12,9 @@ import Register from "./pages/Auth/Register";
 import {history} from "./helpers/_helpers";
 import {useDispatch} from "react-redux";
 import {checkIsLoggedIn} from "./redux/actions/auth";
+import RestaurantDashboard from "./pages/Admin/RestaurantDashboard";
+import {routes} from "./config/routes";
+import Edit from "./pages/Admin/Edit";
 
 
 const App =()=>{
@@ -23,24 +26,32 @@ const App =()=>{
     return (
         <Router history = {history}>
             <Switch>
-                <Route exact path="/" component={Home}/>
-                <Route exact path="/login" component={Login}/>
-                <Route exact path="/register" component={Register}/>
+                <Route exact path={routes.HOMEPAGE} component={Home}/>
+                <Route exact path={routes.LOGIN} component={Login}/>
+                <Route exact path={routes.REGISTER} component={Register}/>
                 <AdminPanelPage>
-                    <Route path="/admin" exact render={(props)=>(
-                        <Dashboard {...props}/>
+                    <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
+                        <AdminDashboard {...props}/>
                     )}
                     />
-                    <Route path="/admin/menu"exact render={(props)=>(
+                    <Route path={`${routes.RESTAURANT_DASHBOARD}/:restaurantId`} exact render={(props)=>(
+                        <RestaurantDashboard {...props}/>
+                    )}
+                    />
+                    <Route path={`${routes.RESTAURANT_MENU}/:restaurantId`} exact render={(props)=>(
                         <Menu {...props}/>
                         )}
                     />
-                    <Route path="/admin/orders"exact render={(props)=>(
+                    <Route path={`${routes.RESTAURANT_ORDERS}/:restaurantId`} exact render={(props)=>(
                         <Orders {...props}/>
                     )}
                     />
-                    <Route path="/admin/workers"exact render={(props)=>(
+                    <Route path={`${routes.RESTAURANT_WORKERS}/:restaurantId`} exact render={(props)=>(
                         <Workers {...props}/>
+                    )}
+                    />
+                    <Route path={`${routes.RESTAURANT_EDIT}/:restaurantId`} exact render={(props)=>(
+                        <Edit {...props}/>
                     )}
                     />
                 </AdminPanelPage>

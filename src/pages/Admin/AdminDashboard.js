@@ -30,7 +30,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     openAddRestaurantStepper,
     closeAddRestaurantStepper,
-    getRestaurantsForAdmin
+    getRestaurantsForAdmin, selectRestaurant, unselectRestaurant
 } from "../../redux/actions/restaurant";
 import PhoneIcon from '@material-ui/icons/Phone';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
@@ -75,7 +75,7 @@ const useStyles = makeStyles(theme=>({
     }
 }));
 
-const Dashboard = () =>{
+const AdminDashboard = () =>{
     const classes = useStyles();
     const dispatch = useDispatch();
     const isDialogOpen = useSelector(state=>state.restaurant.isStepperOpen);
@@ -94,6 +94,9 @@ const Dashboard = () =>{
         isLoggedIn && restaurants.length <=0 && dispatch(getRestaurantsForAdmin());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[isLoggedIn])
+    useEffect(()=>{
+        dispatch(unselectRestaurant())
+    },[])
 
     const handleToggleDialog=()=>{
         isDialogOpen ? dispatch(closeAddRestaurantStepper()): dispatch(openAddRestaurantStepper()) ;
@@ -113,13 +116,10 @@ const Dashboard = () =>{
                     <Grid container spacing={4}>
                         {restaurants.length ? restaurants.map(restaurant=>(
                             <Grid item xs={12} md = {6} lg = {4} xl = {3} key={restaurant.id}>
-
                                 <Card className={classes.card}>
-                                    <CardActionArea>
+                                    <CardActionArea onClick={()=>dispatch(selectRestaurant(restaurant))}>
                                         <Chip
-                                            label={
-                                                userType && getAdminType(userType,restaurant.id)
-                                            }
+                                            label={ userType && getAdminType(userType,restaurant.id) }
                                             color="primary"
                                             className={classes.cardChip}
                                         />
@@ -239,4 +239,4 @@ const Dashboard = () =>{
     );
 
 }
-export default Dashboard;
+export default AdminDashboard;
