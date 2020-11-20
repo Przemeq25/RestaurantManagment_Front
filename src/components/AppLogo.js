@@ -11,17 +11,17 @@ const useStyles = makeStyles(theme=>({
         letterSpacing: '0.085rem',
     },
     boxStyle:{
-        cursor:'pointer'
+        cursor: push=> push.push ? 'pointer': 'auto'
     }
 }))
 
-const AppLogo = ({size, marginTop, marginBottom,color}) =>{
-    const classes = useStyles({size:size});
+const AppLogo = ({size, marginTop, marginBottom,color, push}) =>{
+    const classes = useStyles({size:size , push:push});
     return (
         <Box
             mt={marginTop}
             mb = {marginBottom}
-            onClick={()=>history.push('/')}
+            onClick={()=>push && history.push('/')}
             className={classes.boxStyle}
         >
             <Typography variant = "h2" className ={classes.logoText} color={color}>management</Typography>
@@ -36,10 +36,12 @@ AppLogo.propTypes = {
     marginTop:PropTypes.number,
     marginBottom:PropTypes.number,
     color: PropTypes.string,
+    push:PropTypes.bool,
 };
 AppLogo.defaultProps = {
     size: 18,
     marginTop:0,
     marginBottom:0,
     color:"primary",
+    push: false
 }

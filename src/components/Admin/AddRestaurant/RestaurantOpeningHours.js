@@ -1,6 +1,5 @@
 import React from "react";
 import {
-    Box,
     Button,
     Table, TableBody,
     TableCell,
@@ -10,6 +9,7 @@ import {
     TextField
 } from "@material-ui/core";
 import {useFormikContext} from "formik";
+import {worksTimeDaysTranslate} from "../../../helpers/_helpers";
 
 
 const RestaurantOpeningHours = ()=>{
@@ -21,8 +21,7 @@ const RestaurantOpeningHours = ()=>{
         setFieldValue(nameTo,"");
     }
     return(
-        <Box  p={2}>
-            <TableContainer >
+            <TableContainer>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -34,14 +33,14 @@ const RestaurantOpeningHours = ()=>{
                     </TableHead>
                     <TableBody>
                         {
-                            values.openingHours.map(({label},index)=>(
-                                <TableRow key ={label}>
-                                    <TableCell>{label}</TableCell>
+                            values.worksTime.map(({day},index)=>(
+                                <TableRow key ={day}>
+                                    <TableCell>{worksTimeDaysTranslate(day)}</TableCell>
                                     <TableCell>
                                         <TextField
                                             type="time"
-                                            name={`openingHours[${index}].from`}
-                                            value={values.openingHours[index].from}
+                                            name={`worksTime[${index}].from`}
+                                            value={values.worksTime[index].from}
                                             onChange={handleChange}
                                             InputLabelProps={{
                                                 shrink: true,
@@ -54,8 +53,8 @@ const RestaurantOpeningHours = ()=>{
                                     <TableCell>
                                         <TextField
                                             type="time"
-                                            name={`openingHours[${index}].to`}
-                                            value={values.openingHours[index].to}
+                                            name={`worksTime[${index}].to`}
+                                            value={values.worksTime[index].to}
                                             onChange={handleChange}
                                             InputLabelProps={{
                                                 shrink: true,
@@ -69,7 +68,7 @@ const RestaurantOpeningHours = ()=>{
                                         <Button
                                             color="primary"
                                             variant="outlined"
-                                            onClick={()=>handleClear(`openingHours[${index}].from`, `openingHours[${index}].to`)}
+                                            onClick={()=>handleClear(`worksTime[${index}].from`, `worksTime[${index}].to`)}
                                         >Zamknięte</Button>
                                     </TableCell>
                                 </TableRow>
@@ -80,7 +79,6 @@ const RestaurantOpeningHours = ()=>{
                     </TableBody>
                 </Table>
             </TableContainer>
-        </Box>
     )
 }
 export default RestaurantOpeningHours;

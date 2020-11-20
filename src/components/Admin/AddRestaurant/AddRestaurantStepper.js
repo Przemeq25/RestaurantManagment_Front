@@ -8,19 +8,20 @@ import {
     useTheme,
     useMediaQuery,
     DialogActions,
-    DialogTitle
+    DialogTitle,
+    Box
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {history} from "../../../helpers/_helpers";
+import {history, restaurantInitialValues} from "../../../helpers/_helpers";
 import {routes} from "../../../config/routes";
 import {Formik} from "formik";
 import RestaurantData from "./RestaurantData";
 import RestaurantContact from "./RestaurantContact";
 import RestaurantOpeningHours from "./RestaurantOpeningHours";
 import ProgressButton from "../../ProgressButton";
-import * as Yup from 'yup';
 import {addRestaurant} from "../../../redux/actions/restaurant";
 import {useDispatch, useSelector} from "react-redux";
+import {validationSchema} from "../../../helpers/_validation";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -73,31 +74,6 @@ const AddRestaurantStepper = ({setDialogOpen,firstRegister}) => {
     }
 
 
-    const validationSchema = Yup.object().shape({
-        restaurantName: Yup.string()
-            .required('Pole wymagane'),
-        category: Yup.string()
-            .required('Pole wymagane'),
-        nip: Yup.string()
-            .min(10, "Podany nip jest za krótki")
-            .required('Pole wymagane'),
-        regon: Yup.string()
-            .min(9, "Podany nip jest za krótki")
-            .required('Pole wymagane'),
-        street:Yup.string()
-            .required('Pole wymagane'),
-        city:Yup.string()
-            .required('Pole wymagane'),
-        postCode:Yup.string()
-            .matches(/^[0-9]{2}-[0-9]{3}$/, "Podany kod pocztowy jest błędny")
-            .required('Pole wymagane'),
-        phoneNumber:Yup.string()
-            .matches(/(?<!\w)(\(?(\+|00)?([0-9]{2})\)?)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}(?!\w)/, "Podany numer telefonu jest błędny")
-            .required('Pole wymagane'),
-        houseNumber:Yup.string()
-            .required('Pole wymagane'),
-
-    });
 
     const stepperTable = ['Dane restauracji','Dane kontaktowe','Godziny otwarcia'];
 
@@ -105,7 +81,7 @@ const AddRestaurantStepper = ({setDialogOpen,firstRegister}) => {
         switch (stepIndex) {
             case 0:
                 return (
-                    <RestaurantData/>
+                    <RestaurantData withPhoto/>
                     );
             case 1:
                 return (
@@ -140,66 +116,7 @@ const AddRestaurantStepper = ({setDialogOpen,firstRegister}) => {
                 ))}
             </Stepper>
             <Formik
-                initialValues={{
-                    restaurantName: '',
-                    category: [],
-                    categoryEnum:[],
-                    description:'',
-                    nip:'',
-                    regon:'',
-                    image:'',
-                    street:'',
-                    city:'',
-                    postCode:'',
-                    phoneNumber:'',
-                    houseNumber:'',
-                    openingHours:[
-                        {
-                            label:"Poniedziałek",
-                            day:'MONDAY',
-                            from:'07:00:00',
-                            to:'20:00:00',
-                        },
-                        {
-                            label:"Wtorek",
-                            day:'TUESDAY',
-                            from:'07:00:00',
-                            to:'20:00:00',
-                        },
-                        {
-                            label:"Środa",
-                            day:'WEDNESDAY',
-                            from:'07:00:00',
-                            to:'20:00:00',
-                        },
-                        {
-                            label:'Czwartek',
-                            day:'THURSDAY',
-                            from:'07:00:00',
-                            to:'20:00:00',
-                        },
-                        {
-                            label:"Piątek",
-                            day:'FRIDAY',
-                            from:'07:00:00',
-                            to:'20:00:00',
-                        },
-                        {
-                            label:"Sobota",
-                            day:'SATURDAY',
-                            from:'07:00:00',
-                            to:'20:00:00',
-                        },
-                        {
-                            label:'Niedziela',
-                            day:'SUNDAY',
-                            from:'07:00:00',
-                            to:'20:00:00',
-                        },
-                    ]
-
-
-                }}
+                initialValues={restaurantInitialValues}
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
                     dispatch(addRestaurant(values, localStorage.getItem('refresh_token')));
@@ -212,7 +129,9 @@ const AddRestaurantStepper = ({setDialogOpen,firstRegister}) => {
                       dirty
                   }) => (
                     <form onSubmit={handleSubmit}>
-                        {getStepContent(activeStep)}
+                        <Box p={2}>
+                            {getStepContent(activeStep)}
+                        </Box>
                         <DialogActions>
                             <Button
                                 onClick={()=>{activeStep === 0 ? finishSteps() : handleBack()}}

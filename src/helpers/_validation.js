@@ -1,3 +1,5 @@
+import * as Yup from "yup";
+
 export const  phoneIsValid =(phone)=>{
     let phoneRe = /(?<!\w)(\(?(\+|00)?([0-9]{2})\)?)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}(?!\w)/;
     return phone.length ? phoneRe.test(phone) : true;
@@ -35,3 +37,29 @@ export const isValidRegon = (regon) =>{
 
     return (parseInt(digits[8])==checksum);
 }
+
+export const validationSchema = Yup.object().shape({
+    restaurantName: Yup.string()
+        .required('Pole wymagane'),
+    category: Yup.string()
+        .required('Pole wymagane'),
+    nip: Yup.string()
+        .min(10, "Podany nip jest za krótki")
+        .required('Pole wymagane'),
+    regon: Yup.string()
+        .min(9, "Podany nip jest za krótki")
+        .required('Pole wymagane'),
+    street:Yup.string()
+        .required('Pole wymagane'),
+    city:Yup.string()
+        .required('Pole wymagane'),
+    postCode:Yup.string()
+        .matches(/^[0-9]{2}-[0-9]{3}$/, "Podany kod pocztowy jest błędny")
+        .required('Pole wymagane'),
+    phoneNumber:Yup.string()
+        .matches(/(?<!\w)(\(?(\+|00)?([0-9]{2})\)?)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}(?!\w)/, "Podany numer telefonu jest błędny")
+        .required('Pole wymagane'),
+    houseNumber:Yup.string()
+        .required('Pole wymagane'),
+
+});

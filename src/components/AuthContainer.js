@@ -38,7 +38,7 @@ const AuthContainer = ({title, children}) =>{
                 </div>
                 <Container fixed>
                     <Box height="calc(100vh - 150px)">
-                       <AppLogo size={28} marginBottom={4} marginTop={6}/>
+                       <AppLogo size={28} marginBottom={4} marginTop={6} push/>
                         <Box display = "flex" height="100%">
                             <Box width="40%" display="flex" alignItems = "center" justifyContent = "center">
                                 <img src={authImage} alt="login"/>

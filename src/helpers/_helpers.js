@@ -15,27 +15,26 @@ export const Mobile = ({ children }) => {
     return isMobile ? children : null
 }
 
-export const cuisineType = {
-    STREET_FOOD: "Street food",
-    SUSHI: "Sushi",
-    PIZZA: "Pizza",
-    BURGER: "Fast food",
-    PASTA: "Makarony",
-    KEBAB: "Kebab",
-    VEGE: "Wegetariańska",
-    FIT: "Fit",
-    FISH: "Ryby",
-    SEAFOOD: "Owoce morza",
-    THAI_CUISINE: "Kuchnia tajska",
-    TURKISH_CUISINE: "Kuchnia turecka",
-    POLISH_CUISINE: "Kuchnia polska",
-    MAXICAN_CUISINE: "Kuchnia meksykańska",
-    VIETNAMSE_CUISINE: "Kuchnia wietnamska",
-    cusineTypeOptions:["Street food","Sushi","Pizza","Fast food","Makarony","Kebab","Wegetariańska","Fit","Ryby","Owoce morza","Kuchnia tajska","Kuchnia turecka","Kuchnia polska","Kuchnia meksykańska","Kuchnia wietnamska"],
-
-}
-export const getCuisineTypeKey=(value)=>{
-    return value.map(item => Object.keys(cuisineType).find(key=>cuisineType[key] === item))
+export const cuisineType = [
+    { key: 'STREET_FOOD', label: "Street food"},
+    { key: 'SUSHI', label: "Sushi"},
+    { key: 'PIZZA', label: "Pizza"},
+    { key: 'BURGER', label: "Fast food"},
+    { key: 'PASTA', label: "Makarony"},
+    { key: 'KEBAB', label: "Kebab"},
+    { key: 'VEGE', label: "Wegetariańska"},
+    { key: 'FIT', label: "Fit"},
+    { key: 'FISH', label: "Ryby"},
+    { key: 'SEAFOOD', label: "Owoce morza"},
+    { key: 'THAI_CUISINE', label: "Kuchnia tajska"},
+    { key: 'TURKISH_CUISINE', label: "Kuchnia turecka"},
+    { key: 'POLISH_CUISINE', label: "Kuchnia polska"},
+    { key: 'MAXICAN_CUISINE', label: "Kuchnia meksykańska"},
+    { key: 'VIETNAMSE_CUISINE', label: "Kuchnia wietnamska"}
+    //cusineTypeOptions:["Street food","Sushi","Pizza","Fast food","Makarony","Kebab","Wegetariańska","Fit","Ryby","Owoce morza","Kuchnia tajska","Kuchnia turecka","Kuchnia polska","Kuchnia meksykańska","Kuchnia wietnamska"],
+]
+export const getCuisineTypeValue=(categories)=>{
+    return  categories.map(category => cuisineType.find(cuisine=> category === cuisine.key))
 }
 
 export const getAdminType = (types, restaurantId) => {
@@ -49,6 +48,78 @@ export const getAdminType = (types, restaurantId) => {
         default :
             return null
     }
+}
+export const worksTimeDaysTranslate = (day) =>{
+    switch(day){
+        case "MONDAY":
+            return 'Poniedziałek';
+        case "TUESDAY":
+            return 'Wtorek';
+        case "WEDNESDAY":
+            return 'Środa';
+        case "THURSDAY":
+            return 'Czwartek';
+        case "FRIDAY":
+            return 'Piątek';
+        case "SATURDAY":
+            return 'Sobota';
+        case "SUNDAY":
+            return 'Niedziela';
+        default:
+            return ""
+
+    }
+}
+export const restaurantInitialValues = {
+    name: '',
+    category: [],
+    categoryEnum:[],
+    description:'',
+    nip:'',
+    regon:'',
+    image:'',
+    street:'',
+    city:'',
+    postCode:'',
+    phoneNumber:'',
+    houseNumber:'',
+    worksTime:[
+        {
+            day:'MONDAY',
+            from:'07:00:00',
+            to:'20:00:00',
+        },
+        {
+            day:'TUESDAY',
+            from:'07:00:00',
+            to:'20:00:00',
+        },
+        {
+            day:'WEDNESDAY',
+            from:'07:00:00',
+            to:'20:00:00',
+        },
+        {
+            day:'THURSDAY',
+            from:'07:00:00',
+            to:'20:00:00',
+        },
+        {
+            day:'FRIDAY',
+            from:'07:00:00',
+            to:'20:00:00',
+        },
+        {
+            day:'SATURDAY',
+            from:'07:00:00',
+            to:'20:00:00',
+        },
+        {
+            day:'SUNDAY',
+            from:'07:00:00',
+            to:'20:00:00',
+        },
+    ]
 }
 
 

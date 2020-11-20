@@ -7,19 +7,17 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
 import {AccountCircle} from "@material-ui/icons";
 import AdminDrawer from "./AdminDrawer";
 import AppLogo from "../../AppLogo";
 import {useDispatch, useSelector} from "react-redux";
-import {ClickAwayListener, Grow, ListItemIcon, MenuList, Paper, Popper} from "@material-ui/core";
+import {ClickAwayListener, Grow, Hidden, ListItemIcon, MenuList, Paper, Popper} from "@material-ui/core";
 import {NavLink} from "react-router-dom";
 import {routes} from "../../../config/routes";
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import {logout} from "../../../redux/actions/auth";
 import {history} from "../../../helpers/_helpers";
-import {unselectRestaurant} from "../../../redux/actions/restaurant";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -151,7 +149,9 @@ const AdminPanel = (props) => {
                             {switchTitlePage(props.location)}
                         </Typography>
                     </div>
-                    <AppLogo color="secondary"/>
+                    <Hidden xsDown>
+                        <AppLogo color="secondary" push/>
+                    </Hidden>
                     <div>
                         <IconButton
                             onClick={handleMenuToggle}

@@ -7,7 +7,7 @@ import {onlyLetters, onlyNumbers} from "../../../helpers/_validation";
 const RestaurantContact = ()=>{
     const {values, handleChange,errors,handleBlur,touched } = useFormikContext();
     return(
-        <Box display="flex" flexDirection="column" p={2}>
+        <Box display="flex" flexDirection="column">
                 <TextField
                     label="Miasto"
                     fullWidth
