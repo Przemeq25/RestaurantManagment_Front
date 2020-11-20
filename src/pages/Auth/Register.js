@@ -1,14 +1,21 @@
 import React from "react";
 import AuthContainer from "../../components/AuthContainer";
-import {Box, Button, TextField, Typography,RadioGroup,FormControlLabel,Radio} from "@material-ui/core";
+import {Box, Button, TextField, Typography} from "@material-ui/core";
 import ProgressButton from "../../components/ProgressButton";
 import {Formik} from "formik";
+import {history} from "../../helpers/_helpers";
+import {register} from "../../redux/actions/register";
+import {useDispatch, useSelector} from "react-redux";
+import {routes} from "../../config/routes";
 
-const Register =({history})=>{
+const Register =()=>{
+    const dispatch = useDispatch();
+    const error = useSelector(state => state.register.error);
+    const isLoading = useSelector(state =>state.register.isRequesting);
     return(
         <AuthContainer title = "Zarejestruj się" error="">
             <Formik
-                initialValues={{ login: '', email:'',password: '', confirmPassword:'',userType:'client' }}
+                initialValues={{ login: '', email:'',password: '', confirmPassword:'' }}
                 validate={(values) => {
                     const errors = {};
                     if (!values.login) {
@@ -32,11 +39,8 @@ const Register =({history})=>{
                     }
                     return errors;
                 }}
-                onSubmit={(values, { setSubmitting }) => {
-                    setTimeout(() => {
-                        alert(JSON.stringify(values, null, 2));
-                        setSubmitting(false);
-                    }, 400);
+                onSubmit={(values) => {
+                    dispatch(register(values.email,values.login,values.password));
                 }}
             >
                 {({
@@ -46,74 +50,72 @@ const Register =({history})=>{
                       handleChange,
                       handleBlur,
                       handleSubmit,
-                      isSubmitting,
                   }) => (
+                    <>
+                        {error &&
+                            <Box mt={1} mb={1}>
+                                <Typography variant="subtitle2" color="error">{error}</Typography>
+                            </Box>
+                        }
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                label = "Login"
+                                margin="dense"
+                                fullWidth
+                                error = { errors.login && touched.login ? true : false }
+                                helperText={touched.login && errors.login}
+                                value={values.login}
+                                onChange = {handleChange}
+                                onBlur={handleBlur}
+                                name="login"
+                            />
+                            <TextField
+                                label = "Email"
+                                margin="dense"
+                                fullWidth
+                                error = { errors.email && touched.email ? true : false }
+                                helperText={touched.email && errors.email}
+                                value={values.email}
+                                onChange = {handleChange}
+                                onBlur={handleBlur}
+                                name="email"
+                            />
+                            <TextField
+                                label = "Hasło"
+                                margin="dense"
+                                fullWidth
+                                error = { errors.password && touched.password ? true : false }
+                                helperText={touched.password && errors.password}
+                                value={values.password}
+                                onChange = {handleChange}
+                                onBlur={handleBlur}
+                                name="password"
+                                type="password"
+                            />
+                            <TextField
+                                label = "Potwierdź hasło"
+                                margin="dense"
+                                fullWidth
+                                error = { errors.confirmPassword && touched.confirmPassword ? true : false }
+                                helperText={touched.confirmPassword && errors.confirmPassword}
+                                value={values.confirmPassword}
+                                onChange = {handleChange}
+                                onBlur={handleBlur}
+                                name="confirmPassword"
+                                type="password"
+                            />
 
-                    <form onSubmit={handleSubmit}>
-                        <TextField
-                            label = "Login"
-                            margin="dense"
-                            fullWidth
-                            error = { errors.login && touched.login ? true : false }
-                            helperText={touched.login && errors.login}
-                            value={values.login}
-                            onChange = {handleChange}
-                            onBlur={handleBlur}
-                            name="login"
-                        />
-                        <TextField
-                            label = "Email"
-                            margin="dense"
-                            fullWidth
-                            error = { errors.email && touched.email ? true : false }
-                            helperText={touched.email && errors.email}
-                            value={values.email}
-                            onChange = {handleChange}
-                            onBlur={handleBlur}
-                            name="email"
-                        />
-                        <TextField
-                            label = "Hasło"
-                            margin="dense"
-                            fullWidth
-                            error = { errors.password && touched.password ? true : false }
-                            helperText={touched.password && errors.password}
-                            value={values.password}
-                            onChange = {handleChange}
-                            onBlur={handleBlur}
-                            name="password"
-                            type="password"
-                        />
-                        <TextField
-                            label = "Potwierdź hasło"
-                            margin="dense"
-                            fullWidth
-                            error = { errors.confirmPassword && touched.confirmPassword ? true : false }
-                            helperText={touched.confirmPassword && errors.confirmPassword}
-                            value={values.confirmPassword}
-                            onChange = {handleChange}
-                            onBlur={handleBlur}
-                            name="confirmPassword"
-                            type="password"
-                        />
-                        <Box mt={1}>
-                            <RadioGroup row value={values.userType} onChange={handleChange} name="userType">
-                                <FormControlLabel value="client" control={<Radio />} label="Klient" />
-                                <FormControlLabel value="worker" control={<Radio />} label="Pracownik" />
-                                <FormControlLabel value="owner" control={<Radio />} label="Właściciel" />
-                            </RadioGroup>
-                        </Box>
-
-                        <Box mt={3} mb={1} width="100%">
-                           <ProgressButton label = "Zarejestruj się" loading={isSubmitting}/>
-                        </Box>
-                        <Box display = "flex" alignItems="center" justifyContent="center">
-                            <Typography variant = "subtitle2">Masz już konto? </Typography>
-                            <Button variant = "text" color="secondary" onClick = {()=>history.push('/login')}>
-                                <Typography variant = "subtitle2" color="secondary">Zaloguj sie!</Typography>
-                            </Button>
-                        </Box>
-                    </form>
+                            <Box mt={3} mb={1} width="100%">
+                               <ProgressButton label = "Zarejestruj się" loading={isLoading}/>
+                            </Box>
+                            <Box display = "flex" alignItems="center" justifyContent="center">
+                                <Typography variant = "subtitle2">Masz już konto? </Typography>
+                                <Button variant = "text" color="secondary" onClick = {()=>history.push(routes.LOGIN)}>
+                                    <Typography variant = "subtitle2" color="secondary">Zaloguj się!</Typography>
+                                </Button>
+                            </Box>
+                        </form>
+                    </>
                     )}
             </Formik>
         </AuthContainer>

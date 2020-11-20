@@ -1,9 +1,13 @@
-import React, {useState} from 'react'
+import React from 'react'
+import Navbar from "../components/Navbar";
 
-export const HomePage =(props)=>{
+export const HomePage =()=>{
 
         return (
-            <div>HomePage</div>
+            <>
+                <Navbar/>
+                <div>HomePage</div>
+            </>
         )
 }
 export default HomePage;

@@ -8,8 +8,11 @@ import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import PeopleIcon from '@material-ui/icons/People';
 import {makeStyles} from "@material-ui/core/styles";
-import {Desktop, Mobile} from "../../../_helpers";
-import appLogo from "../../../_helpers";
+import {Desktop, Mobile} from "../../../helpers/_helpers";
+import appLogo from "../../../helpers/_helpers";
+import {routes} from "../../../config/routes";
+import {useSelector} from "react-redux";
+import SettingsIcon from '@material-ui/icons/Settings';
 
 
 
@@ -27,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
         color:theme.palette.text.disabled,
     },
     icon:{
-        width: open=> !open.isMenuOpen && '100%',
+        width: open=> !open.isDrawerOpen && '100%',
         display:'flex',
         alignItems:'center',
         flexDirection:'column',
@@ -35,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
 
     },
     drawerOpen: {
-        minWidth: drawerWidth,
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
@@ -48,12 +50,6 @@ const useStyles = makeStyles((theme) => ({
         }),
         overflowX: 'hidden',
         width: theme.spacing(11) ,
-    },
-    drawerPaper: {
-        width: drawerWidth,
-    },
-    drawerContainer: {
-        overflow: 'auto',
     },
     toolbar:theme.mixins.toolbar,
     logo:{
@@ -69,34 +65,35 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const AdminDrawer = ({isMenuOpen,closeMenu}) =>{
-    const classes = useStyles({isMenuOpen:isMenuOpen});
+const AdminDrawer = ({isDrawerOpen,closeDrawer}) =>{
+    const classes = useStyles({isDrawerOpen:isDrawerOpen});
+    const restaurantId = useSelector(state=>state.restaurant.selectedRestaurant.id)
     const drawerList = ()=> {
         return (
             <List>
-                <ListItem disableGutters button component={NavLink} exact to="/admin" activeClassName="Mui-selected">
+                <ListItem disableGutters button component={NavLink} to={`${routes.RESTAURANT_DASHBOARD}/${restaurantId}`} activeClassName="Mui-selected">
                     <ListItemIcon className={classes.icon}>
                         <DashboardIcon/>
                         <Desktop>
-                            {!isMenuOpen && <Typography className={classes.iconText}>GŁÓWNA</Typography>}
+                            {!isDrawerOpen && <Typography className={classes.iconText}>GŁÓWNA</Typography>}
                         </Desktop>
                     </ListItemIcon>
                     <ListItemText>Strona startowa</ListItemText>
                 </ListItem>
-                <ListItem disableGutters button component={NavLink} to="/admin/menu/" activeClassName="Mui-selected">
+                <ListItem disableGutters button component={NavLink} to={`${routes.RESTAURANT_MENU}/${restaurantId}`} activeClassName="Mui-selected">
                     <ListItemIcon className={classes.icon}>
                         <MenuBookIcon/>
                         <Desktop>
-                            {!isMenuOpen && <Typography className={classes.iconText}>MENU</Typography>}
+                            {!isDrawerOpen && <Typography className={classes.iconText}>MENU</Typography>}
                         </Desktop>
                     </ListItemIcon>
                     <ListItemText>Menu</ListItemText>
                 </ListItem>
-                <ListItem disableGutters button component={NavLink} to="/admin/orders/" activeClassName="Mui-selected">
+                <ListItem disableGutters button component={NavLink} to={`${routes.RESTAURANT_ORDERS}/${restaurantId}`} activeClassName="Mui-selected">
                     <ListItemIcon className={classes.icon}>
                         <RestaurantMenuIcon/>
                         <Desktop>
-                            {!isMenuOpen && <Typography className={classes.iconText}>ZAMÓWIENIA</Typography>}
+                            {!isDrawerOpen && <Typography className={classes.iconText}>ZAMÓWIENIA</Typography>}
                         </Desktop>
                     </ListItemIcon>
                     <ListItemText>Zamówienia</ListItemText>
@@ -105,19 +102,28 @@ const AdminDrawer = ({isMenuOpen,closeMenu}) =>{
                     <ListItemIcon className={classes.icon}>
                         <VisibilityIcon/>
                         <Desktop>
-                            {!isMenuOpen && <Typography className={classes.iconText}>PODGLĄD</Typography>}
+                            {!isDrawerOpen && <Typography className={classes.iconText}>PODGLĄD</Typography>}
                         </Desktop>
                     </ListItemIcon>
                     <ListItemText>Podgląd</ListItemText>
                 </ListItem>
-                <ListItem disableGutters button component={NavLink} to="/admin/workers/" activeClassName="Mui-selected">
+                <ListItem disableGutters button component={NavLink} to={`${routes.RESTAURANT_WORKERS}/${restaurantId}`} activeClassName="Mui-selected">
                     <ListItemIcon className={classes.icon}>
                         <PeopleIcon/>
                         <Desktop>
-                            {!isMenuOpen && <Typography className={classes.iconText}>PRACOWNICY</Typography>}
+                            {!isDrawerOpen && <Typography className={classes.iconText}>PRACOWNICY</Typography>}
                         </Desktop>
                     </ListItemIcon>
                     <ListItemText>Pracownicy</ListItemText>
+                </ListItem>
+                <ListItem disableGutters button component={NavLink} to={`${routes.RESTAURANT_EDIT}/${restaurantId}`} activeClassName="Mui-selected">
+                    <ListItemIcon className={classes.icon}>
+                        <SettingsIcon/>
+                        <Desktop>
+                            {!isDrawerOpen && <Typography className={classes.iconText}>EDYTUJ</Typography>}
+                        </Desktop>
+                    </ListItemIcon>
+                    <ListItemText>Edytuj</ListItemText>
                 </ListItem>
             </List>
         )
@@ -130,13 +136,13 @@ const AdminDrawer = ({isMenuOpen,closeMenu}) =>{
                 <Drawer
                     variant="permanent"
                     className={clsx(classes.drawer, {
-                        [classes.drawerOpen]: isMenuOpen,
-                        [classes.drawerClose]: !isMenuOpen,
+                        [classes.drawerOpen]: isDrawerOpen,
+                        [classes.drawerClose]: !isDrawerOpen,
                     })}
                     classes={{
                         paper: clsx(classes.drawer,{
-                            [classes.drawerOpen]: isMenuOpen,
-                            [classes.drawerClose]: !isMenuOpen,
+                            [classes.drawerOpen]: isDrawerOpen,
+                            [classes.drawerClose]: !isDrawerOpen,
                         }),
                     }}
                 >
@@ -147,8 +153,8 @@ const AdminDrawer = ({isMenuOpen,closeMenu}) =>{
             <Mobile>
                 <Drawer
                     variant="temporary"
-                    open={isMenuOpen}
-                    onClose={closeMenu}
+                    open={isDrawerOpen}
+                    onClose={closeDrawer}
                     classes={{paperAnchorLeft:classes.drawerMobile}}
                 >
                     <div className={classes.logo}>

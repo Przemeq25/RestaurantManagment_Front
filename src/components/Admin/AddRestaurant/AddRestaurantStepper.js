@@ -1,24 +1,27 @@
-import React, {useState} from "react";
+import React,{ useState} from "react";
 import {
     Dialog,
-    DialogActions,
     Stepper,
     Step,
     StepLabel,
     Button,
-    Box,
-    TextField,
-    FormControl,
-    InputLabel,
-    Select,
-    TableContainer,
-    TableCell,
-    Table,
-    TableHead,
-    TableBody,
-    TableRow,
+    useTheme,
+    useMediaQuery,
+    DialogActions,
+    DialogTitle,
+    Box
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import {history, restaurantInitialValues} from "../../../helpers/_helpers";
+import {routes} from "../../../config/routes";
+import {Formik} from "formik";
+import RestaurantData from "./RestaurantData";
+import RestaurantContact from "./RestaurantContact";
+import RestaurantOpeningHours from "./RestaurantOpeningHours";
+import ProgressButton from "../../ProgressButton";
+import {addRestaurant} from "../../../redux/actions/restaurant";
+import {useDispatch, useSelector} from "react-redux";
+import {validationSchema} from "../../../helpers/_validation";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -49,306 +52,44 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const AddRestaurantStepper = ({isDialogOpen,setDialogOpen}) => {
+const AddRestaurantStepper = ({setDialogOpen,firstRegister}) => {
     const [activeStep, setActiveStep] = useState(0);
-    const [image, setImage] = useState('');
     const classes = useStyles();
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.down('sm'))
+    const dispatch = useDispatch();
+    const isRequesting = useSelector(state=>state.restaurant.isRequesting);
+    const isDialogOpen = useSelector(state=>state.restaurant.isStepperOpen);
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
+    const handleBack = () =>{
+        setActiveStep((prevActiveStep)=> prevActiveStep -1);
+    }
 
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
     const finishSteps =()=>{
-        setDialogOpen();
+        firstRegister ? history.push(routes.HOMEPAGE) : setDialogOpen();
         setActiveStep(0);
     }
 
 
-    const stepperTable = ['Dodaj dane restauracji','Dodaj dane kontaktowe','Dodaj godziny otwarcia'];
+
+    const stepperTable = ['Dane restauracji','Dane kontaktowe','Godziny otwarcia'];
 
     function getStepContent(stepIndex) {
         switch (stepIndex) {
             case 0:
                 return (
-                    <Box display="flex" flexDirection="column" p={2}>
-                        <TextField label="Nazwa restauracji" fullWidth margin="dense"/>
-                        <FormControl className={classes.formControl} fullWidth margin="dense">
-                            <InputLabel htmlFor="age-native-simple">Typ kuchni</InputLabel>
-                            <Select
-                                native
-                                inputProps={{
-                                    name: 'type',
-                                    id: 'age-native-simple',
-                                }}
-                            >
-                                <option aria-label="None" value="" />
-                                <option value={10}>Polska</option>
-                                <option value={20}>Chinśka</option>
-                                <option value={30}>Włoska</option>
-                            </Select>
-                        </FormControl>
-                        <TextField label="Opis" fullWidth margin="dense" multiline/>
-                        <Box mt={2}/>
-                        <div>
-                            <input
-                                accept="image/*"
-                                className={classes.input}
-                                id="contained-button-file"
-                                type="file"
-                                onChange={e=>setImage(e.target.files[0])}
-                            />
-                            <label htmlFor="contained-button-file">
-                                <Button variant="contained" color="secondary" component="span">
-                                    {image ? "Zmień zdjęcie" : "Dodaj zdjęcie"}
-                                </Button>
-                            </label>
-                        </div>
-                        <Box mt={2}>
-                            {image && <img src = {URL.createObjectURL(image)} alt = "Logo" className={classes.addedImagePreview}/>}
-                        </Box>
-
-                    </Box>);
+                    <RestaurantData withPhoto/>
+                    );
             case 1:
                 return (
-                    <Box display="flex" flexDirection="column" p={2}>
-                        <TextField label="Kraj" fullWidth margin="dense"/>
-                        <TextField label="Miasto" fullWidth margin="dense"/>
-                        <TextField label="Ulica" fullWidth margin="dense"/>
-                        <TextField label="Numer lokalu" fullWidth margin="dense"/>
-                        <TextField label="Numer telefonu" fullWidth margin="dense"/>
-                    </Box>
+                    <RestaurantContact/>
                 );
             case 2:
                 return (
-                    <Box  p={2}>
-                        <TableContainer >
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Dzień</TableCell>
-                                        <TableCell>Od</TableCell>
-                                        <TableCell>Do</TableCell>
-                                        <TableCell align="right"></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    <TableRow>
-                                    <TableCell>Poniedziałek</TableCell>
-                                    <TableCell>
-                                        <TextField
-                                            type="time"
-                                            defaultValue="07:00"
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            inputProps={{
-                                                step: 300,
-                                            }}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <TextField
-                                            type="time"
-                                            defaultValue="20:00"
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            inputProps={{
-                                                step: 300,
-                                            }}
-                                        />
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <Button color="primary" variant="outlined">Zamknięte</Button>
-                                    </TableCell>
-                                </TableRow>
-                                    <TableRow>
-                                        <TableCell>Wtorek</TableCell>
-                                        <TableCell>
-                                            <TextField
-                                                type="time"
-                                                defaultValue="07:00"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    step: 300,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField
-                                                type="time"
-                                                defaultValue="20:00"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    step: 300,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Button color="primary" variant="outlined">Zamknięte</Button>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell>Środa</TableCell>
-                                        <TableCell>
-                                            <TextField
-                                                type="time"
-                                                defaultValue="07:00"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    step: 300,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField
-                                                type="time"
-                                                defaultValue="20:00"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    step: 300,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Button color="primary" variant="outlined">Zamknięte</Button>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell>Czwartek</TableCell>
-                                        <TableCell>
-                                            <TextField
-                                                type="time"
-                                                defaultValue="07:00"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    step: 300,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField
-                                                type="time"
-                                                defaultValue="20:00"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    step: 300,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Button color="primary" variant="outlined">Zamknięte</Button>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell>Piątek</TableCell>
-                                        <TableCell>
-                                            <TextField
-                                                type="time"
-                                                defaultValue="07:00"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    step: 300,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField
-                                                type="time"
-                                                defaultValue="20:00"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    step: 300,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Button color="primary" variant="outlined">Zamknięte</Button>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell>Sobota</TableCell>
-                                        <TableCell>
-                                            <TextField
-                                                type="time"
-                                                defaultValue="07:00"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    step: 300,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField
-                                                type="time"
-                                                defaultValue="20:00"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    step: 300,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Button color="primary" variant="outlined">Zamknięte</Button>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell>Niedziela</TableCell>
-                                        <TableCell>
-                                            <TextField
-                                                type="time"
-                                                defaultValue="07:00"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    step: 300,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField
-                                                type="time"
-                                                defaultValue="20:00"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    step: 300,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Button color="primary" variant="outlined">Zamknięte</Button>
-                                        </TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Box>
+                    <RestaurantOpeningHours/>
                 );
             default:
                 return 'Unknown step';
@@ -357,11 +98,16 @@ const AddRestaurantStepper = ({isDialogOpen,setDialogOpen}) => {
     return(
         <Dialog
             fullWidth
+            fullScreen = {matches}
             maxWidth="md"
             open={isDialogOpen}
-            onClose={()=>setDialogOpen()}
+            onClose={()=>!firstRegister && setDialogOpen()}
             classes={{paperFullWidth: classes.dialogMobile, paper: classes.dialogMobilePaper}}
         >
+            {
+                firstRegister &&
+                    <DialogTitle>Stwórz swoją restaurację!</DialogTitle>
+            }
             <Stepper activeStep={activeStep} alternativeLabel >
                 {stepperTable.map((label) => (
                     <Step key={label}>
@@ -369,28 +115,80 @@ const AddRestaurantStepper = ({isDialogOpen,setDialogOpen}) => {
                     </Step>
                 ))}
             </Stepper>
-            {getStepContent(activeStep)}
-            <DialogActions>
-                <div>
-                    {activeStep === stepperTable.length ? (
-                        finishSteps()
-                    ) : (
-                        <div>
-                            <Box p={1}>
-                                <Button
-                                    onClick={()=>{activeStep === 0 ? finishSteps() : handleBack()}}
-                                    className={classes.backButton}
-                                >
-                                    {activeStep === 0 ? "Anuluj" : "Cofnij"}
-                                </Button>
-                                <Button variant="contained" color={activeStep === stepperTable.length - 1 ? "secondary":"primary"} onClick={handleNext}>
-                                    {activeStep === stepperTable.length - 1 ? 'Zatwierdź' : 'Dalej'}
-                                </Button>
-                            </Box>
-                        </div>
-                    )}
-                </div>
-            </DialogActions>
+            <Formik
+                initialValues={restaurantInitialValues}
+                validationSchema={validationSchema}
+                onSubmit={(values) => {
+                    dispatch(addRestaurant(values, localStorage.getItem('refresh_token')));
+            }}
+            >
+                {({
+                      errors,
+                      handleSubmit,
+                      setFieldTouched,
+                      dirty
+                  }) => (
+                    <form onSubmit={handleSubmit}>
+                        <Box p={2}>
+                            {getStepContent(activeStep)}
+                        </Box>
+                        <DialogActions>
+                            <Button
+                                onClick={()=>{activeStep === 0 ? finishSteps() : handleBack()}}
+                                className={classes.backButton}
+                            >
+                                {activeStep === 0 ? "Anuluj" : "Cofnij"}
+                            </Button>
+                            {
+                                activeStep === stepperTable.length - 1 ? (
+                                    <ProgressButton
+                                        label="Zatwierdź"
+                                        variant="contained"
+                                        color="secondary"
+                                        loading={isRequesting}
+                                    />
+                                ) : (
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => {
+                                            if(activeStep === 0){
+                                                setFieldTouched("restaurantName");
+                                                setFieldTouched("category");
+                                                setFieldTouched("nip");
+                                                setFieldTouched("regon");
+                                                if (errors['restaurantName'] || errors['nip'] || errors['category'] || errors['regon'] || !dirty) {
+                                                    setActiveStep(0)
+                                                } else {
+                                                    handleNext()
+                                                }
+                                            }
+                                            if(activeStep === 1){
+                                                setFieldTouched("city");
+                                                setFieldTouched("street");
+                                                setFieldTouched("postCode");
+                                                setFieldTouched("houseNumber");
+                                                setFieldTouched("phoneNumber");
+                                                if (errors['city'] || errors['street'] || errors['postCode'] || errors['houseNumber'] || errors['phoneNumber'] || !dirty) {
+                                                    setActiveStep(1)
+                                                } else {
+                                                    handleNext()
+                                                }
+
+                                            }
+                                        }}
+
+                                    >
+                                        Dalej
+                                    </Button>
+                                )
+                            }
+
+                        </DialogActions>
+                    </form>
+                )}
+            </Formik>
+
         </Dialog>
     );
 }
