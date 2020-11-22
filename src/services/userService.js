@@ -55,10 +55,17 @@ const getUserData = (access_token) =>{
         }
     })
 }
+const activateAccount = (login,activationKey) =>{
+    return axios.post(`${appUrl}/user-api/active`,{
+        login,
+        activationKey
+    })
+}
 export const userService = {
     login,
     register,
     postPersonalData,
     getUserData,
-    refreshLogin
+    refreshLogin,
+    activateAccount
 };

@@ -30,6 +30,7 @@ const theme = createMuiTheme({
         },
         h4:{
             fontSize:'1.2rem',
+
             color:'var(--admin-first-color)',
             '@media (max-width:960px)': {
                 fontSize: '1.1rem',
@@ -38,6 +39,7 @@ const theme = createMuiTheme({
         h5:{
             fontSize:'0.9rem',
             fontWeight:400,
+            lineHeight:'1.2rem',
             '@media (max-width:960px)': {
                 fontSize: '1rem',
             },
