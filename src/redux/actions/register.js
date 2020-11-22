@@ -1,7 +1,5 @@
 import {userService} from "../../services/userService";
 import {registerConstants} from "../types";
-import {history} from "../../helpers/_helpers";
-import {routes} from "../../config/routes";
 
 export const register = (email,login,password) =>{
     return dispatch =>{
@@ -9,7 +7,6 @@ export const register = (email,login,password) =>{
         userService.register(email,login,password)
             .then(()=>{
                 dispatch(success());
-                history.push(routes.LOGIN)
             })
             .catch(errorMessage=>{
                 if(errorMessage.response && errorMessage.response.status === 409){
@@ -26,4 +23,27 @@ export const register = (email,login,password) =>{
     function request(){return {type:registerConstants.REGISTER_REQUEST}};
     function success(){return {type:registerConstants.REGISTER_SUCCESS}};
     function error(error){return {type:registerConstants.REGISTER_ERROR, payload:error}}
+}
+
+export const activateAccount = (login,activationKey)=>{
+    return dispatch =>{
+        dispatch(request());
+        setTimeout(()=>
+            userService.activateAccount(login,activationKey)
+            .then(()=>{
+                dispatch(success());
+            })
+            .catch(errorMessage=>{
+                if(errorMessage.response && errorMessage.response.status === 409){
+                    dispatch(success());
+                }else{
+                    dispatch(error("Brak połączenia z serwerem, spróbuj jeszcze raz"));
+                }
+            }),1000)
+
+    }
+
+    function request(){return {type:registerConstants.REGISTER_REQUEST}};
+    function success(){return {type:registerConstants.CONFIRM_REGISTER_SUCCESS}};
+    function error(error){return {type:registerConstants.CONFIRM_REGISTER_ERROR, payload:error}}
 }

@@ -12,6 +12,11 @@ const initialState = {
 };
 export const authReducer = (state = initialState, action) =>{
     switch(action.type){
+        case authConstants.RETURN_INITIAL_STATE:
+            return {
+                ...state,
+                error: null
+            }
         case authConstants.LOGIN_REQUEST :
             return {
                 ...state,

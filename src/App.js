@@ -15,6 +15,7 @@ import {checkIsLoggedIn} from "./redux/actions/auth";
 import RestaurantDashboard from "./pages/Admin/RestaurantDashboard";
 import {routes} from "./config/routes";
 import Edit from "./pages/Admin/Edit";
+import RegisterConfirmation from "./pages/Auth/RegisterConfirmation";
 
 
 const App =()=>{
@@ -27,8 +28,9 @@ const App =()=>{
         <Router history = {history}>
             <Switch>
                 <Route exact path={routes.HOMEPAGE} component={Home}/>
-                <Route exact path={routes.LOGIN} component={Login}/>
+                <Route path={routes.LOGIN} component={Login}/>
                 <Route exact path={routes.REGISTER} component={Register}/>
+                <Route exact path={'/confirm'} component = {RegisterConfirmation}/>
                 <AdminPanelPage>
                     <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
                         <AdminDashboard {...props}/>
