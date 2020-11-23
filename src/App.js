@@ -30,7 +30,7 @@ const App =()=>{
                 <Route exact path={routes.HOMEPAGE} component={Home}/>
                 <Route path={routes.LOGIN} component={Login}/>
                 <Route exact path={routes.REGISTER} component={Register}/>
-                <Route exact path={'/confirm'} component = {RegisterConfirmation}/>
+                <Route exact path={routes.CONFIRM} component = {RegisterConfirmation}/>
                 <AdminPanelPage>
                     <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
                         <AdminDashboard {...props}/>

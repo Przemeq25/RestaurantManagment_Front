@@ -5,8 +5,8 @@ const token = localStorage.getItem('access_token')
 
 const addRestaurant = (restaurantData)=>{
     return axios.post(`${appUrl}/restaurant-api/restaurants`,{
-        name:restaurantData.restaurantName,
-        category:restaurantData.categoryEnum,
+        name:restaurantData.name,
+        category:restaurantData.category,
         image:restaurantData.image,
         description:restaurantData.description,
         nip:restaurantData.nip,
@@ -16,7 +16,7 @@ const addRestaurant = (restaurantData)=>{
         postCode:restaurantData.postCode,
         houseNumber:restaurantData.houseNumber,
         phoneNumber:restaurantData.phoneNumber,
-        worksTime:restaurantData.openingHours,
+        worksTime:restaurantData.worksTime,
     },
 {
         headers:{
@@ -24,6 +24,36 @@ const addRestaurant = (restaurantData)=>{
         }
     }
     )
+};
+const deleteRestaurant = (restaurantID) =>{
+    return axios.delete(`${appUrl}/restaurant-api/restaurants/${restaurantID}`,{
+        headers: {
+            Authorization: `bearer ${token}`
+        }
+    })
+}
+const editRestaurant = (restaurantData,restaurantID)=>{
+    return axios.put(`${appUrl}/restaurant-api/restaurants/${restaurantID}`,{
+            name:restaurantData.name,
+            category:restaurantData.category,
+            image:restaurantData.image,
+            description:restaurantData.description,
+            nip:restaurantData.nip,
+            regon:restaurantData.regon,
+            city:restaurantData.city,
+            street:restaurantData.street,
+            postCode:restaurantData.postCode,
+            houseNumber:restaurantData.houseNumber,
+            phoneNumber:restaurantData.phoneNumber,
+            worksTime:restaurantData.worksTime,
+        },
+        {
+            headers:{
+                Authorization:`bearer ${token}`
+            }
+        }
+    )
+
 };
 const addMeal = (restaurantID,meal) =>{
     return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantID}/meals`,{
@@ -64,5 +94,7 @@ export const restaurantService ={
     addRestaurant,
     getRestaurants,
     getSingleRestaurant,
-    addMeal
+    addMeal,
+    editRestaurant,
+    deleteRestaurant
 }

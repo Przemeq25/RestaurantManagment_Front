@@ -2,6 +2,7 @@ export const routes ={
     LOGIN:'/login',
     REGISTER:'/register',
     HOMEPAGE:'/',
+    CONFIRM:'/confirm',
     PROFILE:"/profile",
     CLIENT_ORDERS:'/your_orders',
     ADMIN_PANEL:'/admin',

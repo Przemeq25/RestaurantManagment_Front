@@ -39,7 +39,7 @@ export const isValidRegon = (regon) =>{
 }
 
 export const validationSchema = Yup.object().shape({
-    restaurantName: Yup.string()
+    name: Yup.string()
         .required('Pole wymagane'),
     category: Yup.string()
         .required('Pole wymagane'),

@@ -31,11 +31,10 @@ export const cuisineType = [
     { key: 'POLISH_CUISINE', label: "Kuchnia polska"},
     { key: 'MAXICAN_CUISINE', label: "Kuchnia meksykańska"},
     { key: 'VIETNAMSE_CUISINE', label: "Kuchnia wietnamska"}
-    //cusineTypeOptions:["Street food","Sushi","Pizza","Fast food","Makarony","Kebab","Wegetariańska","Fit","Ryby","Owoce morza","Kuchnia tajska","Kuchnia turecka","Kuchnia polska","Kuchnia meksykańska","Kuchnia wietnamska"],
-]
+];
 export const getCuisineTypeValue=(categories)=>{
     return  categories.map(category => cuisineType.find(cuisine=> category === cuisine.key))
-}
+};
 
 export const getAdminType = (types, restaurantId) => {
     const typeFound = types.find(item => item.id === restaurantId);
@@ -73,7 +72,6 @@ export const worksTimeDaysTranslate = (day) =>{
 export const restaurantInitialValues = {
     name: '',
     category: [],
-    categoryEnum:[],
     description:'',
     nip:'',
     regon:'',
@@ -120,6 +118,6 @@ export const restaurantInitialValues = {
             to:'20:00:00',
         },
     ]
-}
+};
 
 

@@ -12,7 +12,7 @@ import {
     IconButton,
     AccordionDetails,
     AccordionSummary,
-    Accordion
+    Accordion, CircularProgress, Backdrop
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {getCuisineTypeValue, restaurantInitialValues} from "../../helpers/_helpers";
@@ -26,7 +26,9 @@ import RestaurantOpeningHours from "../../components/Admin/AddRestaurant/Restaur
 import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
 import AppLogo from "../../components/AppLogo";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {deleteRestaurant, editRestaurant} from "../../redux/actions/restaurant";
+import ProgressButton from "../../components/ProgressButton";
 
 const useStyles = makeStyles((theme)=>({
     root:{
@@ -55,19 +57,21 @@ const useStyles = makeStyles((theme)=>({
             width:'calc(100vw - 82px)',
         },
     },
-    buttonStyle:{
-        margin:`${theme.spacing(1)}px 0px`
-    },
     addedImagePreview:{
 
         maxHeight:200,
         maxWidth:"100%",
     }
 }))
-const Edit = () =>{
+const Edit = ({match}) =>{
     const classes = useStyles();
     const [isCollapseOpen, setCollapseOpen] = useState(false);
-    const currentRestaurantData = useSelector(state=>state.restaurant.selectedRestaurant)
+
+    const dispatch = useDispatch();
+    const currentRestaurantData = useSelector(state=>state.restaurant.selectedRestaurant);
+    const isDeleting = useSelector(state=>state.restaurant.isDeleteRequesting);
+    const isEditing = useSelector(state=>state.restaurant.isRequesting)
+
     useEffect(()=>{
         currentRestaurantData && Object.assign(restaurantInitialValues,currentRestaurantData,{category: getCuisineTypeValue(currentRestaurantData.category)});
     },[currentRestaurantData])
@@ -84,6 +88,10 @@ const Edit = () =>{
                 enableReinitialize
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
+                    const categories = values.category.map(category => category.key);
+                    const newValues = Object.assign({},values);
+                    const newRestaurantObject = Object.assign(newValues,{category:categories});
+                    dispatch(editRestaurant(newRestaurantObject,match.params.restaurantId))
                 }}
             >
                 {({
@@ -201,55 +209,64 @@ const Edit = () =>{
                                         <Accordion square elevation={0} expanded={isCollapseOpen}>
                                             <AccordionSummary>
 
-                                                <Box display="flex" justifyContent="space-evenly" alignItems = "space-between" flexWrap="wrap" width="100%">
+                                                <Box display="flex" justifyContent="space-evenly" alignItems = "space-between" flexWrap="wrap" width="100%" pt={1} pb={1}>
                                                     <Button
                                                         variant = "contained"
                                                         color="primary"
                                                         startIcon={<DeleteIcon/>}
                                                         size="small"
-                                                        className={classes.buttonStyle}
                                                         onClick={handleToggleCollapse}
                                                     >
                                                         Usuń restaurację
                                                     </Button>
-                                                    <Button
+                                                    <ProgressButton
                                                         variant = "contained"
                                                         color="secondary"
                                                         startIcon={<DoneIcon/>}
                                                         size="small"
-                                                        className={classes.buttonStyle}
-                                                    >
-                                                        Zatwierdź zmiany
-                                                    </Button>
+                                                        label="Zatwierdź zmiany"
+                                                        loading={isEditing}
+                                                    />
                                                 </Box>
 
                                             </AccordionSummary>
                                             <AccordionDetails>
-                                                <Box display="flex" alignItems="center" flexDirection="column" p={2} pt={0}>
-                                                    <Typography paragraph>
-                                                        Czy na pewno chcesz usunąć swoją restaurację?
-                                                    </Typography>
-                                                    <Typography variant = "subtitle2" gutterBottom>
-                                                        Okres usuwania potrwa 30 dni, w tym czasie możesz anulować usuwanie.
-                                                        Po upływie określonego czasu restauracja zostanie usunięta.
-                                                    </Typography>
-                                                    <Box mt={2}>
-                                                        <Button
-                                                            variant="text"
-                                                            startIcon={<DoneIcon/>}
+                                                <Box display="flex" alignItems="center" flexDirection="column" p={2} pt={0} >
+                                                    { isDeleting ? (
+                                                            <>
+                                                                <Typography variant="h4" color="primary" paragraph>
+                                                                    Proszę czekać, trwa usuwanie restauracji ...
+                                                                </Typography>
+                                                                <CircularProgress color="inherit"/>
+                                                            </>
+                                                        ):(
+                                                            <>
+                                                                <Typography paragraph>
+                                                                    Czy na pewno chcesz usunąć swoją restaurację?
+                                                                </Typography>
+                                                                <Typography variant = "subtitle2" gutterBottom>
+                                                                    Okres usuwania potrwa 30 dni, w tym czasie możesz anulować usuwanie.
+                                                                    Po upływie określonego czasu restauracja zostanie usunięta.
+                                                                </Typography>
+                                                                <Box mt={2}>
+                                                                    <Button
+                                                                        variant="text"
+                                                                        startIcon={<DoneIcon/>}
+                                                                        onClick={()=>dispatch(deleteRestaurant(match.params.restaurantId))}
+                                                                    >
+                                                                        Usuń
+                                                                    </Button>
+                                                                    <Button
+                                                                        variant="text"
+                                                                        startIcon={<CloseIcon/>}
+                                                                        onClick={handleToggleCollapse}
+                                                                    >
 
-                                                        >
-                                                            Usuń
-                                                        </Button>
-                                                        <Button
-                                                            variant="text"
-                                                            startIcon={<CloseIcon/>}
-                                                            onClick={handleToggleCollapse}
-                                                        >
-
-                                                            Anuluj
-                                                        </Button>
-                                                    </Box>
+                                                                        Anuluj
+                                                                    </Button>
+                                                                </Box>
+                                                            </>
+                                                        )}
                                                 </Box>
 
                                             </AccordionDetails>

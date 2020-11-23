@@ -3,10 +3,12 @@ import {restaurantConstants} from '../types';
 
 const initialState = {
     isRequesting:false,
+    isDeleteRequesting:false,
     isStepperOpen:false,
     restaurants:[],
     error:null,
-    selectedRestaurant:null
+    selectedRestaurant:null,
+
 };
 
 export const restaurantReducer = (state = initialState, action)=>{
@@ -74,7 +76,44 @@ export const restaurantReducer = (state = initialState, action)=>{
                 error:action.payload,
                 isRequesting: false,
             }
-
+        case restaurantConstants.DELETE_RESTAURANT_REQUEST:
+            return {
+                ...state,
+                isDeleteRequesting: true,
+                error: null
+            }
+        case restaurantConstants.DELETE_RESTAURANT_SUCCESS:
+            const foundMatchIndexDeletingRestaurant = state.restaurants.findIndex(restaurant=>restaurant.id === state.selectedRestaurant.id);
+            const newRestaurantsArray = [...state.restaurants];
+            newRestaurantsArray.splice(foundMatchIndexDeletingRestaurant,1)
+            return {
+                ...state,
+                isDeleteRequesting:false,
+                restaurants:newRestaurantsArray,
+                selectedRestaurant: null,
+            };
+        case restaurantConstants.DELETE_RESTAURANT_ERROR:
+            return {
+                ...state,
+                isDeleteRequesting: false,
+                error: action.payload
+            }
+        case restaurantConstants.EDIT_RESTAURANT_SUCCESS:
+            const foundMatchIndexOfEditingRestaurant = state.restaurants.findIndex(restaurant=>restaurant.id === action.payload.id);
+            const newRestaurantsOfEditingArray = [...state.restaurants];
+            newRestaurantsOfEditingArray.splice(foundMatchIndexOfEditingRestaurant,1,action.payload);
+            return {
+                ...state,
+                isRequesting: false,
+                selectedRestaurant: action.payload,
+                restaurants: newRestaurantsOfEditingArray,
+            }
+        case restaurantConstants.EDIT_RESTAURANT_ERROR:
+            return {
+                ...state,
+                isRequesting: false,
+                error: action.payload
+            }
         default:
             return {...state}
     }

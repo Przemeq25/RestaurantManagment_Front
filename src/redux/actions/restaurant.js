@@ -9,15 +9,16 @@ export const addRestaurant = (restaurant,refreshToken)=>{
         dispatch(request());
         restaurantService.addRestaurant(restaurant)
             .then(response =>{
-                refreshLogin(refreshToken,dispatch)
-                    .then(()=> {
-                        dispatch(success(response.data))
-                    }).catch(()=>console.log("error"))
+                setTimeout(()=>{
+                    refreshLogin(refreshToken,dispatch)
+                        .then(()=> {
+                            dispatch(success(response.data))
+                        }).catch((errorMessage)=>dispatch(error(errorMessage)))
+                },30000)
 
             })
-            .catch(err=>{
-                dispatch(error(err));
-                console.log(err);
+            .catch(errorMessage=>{
+                dispatch(error(errorMessage));
             })
     }
 
@@ -25,6 +26,42 @@ export const addRestaurant = (restaurant,refreshToken)=>{
     function success(restaurant){return {type:restaurantConstants.ADD_RESTAURANT_SUCCESS, payload:restaurant}}
     function error(error){return {type:restaurantConstants.ADD_RESTAURANT_ERROR, payload:error}}
 };
+
+export const deleteRestaurant = (restaurantID)=>{
+    return dispatch=>{
+        dispatch(request());
+        restaurantService.deleteRestaurant(restaurantID)
+            .then(()=> {
+                dispatch(success());
+                history.push(routes.ADMIN_PANEL);
+            })
+            .catch((errorMessage)=> {
+                dispatch(error(errorMessage))
+                history.push(routes.ADMIN_PANEL);
+            })
+
+    }
+    function request(){return {type:restaurantConstants.DELETE_RESTAURANT_REQUEST}};
+    function success(){return {type:restaurantConstants.DELETE_RESTAURANT_SUCCESS}}
+    function error(error){return {type:restaurantConstants.DELETE_RESTAURANT_ERROR, payload:error}}
+}
+
+export const editRestaurant = (restaurantData, restaurantID) =>{
+    return dispatch =>{
+        dispatch(request());
+        restaurantService.editRestaurant(restaurantData,restaurantID)
+            .then(response =>{
+                dispatch(success(response.data))
+            })
+            .catch(errorMessage=>{
+                dispatch(error(errorMessage));
+            })
+    }
+
+    function request(){return {type:restaurantConstants.RESTAURANT_REQUEST}};
+    function success(restaurant){return {type:restaurantConstants.EDIT_RESTAURANT_SUCCESS, payload:restaurant}}
+    function error(error){return {type:restaurantConstants.EDIT_RESTAURANT_ERROR, payload:error}}
+}
 
 export const openAddRestaurantStepper = () =>{
     return dispatch => dispatch(openStepper());
