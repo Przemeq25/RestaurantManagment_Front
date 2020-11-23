@@ -12,7 +12,10 @@ import {
     IconButton,
     AccordionDetails,
     AccordionSummary,
-    Accordion, CircularProgress, Backdrop
+    Accordion,
+    CircularProgress,
+    Backdrop,
+    Fade
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {getCuisineTypeValue, restaurantInitialValues} from "../../helpers/_helpers";
@@ -66,14 +69,16 @@ const useStyles = makeStyles((theme)=>({
 const Edit = ({match}) =>{
     const classes = useStyles();
     const [isCollapseOpen, setCollapseOpen] = useState(false);
-
+    const [currentData,setCurrentData] = useState(restaurantInitialValues);
     const dispatch = useDispatch();
     const currentRestaurantData = useSelector(state=>state.restaurant.selectedRestaurant);
     const isDeleting = useSelector(state=>state.restaurant.isDeleteRequesting);
     const isEditing = useSelector(state=>state.restaurant.isRequesting)
 
     useEffect(()=>{
-        currentRestaurantData && Object.assign(restaurantInitialValues,currentRestaurantData,{category: getCuisineTypeValue(currentRestaurantData.category)});
+         const data = Object.assign({},restaurantInitialValues)
+         currentRestaurantData && Object.assign(data,currentRestaurantData,{category: getCuisineTypeValue(currentRestaurantData.category)});
+         setCurrentData(data);
     },[currentRestaurantData])
 
     const handleToggleCollapse = () =>{
@@ -83,15 +88,17 @@ const Edit = ({match}) =>{
         <>
             <Typography variant="h3">Edycja:</Typography>
             <Typography variant="subtitle2" paragraph >Zmień dane swojej restauracji!</Typography>
-            <Formik
-                initialValues={restaurantInitialValues}
-                enableReinitialize
+            {currentRestaurantData ? (
+                <Formik
+                initialValues={currentData}
+                enableReinitialize={true}
+                validateOnMount={true}
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
                     const categories = values.category.map(category => category.key);
-                    const newValues = Object.assign({},values);
-                    const newRestaurantObject = Object.assign(newValues,{category:categories});
-                    dispatch(editRestaurant(newRestaurantObject,match.params.restaurantId))
+                    const newValues = Object.assign({}, values);
+                    const newRestaurantObject = Object.assign(newValues, {category: categories});
+                    dispatch(editRestaurant(newRestaurantObject, match.params.restaurantId))
                 }}
             >
                 {({
@@ -100,62 +107,64 @@ const Edit = ({match}) =>{
                       values,
                   }) => (
                     <form onSubmit={handleSubmit} className={classes.formStyle}>
-                        <Grid container spacing={4} justify="center">
-                            <Grid item xs={12} md={7} >
-                                <Grid item xs="auto">
-                                <Card className={classes.root}>
-                                    <CardHeader
-                                        title={
-                                            <Typography
-                                                className={"MuiTypography--heading"}
-                                                variant={"h6"}
-                                                gutterBottom
-                                            >
-                                                Dane restauracji
-                                            </Typography>
-                                        }
+                        <Fade in={Boolean(currentRestaurantData)} timeout={500}>
+                            <Grid container spacing={4} justify="center">
+                                <Grid item xs={12} md={7}>
+                                    <Grid item xs="auto">
+                                        <Card className={classes.root}>
+                                            <CardHeader
+                                                title={
+                                                    <Typography
+                                                        className={"MuiTypography--heading"}
+                                                        variant={"h6"}
+                                                        gutterBottom
+                                                    >
+                                                        Dane restauracji
+                                                    </Typography>
+                                                }
 
-                                    />
-                                    <Divider/>
-                                    <CardContent>
-                                        <RestaurantData/>
-                                    </CardContent>
-                                </Card>
+                                            />
+                                            <Divider/>
+                                            <CardContent>
+                                                <RestaurantData/>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                    <Box mt={4}/>
+                                    <Grid item xs="auto">
+                                        <Card className={classes.root}>
+                                            <CardHeader
+                                                title={
+                                                    <Typography
+                                                        className={"MuiTypography--heading"}
+                                                        variant={"h6"}
+                                                        gutterBottom
+                                                    >
+                                                        Godziny otwarcia
+                                                    </Typography>
+                                                }
+
+                                            />
+                                            <Divider/>
+                                            <CardContent className={classes.responsiveTable}>
+                                                <RestaurantOpeningHours/>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
                                 </Grid>
-                            <Box mt={4}/>
-                                <Grid item xs="auto">
-                                <Card className={classes.root}>
-                                    <CardHeader
-                                        title={
-                                            <Typography
-                                                className={"MuiTypography--heading"}
-                                                variant={"h6"}
-                                                gutterBottom
-                                            >
-                                                Godziny otwarcia
-                                            </Typography>
-                                        }
-
-                                    />
-                                    <Divider/>
-                                    <CardContent className={classes.responsiveTable}>
-                                        <RestaurantOpeningHours/>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                                <Grid item xs="auto">
-                                        <Card className={classes.root} >
-                                            <Box display="flex" alignItems = "center" justifyContent = "center">
-                                                <Avatar variant="rounded" className={classes.avatar} src={values.image && URL.createObjectURL(values.image)}>
-                                                    {!values.image && <AppLogo/> }
+                                <Grid item xs={12} md={4}>
+                                    <Grid item xs="auto">
+                                        <Card className={classes.root}>
+                                            <Box display="flex" alignItems="center" justifyContent="center">
+                                                <Avatar variant="rounded" className={classes.avatar}
+                                                        src={values.image && URL.createObjectURL(values.image)}>
+                                                    {!values.image && <AppLogo/>}
                                                 </Avatar>
                                             </Box>
-                                            <Box display="flex" justifyContent="space-between" alignItems = "center" mt={2}>
+                                            <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
                                                 <Box>
                                                     <IconButton
-                                                        onClick={()=> setFieldValue("image",'')}
+                                                        onClick={() => setFieldValue("image", '')}
                                                         name="image"
                                                     >
                                                         <DeleteIcon/>
@@ -167,14 +176,15 @@ const Edit = ({match}) =>{
                                                 <div>
                                                     <input
                                                         accept="image/*"
-                                                        style={{display:'none'}}
+                                                        style={{display: 'none'}}
                                                         id="contained-button-file"
                                                         type="file"
-                                                        onChange={e=> setFieldValue("image",e.target.files[0])}
+                                                        onChange={e => setFieldValue("image", e.target.files[0])}
                                                         name="image"
                                                     />
                                                     <label htmlFor="contained-button-file">
-                                                        <Button variant="contained" color="secondary" component="span" size="small">
+                                                        <Button variant="contained" color="secondary" component="span"
+                                                                size="small">
                                                             {values.image ? "Zmień zdjęcie" : "Dodaj zdjęcie"}
                                                         </Button>
                                                     </label>
@@ -182,77 +192,82 @@ const Edit = ({match}) =>{
                                             </Box>
                                         </Card>
                                     </Grid>
-                                <Box mt={4} mb={4}>
-                                <Grid item xs="auto">
-                                    <Card className={classes.root} >
-                                        <CardHeader
-                                            title={
-                                                <Typography
-                                                    className={"MuiTypography--heading"}
-                                                    variant={"h6"}
-                                                    gutterBottom
-                                                >
-                                                    Dane kontaktowe
-                                                </Typography>
-                                            }
-                                        />
-                                        <Divider/>
-                                    <CardContent>
-                                        <RestaurantContact padding={null}/>
-                                    </CardContent>
-                                    </Card>
-                                </Grid>
-                                </Box>
-                                <Box mt={"auto"}/>
-                                <Grid item xs="auto">
-                                    <Card className={classes.root} style={{padding:0}} >
-                                        <Accordion square elevation={0} expanded={isCollapseOpen}>
-                                            <AccordionSummary>
+                                    <Box mt={4} mb={4}>
+                                        <Grid item xs="auto">
+                                            <Card className={classes.root}>
+                                                <CardHeader
+                                                    title={
+                                                        <Typography
+                                                            className={"MuiTypography--heading"}
+                                                            variant={"h6"}
+                                                            gutterBottom
+                                                        >
+                                                            Dane kontaktowe
+                                                        </Typography>
+                                                    }
+                                                />
+                                                <Divider/>
+                                                <CardContent>
+                                                    <RestaurantContact padding={null}/>
+                                                </CardContent>
+                                            </Card>
+                                        </Grid>
+                                    </Box>
+                                    <Box mt={"auto"}/>
+                                    <Grid item xs="auto">
+                                        <Card className={classes.root} style={{padding: 0}}>
+                                            <Accordion square elevation={0} expanded={isCollapseOpen}>
+                                                <AccordionSummary>
 
-                                                <Box display="flex" justifyContent="space-evenly" alignItems = "space-between" flexWrap="wrap" width="100%" pt={1} pb={1}>
-                                                    <Button
-                                                        variant = "contained"
-                                                        color="primary"
-                                                        startIcon={<DeleteIcon/>}
-                                                        size="small"
-                                                        onClick={handleToggleCollapse}
-                                                    >
-                                                        Usuń restaurację
-                                                    </Button>
-                                                    <ProgressButton
-                                                        variant = "contained"
-                                                        color="secondary"
-                                                        startIcon={<DoneIcon/>}
-                                                        size="small"
-                                                        label="Zatwierdź zmiany"
-                                                        loading={isEditing}
-                                                    />
-                                                </Box>
+                                                    <Box display="flex" justifyContent="space-evenly"
+                                                         alignItems="space-between" flexWrap="wrap" width="100%" pt={1}
+                                                         pb={1}>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            startIcon={<DeleteIcon/>}
+                                                            size="small"
+                                                            onClick={handleToggleCollapse}
+                                                        >
+                                                            Usuń restaurację
+                                                        </Button>
+                                                        <ProgressButton
+                                                            variant="contained"
+                                                            color="secondary"
+                                                            startIcon={<DoneIcon/>}
+                                                            size="small"
+                                                            label="Zatwierdź zmiany"
+                                                            loading={isEditing}
+                                                        />
+                                                    </Box>
 
-                                            </AccordionSummary>
-                                            <AccordionDetails>
-                                                <Box display="flex" alignItems="center" flexDirection="column" p={2} pt={0} >
-                                                    { isDeleting ? (
+                                                </AccordionSummary>
+                                                <AccordionDetails>
+                                                    <Box display="flex" alignItems="center" flexDirection="column" p={2}
+                                                         pt={0}>
+                                                        {isDeleting ? (
                                                             <>
                                                                 <Typography variant="h4" color="primary" paragraph>
                                                                     Proszę czekać, trwa usuwanie restauracji ...
                                                                 </Typography>
                                                                 <CircularProgress color="inherit"/>
                                                             </>
-                                                        ):(
+                                                        ) : (
                                                             <>
                                                                 <Typography paragraph>
                                                                     Czy na pewno chcesz usunąć swoją restaurację?
                                                                 </Typography>
-                                                                <Typography variant = "subtitle2" gutterBottom>
-                                                                    Okres usuwania potrwa 30 dni, w tym czasie możesz anulować usuwanie.
-                                                                    Po upływie określonego czasu restauracja zostanie usunięta.
+                                                                <Typography variant="subtitle2" gutterBottom>
+                                                                    Okres usuwania potrwa 30 dni, w tym czasie możesz
+                                                                    anulować usuwanie.
+                                                                    Po upływie określonego czasu restauracja zostanie
+                                                                    usunięta.
                                                                 </Typography>
                                                                 <Box mt={2}>
                                                                     <Button
                                                                         variant="text"
                                                                         startIcon={<DoneIcon/>}
-                                                                        onClick={()=>dispatch(deleteRestaurant(match.params.restaurantId))}
+                                                                        onClick={() => dispatch(deleteRestaurant(match.params.restaurantId))}
                                                                     >
                                                                         Usuń
                                                                     </Button>
@@ -267,21 +282,26 @@ const Edit = ({match}) =>{
                                                                 </Box>
                                                             </>
                                                         )}
-                                                </Box>
+                                                    </Box>
 
-                                            </AccordionDetails>
-                                        </Accordion>
-                                    </Card>
+                                                </AccordionDetails>
+                                            </Accordion>
+                                        </Card>
 
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-
-
+                        </Fade>
                     </form>
                 )
                 }
             </Formik>
+            ): (
+                <Backdrop open={Boolean(!currentRestaurantData)} invisible>
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+                )
+            }
         </>
     )
 };

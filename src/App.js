@@ -31,32 +31,43 @@ const App =()=>{
                 <Route path={routes.LOGIN} component={Login}/>
                 <Route exact path={routes.REGISTER} component={Register}/>
                 <Route exact path={routes.CONFIRM} component = {RegisterConfirmation}/>
-                <AdminPanelPage>
+
                     <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
-                        <AdminDashboard {...props}/>
+                        <AdminPanelPage {...props}>
+                            <AdminDashboard {...props} />
+                        </AdminPanelPage>
                     )}
                     />
                     <Route path={`${routes.RESTAURANT_DASHBOARD}/:restaurantId`} exact render={(props)=>(
-                        <RestaurantDashboard {...props}/>
+                        <AdminPanelPage {...props}>
+                            <RestaurantDashboard {...props}/>
+                        </AdminPanelPage>
                     )}
                     />
                     <Route path={`${routes.RESTAURANT_MENU}/:restaurantId`} exact render={(props)=>(
-                        <Menu {...props}/>
+                        <AdminPanelPage {...props}>
+                            <Menu {...props}/>
+                        </AdminPanelPage>
                         )}
                     />
                     <Route path={`${routes.RESTAURANT_ORDERS}/:restaurantId`} exact render={(props)=>(
-                        <Orders {...props}/>
+                        <AdminPanelPage {...props}>
+                            <Orders {...props}/>
+                        </AdminPanelPage>
                     )}
                     />
                     <Route path={`${routes.RESTAURANT_WORKERS}/:restaurantId`} exact render={(props)=>(
-                        <Workers {...props}/>
+                        <AdminPanelPage {...props}>
+                            <Workers {...props}/>
+                        </AdminPanelPage>
                     )}
                     />
                     <Route path={`${routes.RESTAURANT_EDIT}/:restaurantId`} exact render={(props)=>(
-                        <Edit {...props}/>
+                        <AdminPanelPage {...props}>
+                            <Edit {...props}/>
+                        </AdminPanelPage>
                     )}
                     />
-                </AdminPanelPage>
             </Switch>
         </Router>
 

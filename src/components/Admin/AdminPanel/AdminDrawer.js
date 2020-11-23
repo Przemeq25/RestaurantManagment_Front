@@ -11,7 +11,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import {Desktop, Mobile} from "../../../helpers/_helpers";
 import appLogo from "../../../helpers/_helpers";
 import {routes} from "../../../config/routes";
-import {useSelector} from "react-redux";
 import SettingsIcon from '@material-ui/icons/Settings';
 
 
@@ -65,9 +64,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const AdminDrawer = ({isDrawerOpen,closeDrawer}) =>{
+const AdminDrawer = ({isDrawerOpen,closeDrawer,match}) =>{
     const classes = useStyles({isDrawerOpen:isDrawerOpen});
-    const restaurantId = useSelector(state=>state.restaurant.selectedRestaurant.id)
+    const restaurantId = match.params.restaurantId;
     const drawerList = ()=> {
         return (
             <List>
@@ -98,7 +97,7 @@ const AdminDrawer = ({isDrawerOpen,closeDrawer}) =>{
                     </ListItemIcon>
                     <ListItemText>Zamówienia</ListItemText>
                 </ListItem>
-                <ListItem disableGutters button component={NavLink} to="/restaurants/" activeClassName="Mui-selected">
+                <ListItem disableGutters button component={NavLink} to={`/admin/my_restaurant/${restaurantId}`} activeClassName="Mui-selected">
                     <ListItemIcon className={classes.icon}>
                         <VisibilityIcon/>
                         <Desktop>

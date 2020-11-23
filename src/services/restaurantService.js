@@ -49,7 +49,7 @@ const editRestaurant = (restaurantData,restaurantID)=>{
         },
         {
             headers:{
-                Authorization:`bearer ${token}`
+                Authorization:`bearer ${ localStorage.getItem('access_token')}`
             }
         }
     )

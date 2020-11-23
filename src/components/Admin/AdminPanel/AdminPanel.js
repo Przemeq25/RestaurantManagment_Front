@@ -88,13 +88,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const AdminPanel = (props) => {
+const AdminPanel = ({children,match}) => {
     const classes = useStyles();
     const [isDrawerOpen,setDrawerOpen] = useState(false);
     const [isMenuOpen, setMenuOpen] = React.useState(false);
     const anchorRef = useRef(null);
     const theme = useTheme();
-    const selectedRestaurant = useSelector(state=>state.restaurant.selectedRestaurant);
     const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
     const dispatch = useDispatch();
 
@@ -112,10 +111,12 @@ const AdminPanel = (props) => {
     };
 
     const switchTitlePage = (title)=>{
-        //const splitedTitle = title.split("/")[2] ? props.location.pathname.split("/")[2]: "admin";
-        switch(title){
+        const splitedTitle = title.split("/")[2] ? title.split("/")[2]: "admin";
+        switch(splitedTitle){
+            case "admin":
+                return "Admin panel";
             case 'dashboard':
-                return 'Strona startowa';
+                return 'Strona główna';
             case 'menu':
                 return 'Menu';
             case 'orders':
@@ -134,7 +135,7 @@ const AdminPanel = (props) => {
                 <Toolbar className={classes.spaceBetween}>
                     <div className={classes.inline}>
                         {
-                            selectedRestaurant &&
+                            match.path !== routes.ADMIN_PANEL &&
                                 <IconButton
                                     color="inherit"
                                     aria-label="open drawer"
@@ -146,7 +147,7 @@ const AdminPanel = (props) => {
                                 </IconButton>
                         }
                         <Typography variant="h6" noWrap>
-                            {switchTitlePage(props.location)}
+                            {switchTitlePage(match.path)}
                         </Typography>
                     </div>
                     <Hidden xsDown>
@@ -246,10 +247,10 @@ const AdminPanel = (props) => {
                     </div>
                 </Toolbar>
             </AppBar>
-            {selectedRestaurant && <AdminDrawer isDrawerOpen={isDrawerOpen} closeDrawer={handleDrawerToggle}/>}
+            {match.path !== routes.ADMIN_PANEL && <AdminDrawer isDrawerOpen={isDrawerOpen} closeDrawer={handleDrawerToggle} match={match}/>}
             <main className={classes.content}>
                 <Toolbar />
-               {props.children}
+               {children}
             </main>
         </div>
     );

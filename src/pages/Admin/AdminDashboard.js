@@ -21,6 +21,7 @@ import {
     TableBody,
     TableRow,
     TableCell,
+    Grow
 } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
@@ -116,6 +117,7 @@ const AdminDashboard = () =>{
                     <AddRestaurantStepper isDialogOpen={isDialogOpen} setDialogOpen={handleToggleDialog} firstRegister={Boolean(userType && userType.length <= 0)}/>
                     <Grid container spacing={4}>
                         {restaurants.length ? restaurants.map(restaurant=>(
+                            <Grow in = {Boolean(restaurants.length > 0)} key={restaurant.id}>
                             <Grid item xs={12} md = {6} lg = {4} xl = {3} key={restaurant.id}>
                                 <Card className={classes.card}>
                                     <CardActionArea onClick={()=>dispatch(selectRestaurant(restaurant))}>
@@ -226,6 +228,7 @@ const AdminDashboard = () =>{
                                     </CardActions>
                                 </Card>
                             </Grid>
+                            </Grow>
                         )): null}
 
 
