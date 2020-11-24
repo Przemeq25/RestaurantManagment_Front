@@ -25,8 +25,10 @@ const useStyles = makeStyles((theme) => ({
         width: drawerWidth,
         flexShrink: 0,
         whiteSpace: 'nowrap',
-        backgroundColor:'#f5f5f5',
+        backgroundColor:'#ededed',
         color:theme.palette.text.disabled,
+        boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
+
     },
     icon:{
         width: open=> !open.isDrawerOpen && '100%',

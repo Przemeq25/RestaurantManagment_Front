@@ -19,7 +19,7 @@ import {
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {getCuisineTypeValue, restaurantInitialValues} from "../../helpers/_helpers";
-import {validationSchema} from "../../helpers/_validation";
+import {restaurantValidationSchema} from "../../helpers/_validation";
 import {Formik} from "formik";
 import DeleteIcon from '@material-ui/icons/Delete';
 import CropIcon from '@material-ui/icons/Crop';
@@ -92,8 +92,7 @@ const Edit = ({match}) =>{
                 <Formik
                 initialValues={currentData}
                 enableReinitialize={true}
-                validateOnMount={true}
-                validationSchema={validationSchema}
+                validationSchema={restaurantValidationSchema}
                 onSubmit={(values) => {
                     const categories = values.category.map(category => category.key);
                     const newValues = Object.assign({}, values);

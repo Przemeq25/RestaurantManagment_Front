@@ -119,5 +119,12 @@ export const restaurantInitialValues = {
         },
     ]
 };
+export const menuInitialValues = {
+    image:'',
+    name:'',
+    price:'',
+    ingredients:'',
+    timeToDo:'',
+}
 
 

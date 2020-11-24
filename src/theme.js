@@ -37,11 +37,11 @@ const theme = createMuiTheme({
             },
         },
         h5:{
-            fontSize:'0.9rem',
+            fontSize:'1rem',
             fontWeight:400,
             lineHeight:'1.2rem',
             '@media (max-width:960px)': {
-                fontSize: '1rem',
+                fontSize: '0.9rem',
             },
         },
         subtitle2:{

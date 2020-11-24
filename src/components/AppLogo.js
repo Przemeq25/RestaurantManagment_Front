@@ -24,8 +24,8 @@ const AppLogo = ({size, marginTop, marginBottom,color, push}) =>{
             onClick={()=>push && history.push('/')}
             className={classes.boxStyle}
         >
-            <Typography variant = "h2" className ={classes.logoText} color={color}>management</Typography>
-            <Typography variant = "h2" className ={classes.logoText} color={color}>restaurant.</Typography>
+            <Typography variant = "h2" className ={classes.logoText} color={color}>restaurant</Typography>
+            <Typography variant = "h2" className ={classes.logoText} color={color}>management.</Typography>
         </Box>
     )
 }

@@ -6,7 +6,7 @@ export const  phoneIsValid =(phone)=>{
 }
 
 export const onlyNumbers = (e)=> {
-    e.target.value = e.target.value.replace(/[^0-9+-]/g, '');
+    e.target.value = e.target.value.replace(/[^0-9\.-]/g, '');
 }
 export const onlyLetters = (e)=>{
     e.target.value = e.target.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+/g, '');
@@ -38,7 +38,7 @@ export const isValidRegon = (regon) =>{
     return (parseInt(digits[8])==checksum);
 }
 
-export const validationSchema = Yup.object().shape({
+export const restaurantValidationSchema = Yup.object().shape({
     name: Yup.string()
         .required('Pole wymagane'),
     category: Yup.string()
@@ -62,4 +62,20 @@ export const validationSchema = Yup.object().shape({
     houseNumber:Yup.string()
         .required('Pole wymagane'),
 
+});
+
+export const menuValidationSchema = Yup.object().shape({
+    name: Yup.string()
+        .required('Pole wymagane'),
+    price:Yup.string().test(
+        'is-decimal',
+        'Kwota niepoprawna',
+        value => (value + "").match(/^(0|0?[1-9]\d*)\.\d\d$/g),
+    ).required("Pole wymagane"),
+    timeToDo:Yup.string()
+        .test(
+            'is-integer',
+            'Podaj czas w minutach',
+            value => (value + "").match(/^[0-9]*$/g))
+        .required('Pole wymagane'),
 });

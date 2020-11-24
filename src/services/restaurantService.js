@@ -20,7 +20,7 @@ const addRestaurant = (restaurantData)=>{
     },
 {
         headers:{
-            Authorization:`bearer ${token}`
+            Authorization:`bearer ${localStorage.getItem('access_token')}`
         }
     }
     )

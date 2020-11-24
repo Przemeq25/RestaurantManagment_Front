@@ -1,13 +1,11 @@
 import React, {useState} from "react";
 import {makeStyles, useTheme} from "@material-ui/core/styles";
-import {Card, CardMedia, CardContent, Typography,Chip,Box,TextField,IconButton,Grid} from "@material-ui/core";
+import {Card, CardMedia, CardContent, Typography,Chip,Box,Grow,IconButton,Grid} from "@material-ui/core";
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import DescriptionIcon from '@material-ui/icons/Description';
-import LocalAtmIcon from '@material-ui/icons/LocalAtm';
-import DoneIcon from '@material-ui/icons/Done';
-import CloseIcon from '@material-ui/icons/Close';
+import AppLogo from "../../AppLogo";
+import {useDispatch} from "react-redux";
+import {openDrawerToEditMeal} from "../../../redux/actions/meals";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -82,55 +80,75 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down('xs')]: {
             lineClamp: 2,
         },
+    },
+    cardMedia:{
+        display: 'flex',
+        backgroundColor:'#ededed',
+        height: '100%',
+        alignItems:'center',
+        justifyContent:'center',
+        width: 200,
+        [theme.breakpoints.down('xs')]: {
+            maxWidth: 120,
+            height: 120,
+        },
     }
 }));
 
-const MenuRowCard = () =>{
+const MenuRowCard = ({id,name,image,ingredients,timeToDo,price}) =>{
     const classes = useStyles();
+    const dispatch = useDispatch();
     return(
-        <Card className={classes.root}>
-            <Box className={classes.editingButtons}>
-                <IconButton size="small">
-                    <EditIcon fontSize="small"/>
-                </IconButton>
-            </Box>
-            <Chip
-                variant="default"
-                color="secondary"
-                size="small"
-                icon={<AccessTimeIcon/>}
-                label="35min"
-                className = {classes.chip}
-            />
-            <CardMedia
-                className={classes.cover}
-                image="https://res.cloudinary.com/przemeq25/image/upload/v1593706499/frytki_dnooac.jpg"
-            />
-            <CardContent className={classes.content}>
-                <Grid container wrap="nowrap" direction="column" spacing={1} >
-                    <Grid item zeroMinWidth>
-                        <Typography component="h2" variant="h5" noWrap gutterBottom className={classes.fontBold}>
-                            Live From Space 3213 123 123 dasd asd asd asd
-                        </Typography>
+        <Grow in={true} timeout={500}>
+            <Card className={classes.root}>
+                <Box className={classes.editingButtons}>
+                    <IconButton size="small" onClick={()=>dispatch(openDrawerToEditMeal({id,name,image,ingredients,timeToDo,price}))}>
+                        <EditIcon fontSize="small" color="secondary"/>
+                    </IconButton>
+                </Box>
+                <Chip
+                    variant="default"
+                    color="secondary"
+                    size="small"
+                    icon={<AccessTimeIcon/>}
+                    label={`${timeToDo} min`}
+                    className = {classes.chip}
+                />
+                {image ? (
+                        <CardMedia
+                            className={classes.cover}
+                            image="https://res.cloudinary.com/przemeq25/image/upload/v1593706499/frytki_dnooac.jpg"
+                        />
+                    ):(
+                        <Box className = {classes.cardMedia}>
+                            <AppLogo size={12}/>
+                        </Box>
+                    )}
+                <CardContent className={classes.content}>
+                    <Grid container wrap="nowrap" direction="column" spacing={1} >
+                        <Grid item zeroMinWidth>
+                            <Typography component="h2" variant="h5" noWrap gutterBottom className={classes.fontBold}>
+                                {name}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs>
+                           <Box
+                               classes={{root:classes.descriptionBox}}
+                           >
+                               <Typography variant = "subtitle2">
+                                   {ingredients}
+                               </Typography>
+                           </Box>
+                        </Grid>
+                        <Grid item>
+                            <Typography component="h6" variant="h4" color="secondary" className={classes.fontBold}>
+                                {price} zł
+                            </Typography>
+                        </Grid>
                     </Grid>
-                    <Grid item xs>
-                       <Box
-                           component="Typography"
-                           variant="subtitle2"
-                           classes={{root:classes.descriptionBox}}
-                       >
-
-
-                       </Box>
-                    </Grid>
-                    <Grid item>
-                        <Typography component="h6" variant="h4" color="secondary" className={classes.fontBold}>
-                            35 zł
-                        </Typography>
-                    </Grid>
-                </Grid>
-            </CardContent>
-        </Card>
+                </CardContent>
+            </Card>
+        </Grow>
     );
 }
 export default MenuRowCard;

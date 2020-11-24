@@ -22,7 +22,7 @@ import RestaurantOpeningHours from "./RestaurantOpeningHours";
 import ProgressButton from "../../ProgressButton";
 import {addRestaurant} from "../../../redux/actions/restaurant";
 import {useDispatch, useSelector} from "react-redux";
-import {validationSchema} from "../../../helpers/_validation";
+import {restaurantValidationSchema} from "../../../helpers/_validation";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -118,7 +118,7 @@ const AddRestaurantStepper = ({setDialogOpen,firstRegister}) => {
             </Stepper>
             <Formik
                 initialValues={restaurantInitialValues}
-                validationSchema={validationSchema}
+                validationSchema={restaurantValidationSchema}
                 onSubmit={(values) => {
                     const categories = values.category.map(category => category.key);
                     const newRestaurantObject = Object.assign(values,{category:categories});
