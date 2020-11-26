@@ -58,9 +58,8 @@ const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isRequesting,menu
     }
 
     useEffect(()=>{
-        console.log('123')
-        setCollapseOpen(false);
-    },[isDeleteRequesting]);
+        !menuIsOpen && setCollapseOpen(false);
+    },[menuIsOpen]);
 
     return(
         <>

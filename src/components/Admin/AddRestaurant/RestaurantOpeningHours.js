@@ -9,7 +9,7 @@ import {
     TextField
 } from "@material-ui/core";
 import {useFormikContext} from "formik";
-import {worksTimeDaysTranslate} from "../../../helpers/_helpers";
+import {toLocalTime, worksTimeDaysTranslate} from "../../../helpers/_helpers";
 
 
 const RestaurantOpeningHours = ()=>{
@@ -40,7 +40,7 @@ const RestaurantOpeningHours = ()=>{
                                         <TextField
                                             type="time"
                                             name={`worksTime[${index}].from`}
-                                            value={values.worksTime[index].from}
+                                            value={values.worksTime[index].from ? toLocalTime(values.worksTime[index].from) : ""}
                                             onChange={handleChange}
                                             InputLabelProps={{
                                                 shrink: true,
@@ -54,7 +54,7 @@ const RestaurantOpeningHours = ()=>{
                                         <TextField
                                             type="time"
                                             name={`worksTime[${index}].to`}
-                                            value={values.worksTime[index].to}
+                                            value={values.worksTime[index].to ? toLocalTime(values.worksTime[index].to) : ""}
                                             onChange={handleChange}
                                             InputLabelProps={{
                                                 shrink: true,

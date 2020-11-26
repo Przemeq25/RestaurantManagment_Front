@@ -71,7 +71,7 @@ const addMeal = (restaurantID,meal) =>{
 }
 
 const getRestaurants = () =>{
-    return axios.get(`${appUrl}/restaurant-api/restaurants?size=99`,
+    return axios.get(`${appUrl}/restaurant-api/restaurants?size=99&me=true`,
 {
             headers: {
                 Authorization: `bearer ${token}`

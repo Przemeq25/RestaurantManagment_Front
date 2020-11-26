@@ -1,6 +1,7 @@
 import logo from "../images/logo2.png";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createBrowserHistory } from 'history';
+import moment from 'moment';
 
 export const history = createBrowserHistory();
 
@@ -35,6 +36,9 @@ export const cuisineType = [
 export const getCuisineTypeValue=(categories)=>{
     return  categories.map(category => cuisineType.find(cuisine=> category === cuisine.key))
 };
+export const toLocalTime = (time)=>{
+    return moment(time,'HH:mm').format("HH:mm");
+}
 
 export const getAdminType = (types, restaurantId) => {
     const typeFound = types.find(item => item.id === restaurantId);
@@ -84,38 +88,38 @@ export const restaurantInitialValues = {
     worksTime:[
         {
             day:'MONDAY',
-            from:'07:00:00',
-            to:'20:00:00',
+            from:'07:00',
+            to:'20:00',
         },
         {
             day:'TUESDAY',
-            from:'07:00:00',
-            to:'20:00:00',
+            from:'07:00',
+            to:'20:00',
         },
         {
             day:'WEDNESDAY',
-            from:'07:00:00',
-            to:'20:00:00',
+            from:'07:00',
+            to:'20:00',
         },
         {
             day:'THURSDAY',
-            from:'07:00:00',
-            to:'20:00:00',
+            from:'07:00',
+            to:'20:00',
         },
         {
             day:'FRIDAY',
-            from:'07:00:00',
-            to:'20:00:00',
+            from:'07:00',
+            to:'20:00',
         },
         {
             day:'SATURDAY',
-            from:'07:00:00',
-            to:'20:00:00',
+            from:'07:00',
+            to:'20:00',
         },
         {
             day:'SUNDAY',
-            from:'07:00:00',
-            to:'20:00:00',
+            from:'07:00',
+            to:'20:00',
         },
     ]
 };

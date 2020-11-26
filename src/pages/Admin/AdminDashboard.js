@@ -25,7 +25,7 @@ import {
 } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
-import appLogo, {getAdminType} from '../../helpers/_helpers';
+import appLogo, {getAdminType, toLocalTime, worksTimeDaysTranslate} from '../../helpers/_helpers';
 import AddRestaurantStepper from "../../components/Admin/AddRestaurant/AddRestaurantStepper";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -214,10 +214,10 @@ const AdminDashboard = () =>{
                                                             {restaurant.worksTime.map((row) => (
                                                                 <TableRow key={row.day}>
                                                                     <TableCell>
-                                                                        {row.day}
+                                                                        {worksTimeDaysTranslate(row.day)}
                                                                     </TableCell>
-                                                                    <TableCell align="right">{row.from}</TableCell>
-                                                                    <TableCell align="right">{row.to}</TableCell>
+                                                                    <TableCell align="right">{row.from ? toLocalTime(row.from) : "Zamknięte"}</TableCell>
+                                                                    <TableCell align="right">{row.to ? toLocalTime(row.to) : "Zamknięte"}</TableCell>
                                                                 </TableRow>
                                                             ))}
                                                         </TableBody>
