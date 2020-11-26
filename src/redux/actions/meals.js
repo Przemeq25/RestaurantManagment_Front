@@ -54,3 +54,18 @@ export const editMeal =(meal,restaurantID)=>{
     function success(meal){ return {type:mealsConstants.EDIT_MEAL_SUCCESS, payload:meal}}
     function error(error) { return {type:mealsConstants.EDIT_MEAL_ERROR, payload:error}}
 }
+
+export const deleteMeal = (mealID,restaurantID)=>{
+    return dispatch=>{
+        dispatch(request());
+        mealsService.deleteMeal(mealID,restaurantID)
+            .then(()=>{
+                dispatch(success(mealID));
+                dispatch(closeDrawer())
+            })
+            .catch(errorMessage=>dispatch(error(errorMessage)));
+    };
+    function request(){ return{type:mealsConstants.DELETE_MEAL_REQUEST}}
+    function success(meal){ return {type:mealsConstants.DELETE_MEAL_SUCCESS, payload:meal}}
+    function error(error) { return {type:mealsConstants.DELETE_MEAL_ERROR, payload:error}}
+}

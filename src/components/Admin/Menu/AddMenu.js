@@ -1,17 +1,30 @@
 import React, {useEffect, useState} from "react";
-import {Drawer, TextField, Typography, Avatar, Button, Box} from "@material-ui/core";
+import {
+    Drawer,
+    TextField,
+    Typography,
+    Avatar,
+    Button,
+    Box,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails, CircularProgress, Card
+} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import CloseIcon from '@material-ui/icons/Close';
 import {Formik} from "formik";
 import {menuValidationSchema, onlyNumbers} from "../../../helpers/_validation";
 import ProgressButton from "../../ProgressButton";
 import AppLogo from "../../AppLogo";
+import DeleteIcon from '@material-ui/icons/Delete';
+import DoneIcon from '@material-ui/icons/Done';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles(theme=>({
     drawerStyle:{
         top: 64,
         padding:20,
         alignItems:'center',
+        height:'calc(100% - 64px)',
         maxWidth:380,
         [theme.breakpoints.down('sm')]: {
             width: '100%',
@@ -30,11 +43,24 @@ const useStyles = makeStyles(theme=>({
     },
     input:{
         display:'none',
+    },
+    accordionSummary:{
+        padding: 0,
     }
 }));
 
-const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isRequesting,menuInitialValues,isEditing})=>{
+const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isRequesting,menuInitialValues,isEditing,isDeleteRequesting,handleDeleteMeal})=>{
     const classes = useStyles();
+    const [isCollapseOpen,setCollapseOpen] = useState(false);
+
+    const handleToggleCollapse = () =>{
+        setCollapseOpen(!isCollapseOpen);
+    }
+
+    useEffect(()=>{
+        console.log('123')
+        setCollapseOpen(false);
+    },[isDeleteRequesting]);
 
     return(
         <>
@@ -167,6 +193,63 @@ const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isRequesting,menu
                                             loading={isRequesting}
                                         />
                                     </Box>
+                                    {isEditing ?
+                                        <Box mt={2} display="flex" justifyContent="center">
+                                            <Accordion square elevation={0} expanded={isCollapseOpen}>
+                                                <AccordionSummary classes={{root:classes.accordionSummary}}>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        startIcon={<DeleteIcon/>}
+                                                        size="small"
+                                                        onClick={handleToggleCollapse}
+                                                        fullWidth
+                                                    >
+                                                        Usuń posiłek
+                                                    </Button>
+                                                </AccordionSummary>
+                                                <AccordionDetails>
+                                                    <Box display="flex" alignItems="center" flexDirection="column" p={2} pt={0}>
+                                                        {isDeleteRequesting ? (
+                                                            <>
+                                                                <Typography variant="h4" color="primary" paragraph>
+                                                                    Proszę czekać, trwa usuwanie posiłku ...
+                                                                </Typography>
+                                                                <CircularProgress color="inherit"/>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Typography paragraph>
+                                                                    Czy na pewno chcesz usunąć ten posiłek?
+                                                                </Typography>
+                                                                <Typography variant="subtitle2" gutterBottom>
+                                                                    Usuwając nie będziesz miał możliwości przywrócenia go do swojego menu!
+                                                                </Typography>
+                                                                <Box mt={2}>
+                                                                    <Button
+                                                                        variant="text"
+                                                                        startIcon={<DoneIcon/>}
+                                                                        onClick={()=>handleDeleteMeal(values.id)}
+                                                                    >
+                                                                        Usuń
+                                                                    </Button>
+                                                                    <Button
+                                                                        variant="text"
+                                                                        startIcon={<CloseIcon/>}
+                                                                        onClick={handleToggleCollapse}
+                                                                    >
+                                                                        Anuluj
+                                                                    </Button>
+                                                                </Box>
+                                                            </>
+                                                        )}
+                                                    </Box>
+
+                                                </AccordionDetails>
+                                            </Accordion>
+                                        </Box>
+                                        : null
+                                    }
 
                                 </form>
                             </>

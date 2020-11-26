@@ -5,7 +5,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import AddMenu from "../../components/Admin/Menu/AddMenu";
 import MenuRowCard from "../../components/Admin/Menu/MenuRowCard";
 import {useDispatch, useSelector} from "react-redux";
-import {addMeal, closeDrawer, editMeal, getMeals, openDrawer} from "../../redux/actions/meals";
+import {addMeal, closeDrawer, deleteMeal, editMeal, getMeals, openDrawer} from "../../redux/actions/meals";
 import {menuInitialValues} from "../../helpers/_helpers";
 
 const useStyles = makeStyles(theme=>({
@@ -28,6 +28,7 @@ const Menu = ({match}) =>{
     const mealsArray = useSelector(state=>state.meals.meals);
     const menuIsOpen = useSelector(state=>state.meals.isDrawerOpen);
     const isRequesting = useSelector(state=>state.meals.isRequesting);
+    const isDeleteRequesting = useSelector(state=>state.meals.isDeleteRequesting);
     const editedMeal = useSelector(state=>state.meals.editedMeal);
     useEffect(()=>{
         mealsArray.length <=0 && dispatch(getMeals(match.params.restaurantId))
@@ -46,15 +47,20 @@ const Menu = ({match}) =>{
     const handleEditMeal = (meal) =>{
         dispatch(editMeal(meal,match.params.restaurantId,meal.id));
     }
+    const handleDeleteMeal = (mealID) =>{
+        dispatch(deleteMeal(mealID,match.params.restaurantId));
+    }
     return (
         <>
             <AddMenu
                 menuIsOpen = {menuIsOpen}
                 handleCloseDrawer={handleCloseDrawer}
                 handleSubmitForm={editedMeal ? handleEditMeal : handleAddMeal}
+                handleDeleteMeal={handleDeleteMeal}
                 isRequesting={isRequesting}
                 menuInitialValues={editedMeal ? editedMeal : menuInitialValues}
                 isEditing={Boolean(editedMeal)}
+                isDeleteRequesting={isDeleteRequesting}
             />
             <Typography variant="h3">Menu:</Typography>
             <Typography variant="subtitle2" paragraph >Zarządzaj menu swojej restauracji!</Typography>

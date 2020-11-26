@@ -42,8 +42,17 @@ const editMeal = (meal,restaurantID,mealID)=>{
         })
 }
 
+const deleteMeal = (mealID,restaurantID) =>{
+    return axios.delete(`${appUrl}/restaurant-api/restaurants/${restaurantID}/meals/${mealID}`,{
+        headers: {
+            Authorization: `bearer ${localStorage.getItem('access_token')}`
+        }
+    })
+}
+
 export const mealsService = {
     getMeals,
     addMeal,
-    editMeal
+    editMeal,
+    deleteMeal
 }

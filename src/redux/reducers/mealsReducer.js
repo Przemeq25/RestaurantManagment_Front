@@ -62,7 +62,6 @@ export const mealsReducer = (state=initialState, action)=>{
         case mealsConstants.EDIT_MEAL_SUCCESS:
             const foundMatchIndexOfEditingMeal = state.meals.findIndex(meal=>meal.id === action.payload.id);
             const newArrayOfMeals = [...state.meals];
-            console.log(foundMatchIndexOfEditingMeal)
             newArrayOfMeals.splice(foundMatchIndexOfEditingMeal,1,action.payload);
             return {
                 ...state,
@@ -73,6 +72,27 @@ export const mealsReducer = (state=initialState, action)=>{
             return {
                 ...state,
                 isRequesting:false,
+                error: action.payload,
+            }
+        case mealsConstants.DELETE_MEAL_REQUEST:
+            return {
+                ...state,
+                isDeleteRequesting: true,
+            }
+        case mealsConstants.DELETE_MEAL_SUCCESS:
+            const foundMatchIndexOfDeletingMeal = state.meals.findIndex(meal=>meal.id === action.payload);
+            const newMeals = [...state.meals];
+            newMeals.splice(foundMatchIndexOfDeletingMeal,1);
+
+            return {
+                ...state,
+                isDeleteRequesting:false,
+                meals: newMeals
+            }
+        case mealsConstants.DELETE_MEAL_ERROR:
+            return {
+                ...state,
+                isDeleteRequesting: false,
                 error: action.payload,
             }
         default:
