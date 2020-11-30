@@ -7,14 +7,14 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from "@material-ui/core/MenuItem";
-import {AccountCircle} from "@material-ui/icons";
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import AdminDrawer from "./AdminDrawer";
 import AppLogo from "../../AppLogo";
 import {useDispatch, useSelector} from "react-redux";
-import {ClickAwayListener, Grow, Hidden, ListItemIcon, MenuList, Paper, Popper} from "@material-ui/core";
+import {Box,Button, ClickAwayListener, Grow, Hidden, ListItemIcon, MenuList, Paper, Popper} from "@material-ui/core";
 import {NavLink} from "react-router-dom";
 import {routes} from "../../../config/routes";
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import {logout} from "../../../redux/actions/auth";
 import {history} from "../../../helpers/_helpers";
@@ -39,7 +39,13 @@ const useStyles = makeStyles((theme) => ({
         "&:focus, &:active":{
             outline:'none',
         },
-        marginRight:theme.spacing(2)
+        '&:hover':{
+            color: theme.palette.secondary.main,
+        },
+    },
+    menuButtonText:{
+        fontWeight:600,
+        fontSize:'0.6rem',
     },
     inline:{
         display: 'flex',
@@ -63,15 +69,16 @@ const useStyles = makeStyles((theme) => ({
     },
     toolbar:theme.mixins.toolbar,
     paperRoot:{
-        backgroundColor:theme.palette.primary.main,
-        color:theme.palette.primary.contrastText,
+        boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
+        borderBottomLeftRadius:theme.spacing(2),
+        borderBottomRightRadius:theme.spacing(2),
+        overflow:'hidden'
     },
     menuItem:{
-        padding: '12px 16px',
+        padding: '20px 20px',
         [theme.breakpoints.down('md')]:{
             padding: '12px 12px',
         }
-
     },
     menuIcon:{
         color : "inherit",
@@ -82,8 +89,9 @@ const useStyles = makeStyles((theme) => ({
         justifyContent:'center',
         padding: '10px 16px',
         [theme.breakpoints.down('md')]:{
-            padding: '12px 8px',
+            padding: '5px 8px',
         },
+        minHeight:30,
 
     },
 }));
@@ -154,13 +162,12 @@ const AdminPanel = ({children,match}) => {
                         <AppLogo color="secondary" push/>
                     </Hidden>
                     <div>
-                        <IconButton
-                            onClick={handleMenuToggle}
-                            color="inherit"
-                            ref={anchorRef}
-                        >
-                            <AccountCircle />
-                        </IconButton>
+                        <Button ref={anchorRef}  onClick={handleMenuToggle} color="inherit" disableRipple className={classes.menuButton}>
+                            <Box display="flex" alignItems ='center' flexDirection = "column">
+                                <PersonOutlineIcon color="inherit"/>
+                                <Typography color="inherit" className={classes.menuButtonText}>Twoje konto</Typography>
+                            </Box>
+                        </Button>
                         <Popper
                             open={isMenuOpen}
                             anchorEl={anchorRef.current}
@@ -171,7 +178,7 @@ const AdminPanel = ({children,match}) => {
                             {({ TransitionProps }) => (
                                 <Grow
                                     {...TransitionProps}
-                                    style={{ transformOrigin: " right top", transform: window.innerWidth >= theme.breakpoints.width('md') ? 'translate(10px,9px)' : 'translate(16px,5px)' }}
+                                    style={{ transformOrigin: " right top", transform: window.innerWidth >= theme.breakpoints.width('md') ? 'translate(10px,7px)' : 'translate(16px,0px)' }}
                                 >
                                     <Paper square elevation={2} classes={{root: classes.paperRoot}} >
                                         <ClickAwayListener onClickAway={handleClose}>
@@ -184,7 +191,7 @@ const AdminPanel = ({children,match}) => {
                                                     className={classes.menuItem}
                                                 >
                                                     <ListItemIcon className={classes.menuIcon}>
-                                                        <AccountCircle fontSize="small" />
+                                                        <PersonOutlineIcon fontSize="small" />
                                                     </ListItemIcon>
                                                     <Typography variant="h5" color = "inherit">Twoje konto</Typography>
                                                 </MenuItem>
@@ -196,7 +203,7 @@ const AdminPanel = ({children,match}) => {
                                                     className={classes.menuItem}
                                                 >
                                                     <ListItemIcon className={classes.menuIcon}>
-                                                        <AssignmentIcon fontSize="small" />
+                                                        <AssignmentOutlinedIcon fontSize="small" />
                                                     </ListItemIcon>
                                                     <Typography variant="h5" color = "inherit">Zamówienia</Typography>
                                                 </MenuItem>
@@ -221,7 +228,7 @@ const AdminPanel = ({children,match}) => {
                                                                 handleClose(e);
                                                                 dispatch(logout());
                                                             }}
-                                                            className={classes.authButton}
+                                                            classes={{root:classes.authButton}}
                                                         >
                                                             <Typography variant="h5" color = "inherit">Wyloguj się</Typography>
                                                         </MenuItem>

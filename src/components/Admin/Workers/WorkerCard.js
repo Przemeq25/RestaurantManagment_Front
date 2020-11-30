@@ -1,5 +1,5 @@
 import React from 'react';
-import {Paper, Box, Avatar, Typography, Button} from "@material-ui/core";
+import {Paper, Box, Divider, Typography, Button, Grow} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import PhoneIcon from '@material-ui/icons/Phone';
 import MailIcon from '@material-ui/icons/Mail';
@@ -8,43 +8,73 @@ import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 const useStyles = makeStyles((theme)=>({
     cardStyle:{
         width:'100%',
+        boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
+        borderRadius:theme.spacing(2),
+        "&:hover": {
+            boxShadow: "-1px 10px 29px 0px rgba(0,0,0,0.4)"
+        },
     },
-    avatarStyle:{
-        width: 120,
-        height: 120,
+    titleText:{
+        fontWeight:600
     }
 }))
 
-const WorkerCard = () =>{
+const WorkerCard = ({city,email,forename,surname,houseNumber,street,phoneNumber,postCode}) =>{
     const classes = useStyles();
     return (
-        <Paper elevation={2} className={classes.cardStyle}>
-            <Box display = "flex" alignItems="center" justifyContent="center" pt={5} pb = {10}>
-                <Avatar className={classes.avatarStyle}>
+        <Grow in={true} timeout={500}>
+            <Paper elevation={2} className={classes.cardStyle}>
+                <Box display = "flex" alignItems="center" justifyContent="center" flexDirection="column" p={4}>
+                    <Typography variant="h4" className={classes.titleText}>{forename} {surname}</Typography>
+                    <Box display="flex" justifyContent = "space-between" mt={4} mb ={4}>
+                        <Box display="flex" justifyContent="center" flexDirection="column" alignItems="flex-start" pr={3}>
+                            <Box display="flex" alignItems="center" pb={1}>
+                                <PhoneIcon color="secondary" fontSize="small"/>
+                                <Box mr={1}/>
+                                <Typography variant="body2"> {phoneNumber}</Typography>
+                            </Box>
+                            <Box display="flex" alignItems="center">
+                                <MailIcon color="secondary" fontSize="small"/>
+                                <Box mr={1}/>
+                                <Typography variant="body2"> {email}</Typography>
+                            </Box>
+                        </Box>
+                        <Divider orientation="vertical" />
+                        <Box display="flex" justifyContent="flex-start" flexDirection="column" pl={3}>
+                            <Typography
+                                variant="body2"
+                                gutterBottom
+                            >
+                                {city}
+                            </Typography>
+                            <Typography
+                                variant="body2"
+                                gutterBottom
+                            >
+                                {postCode}
+                            </Typography>
+                            <Box display="flex" alignItems ="center">
+                                <Typography
+                                    variant="body2"
+                                >
+                                   {street}
+                                </Typography>
 
-                </Avatar>
-            </Box>
-            <Box display = "flex" alignItems="center" justifyContent="center" flexDirection="column">
-                <Typography variant="h4">Jan Kowalski</Typography>
-                <Typography variant="subtitle1" paragraph>Kelner</Typography>
-                <Box display="flex" justifyContent="flex-start" flexDirection="column">
-                    <Box display="flex" alignItems="center">
-                        <PhoneIcon color="secondary" fontSize="small"/>
-                        <Box mr={1}/>
-                        <Typography variant="subtitle1"> 675 928 192</Typography>
+                                <Typography
+                                    variant="body2"
+                                >
+                                    {houseNumber}
+                                </Typography>
+                            </Box>
+                        </Box>
                     </Box>
-                    <Box display="flex" alignItems="center">
-                        <MailIcon color="secondary" fontSize="small"/>
-                        <Box mr={1}/>
-                        <Typography variant="subtitle1"> poczta@wp.pl</Typography>
+                    <Box>
+                        <Button variant="outlined" color="primary" startIcon={<AssignmentIndIcon/>}>Zwolnij pracownika</Button>
                     </Box>
-                </Box>
-                <Box m={3}>
-                    <Button variant="outlined" color="primary" startIcon={<AssignmentIndIcon/>}>Zarządzaj</Button>
-                </Box>
 
-            </Box>
-        </Paper>
+                </Box>
+            </Paper>
+        </Grow>
     );
 }
 export default WorkerCard;

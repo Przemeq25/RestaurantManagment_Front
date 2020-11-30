@@ -24,7 +24,7 @@ export const addMeal = (meal,restaurantID)=>{
             })
             .catch(errorMessage=>dispatch(error(errorMessage)));
     };
-    function request(){ return{type:mealsConstants.MEALS_REQUEST}}
+    function request(){ return{type:mealsConstants.ADD_MEAL_REQUEST}}
     function success(meal){ return {type:mealsConstants.ADD_MEAL_SUCCESS, payload:meal}}
     function error(error) { return {type:mealsConstants.ADD_MEAL_ERROR, payload:error}}
 };
@@ -50,7 +50,7 @@ export const editMeal =(meal,restaurantID)=>{
             })
             .catch(errorMessage=>dispatch(error(errorMessage)));
     };
-    function request(){ return{type:mealsConstants.MEALS_REQUEST}}
+    function request(){ return{type:mealsConstants.EDIT_MEAL_REQUEST}}
     function success(meal){ return {type:mealsConstants.EDIT_MEAL_SUCCESS, payload:meal}}
     function error(error) { return {type:mealsConstants.EDIT_MEAL_ERROR, payload:error}}
 }

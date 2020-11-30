@@ -34,6 +34,10 @@ const useStyles = makeStyles(theme=>({
         width: theme.spacing(22),
         height: theme.spacing(22),
         backgroundColor:'#ededed',
+        [theme.breakpoints.down('sm')]: {
+            width: theme.spacing(16),
+            height: theme.spacing(16),
+        },
     },
     closeIconPosition:{
         position:'absolute',
@@ -49,7 +53,7 @@ const useStyles = makeStyles(theme=>({
     }
 }));
 
-const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isRequesting,menuInitialValues,isEditing,isDeleteRequesting,handleDeleteMeal})=>{
+const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isAddRequesting,isEditRequesting,menuInitialValues,isEditing,isDeleteRequesting,handleDeleteMeal})=>{
     const classes = useStyles();
     const [isCollapseOpen,setCollapseOpen] = useState(false);
 
@@ -90,7 +94,7 @@ const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isRequesting,menu
                                         <Avatar src = {URL.createObjectURL(values.image)} variant="rounded" className={classes.imageStyle}/>
                                     ):(
                                         <Avatar variant="rounded" className={classes.imageStyle}>
-                                            <AppLogo />
+                                            <AppLogo size={12}/>
                                         </Avatar>
                                     )
                                 }
@@ -189,7 +193,7 @@ const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isRequesting,menu
                                             variant = "contained"
                                             size="small"
                                             label={isEditing ? "Edytuj":"Dodaj"}
-                                            loading={isRequesting}
+                                            loading={isEditing ? isEditRequesting : isAddRequesting}
                                         />
                                     </Box>
                                     {isEditing ?

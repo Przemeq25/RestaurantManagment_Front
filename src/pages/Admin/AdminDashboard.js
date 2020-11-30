@@ -109,7 +109,7 @@ const AdminDashboard = () =>{
         <Typography variant="h3">Twoje restauracje:</Typography>
         <Typography variant="subtitle2" paragraph >Kliknij w kartę i zarządzaj wybraną restauracją!</Typography>
             {(isLoading || isRequesting) && !isDialogOpen ? (
-                <Backdrop className={classes.backdrop} open={isLoading || isRequesting} invisible>
+                <Backdrop open={isLoading || isRequesting} invisible>
                     <CircularProgress color="inherit" />
                 </Backdrop>
             ):(

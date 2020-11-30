@@ -1,7 +1,6 @@
 import axios from 'axios';
 import {appUrl} from "../config/app.config";
 
-const token = localStorage.getItem('access_token')
 
 const addRestaurant = (restaurantData)=>{
     return axios.post(`${appUrl}/restaurant-api/restaurants`,{
@@ -28,7 +27,7 @@ const addRestaurant = (restaurantData)=>{
 const deleteRestaurant = (restaurantID) =>{
     return axios.delete(`${appUrl}/restaurant-api/restaurants/${restaurantID}`,{
         headers: {
-            Authorization: `bearer ${token}`
+            Authorization: `bearer ${localStorage.getItem('access_token')}`
         }
     })
 }
@@ -65,7 +64,7 @@ const addMeal = (restaurantID,meal) =>{
     },
     {
         headers:{
-            Authorization:`bearer ${token}`
+            Authorization:`bearer ${localStorage.getItem('access_token')}`
         }
     })
 }
@@ -74,7 +73,7 @@ const getRestaurants = () =>{
     return axios.get(`${appUrl}/restaurant-api/restaurants?size=99&me=true`,
 {
             headers: {
-                Authorization: `bearer ${token}`
+                Authorization: `bearer ${localStorage.getItem('access_token')}`
             }
         })
 
@@ -83,11 +82,39 @@ const getSingleRestaurant = (restaurantID) =>{
     return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}`,
         {
             headers: {
-                Authorization: `bearer ${token}`
+                Authorization: `bearer ${localStorage.getItem('access_token')}`
             }
         })
 
 }
+const addWorker = (email,restaurantID)=>{
+    return axios.post(`${appUrl}/user-api/restaurants/${restaurantID}/workers`,{},
+        {
+            headers:{
+                Authorization:`bearer ${localStorage.getItem('access_token')}`
+            },
+            params:{
+                "email": email,
+            }
+        })
+};
+
+const getWorkers = (restaurantID) =>{
+    return axios.get(`${appUrl}/user-api/restaurants/${restaurantID}/workers`,
+        {
+            headers: {
+                Authorization: `bearer ${localStorage.getItem('access_token')}`
+            }
+        })
+
+}
+const deleteWorker = (restaurantID, workerID)=>{
+    return axios.delete(`${appUrl}/user-api/restaurants/${restaurantID}/workers/${workerID}`,{
+        headers: {
+            Authorization: `bearer ${localStorage.getItem('access_token')}`
+        }
+    })
+};
 
 
 export const restaurantService ={
@@ -96,5 +123,8 @@ export const restaurantService ={
     getSingleRestaurant,
     addMeal,
     editRestaurant,
-    deleteRestaurant
+    deleteRestaurant,
+    addWorker,
+    getWorkers,
+    deleteWorker,
 }
