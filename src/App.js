@@ -16,6 +16,7 @@ import RestaurantDashboard from "./pages/Admin/RestaurantDashboard";
 import {routes} from "./config/routes";
 import Edit from "./pages/Admin/Edit";
 import RegisterConfirmation from "./pages/Auth/RegisterConfirmation";
+import Restaurants from "./pages/Restaurants";
 
 
 const App =()=>{
@@ -31,7 +32,7 @@ const App =()=>{
                 <Route path={routes.LOGIN} component={Login}/>
                 <Route exact path={routes.REGISTER} component={Register}/>
                 <Route exact path={routes.CONFIRM} component = {RegisterConfirmation}/>
-
+                <Route exact path={routes.RESTAURANTS} component = {Restaurants}/>
                     <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
                         <AdminPanelPage {...props}>
                             <AdminDashboard {...props} />

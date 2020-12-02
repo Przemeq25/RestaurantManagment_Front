@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
         '&:hover':{
             color: theme.palette.secondary.main,
         },
+        transition:'color 200ms ease-in'
     },
     menuButtonText:{
         fontWeight:600,
@@ -159,7 +160,7 @@ const AdminPanel = ({children,match}) => {
                         </Typography>
                     </div>
                     <Hidden xsDown>
-                        <AppLogo color="secondary" push/>
+                        <AppLogo color="secondary" push size={12}/>
                     </Hidden>
                     <div>
                         <Button ref={anchorRef}  onClick={handleMenuToggle} color="inherit" disableRipple className={classes.menuButton}>

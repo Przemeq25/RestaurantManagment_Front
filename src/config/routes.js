@@ -3,6 +3,8 @@ export const routes ={
     REGISTER:'/register',
     HOMEPAGE:'/',
     CONFIRM:'/confirm',
+    RESTAURANTS:'/restaurants',
+    SINGLERESTAURANT:'/menu',
     PROFILE:"/profile",
     CLIENT_ORDERS:'/your_orders',
     ADMIN_PANEL:'/admin',
