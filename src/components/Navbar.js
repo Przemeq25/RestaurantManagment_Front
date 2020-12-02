@@ -120,7 +120,7 @@ const Navbar = () =>{
         setCartOpen(false);
     }
     return(
-        <AppBar position="static" color="secondary" elevation={2}>
+        <AppBar position="static" color="secondary" elevation={2} >
             <Container>
                 <Toolbar className={classes.toolbarStyle} disableGutters>
                     <AppLogo push size={12}/>

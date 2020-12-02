@@ -17,6 +17,7 @@ import {routes} from "./config/routes";
 import Edit from "./pages/Admin/Edit";
 import RegisterConfirmation from "./pages/Auth/RegisterConfirmation";
 import Restaurants from "./pages/Restaurants";
+import SingleRestaurant from "./pages/SingleRestaurant";
 
 
 const App =()=>{
@@ -33,7 +34,8 @@ const App =()=>{
                 <Route exact path={routes.REGISTER} component={Register}/>
                 <Route exact path={routes.CONFIRM} component = {RegisterConfirmation}/>
                 <Route exact path={routes.RESTAURANTS} component = {Restaurants}/>
-                    <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
+                <Route path={routes.SINGLERESTAURANT} component={SingleRestaurant}/>
+                <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
                         <AdminPanelPage {...props}>
                             <AdminDashboard {...props} />
                         </AdminPanelPage>

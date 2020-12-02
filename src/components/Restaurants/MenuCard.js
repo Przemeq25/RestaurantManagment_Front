@@ -1,15 +1,12 @@
 import React from "react";
-import {Box, Divider, Paper, Typography} from "@material-ui/core";
+import {Box, Divider, Paper, Typography,IconButton} from "@material-ui/core";
 import AppLogo from "../AppLogo";
-import Rating from "@material-ui/lab/Rating/Rating";
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import {makeStyles} from "@material-ui/core/styles";
-import HomeIcon from '@material-ui/icons/Home';
-import PhoneIcon from '@material-ui/icons/Phone';
-import {history} from "../../helpers/_helpers";
-import {routes} from "../../config/routes";
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 
 const useStyles = makeStyles((theme)=>({
-    restaurantsPaperStyle: {
+    menuPaperStyle: {
         boxShadow: "0 8px 40px -12px rgba(0,0,0,0.1)",
         borderRadius: theme.spacing(2),
         "&:hover": {
@@ -22,6 +19,7 @@ const useStyles = makeStyles((theme)=>({
             height: 120,
         },
         overflow: 'hidden',
+        position: 'relative'
     },
     cardMedia: {
         display: 'flex',
@@ -35,7 +33,7 @@ const useStyles = makeStyles((theme)=>({
             height: 120,
         },
     },
-    restaurantsPaperContentStyle: {
+    menuPaperContentStyle: {
         display: "flex",
         flexDirection: "column",
         alignItems:"space-between",
@@ -53,37 +51,42 @@ const useStyles = makeStyles((theme)=>({
         [theme.breakpoints.down('xs')]: {
             marginTop:'3px',
         },
+    },
+    buyButton:{
+        position:'absolute',
+        bottom:10,
+        right:10,
     }
 }));
-const RestaurantCard = () =>{
+const MenuCard = () =>{
     const classes = useStyles();
     return (
-        <Paper className={classes.restaurantsPaperStyle} variant="outlined" onClick={()=>history.push(`${routes.SINGLERESTAURANT}/nazwarestauracji`)}>
+        <Paper className={classes.menuPaperStyle} variant="outlined" >
             <Box display ="flex"  height="100%" >
                 <Box className={classes.cardMedia}>
                     <AppLogo size={12}/>
                 </Box>
                 <Divider orientation='vertical'/>
-                <Box className={classes.restaurantsPaperContentStyle}>
+                <Box className={classes.menuPaperContentStyle}>
                     <Box flex="1">
-                        <Typography variant="h4" color="primary"> Nazwa restauracji</Typography>
-                        <Typography variant="subtitle2" gutterBottom>Kuchnia chińska, Sushi</Typography>
-                        <Rating readOnly value={4} size="small"/>
+                        <Typography variant="h4" color="primary"> Frytki</Typography>
+                        <Typography variant="subtitle2" gutterBottom>Opis</Typography>
                     </Box>
+                    <Typography variant="h4" color="secondary">15 zł </Typography>
                     <Divider/>
                     <Box className={classes.contactBox}>
-                        <Box mr={1} display="flex" alignItems="center">
-                            <HomeIcon fontSize="small" className={classes.iconPadding}/>
-                            <Typography variant="subtitle2">Tarnów - Mickiewicza 12</Typography>
+                        <Box mr={1} display="flex" alignItems="center" >
+                            <AccessTimeIcon fontSize="small" className={classes.iconPadding}/>
+                            <Typography variant="subtitle2">15min</Typography>
                         </Box>
-                        <Box mr={1} display="flex" alignItems="center">
-                            <PhoneIcon fontSize="small" className={classes.iconPadding}/>
-                            <Typography variant="subtitle2">879 726 292</Typography>
-                        </Box>
+
                     </Box>
                 </Box>
             </Box>
+            <IconButton className={classes.buyButton}>
+                <ShoppingCartOutlinedIcon color="secondary"/>
+            </IconButton>
         </Paper>
     )
 }
-export default RestaurantCard;
+export default MenuCard;

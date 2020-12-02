@@ -54,7 +54,12 @@ const useStyles = makeStyles((theme)=>({
         borderRadius:theme.spacing(2),
         fontSize: '0.8rem'
     },
-}));
+    listItem:{
+        paddingTop: 0,
+        paddingBottom: 0,
+    }
+    }
+));
 
 const RestaurantFilters = ({isCuisineTypeCollapse,handleCuisineTypeCollapse}) =>{
     const classes = useStyles();
@@ -90,11 +95,12 @@ const RestaurantFilters = ({isCuisineTypeCollapse,handleCuisineTypeCollapse}) =>
                 {
                     cuisineType.map((type,index) => (
                         index <=4 &&
-                        <ListItem key={type.key} dense button>
+                        <ListItem key={type.key} button classes={{root:classes.listItem}}>
                             <ListItemIcon classes={{root:classes.listItemIcon}}>
                                 <Checkbox
                                     edge="start"
                                     checked={false}
+                                    size="small"
                                 />
                             </ListItemIcon>
                             <ListItemText primary={type.label} />
@@ -105,11 +111,12 @@ const RestaurantFilters = ({isCuisineTypeCollapse,handleCuisineTypeCollapse}) =>
                     {
                         cuisineType.map((type,index) => (
                             index >4 &&
-                            <ListItem key={type.key} dense button>
+                            <ListItem key={type.key} button classes={{root:classes.listItem}}>
                                 <ListItemIcon classes={{root:classes.listItemIcon}}>
                                     <Checkbox
                                         edge="start"
                                         checked={false}
+                                        size="small"
                                     />
                                 </ListItemIcon>
                                 <ListItemText primary={type.label} />

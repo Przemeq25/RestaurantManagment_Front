@@ -23,6 +23,7 @@ const theme = createMuiTheme({
     typography:{
         h3:{
             fontSize:'1.7rem',
+            fontWeight:700,
             color:'var(--admin-first-color)',
             '@media (max-width:960px)': {
                 fontSize: '1.4rem',

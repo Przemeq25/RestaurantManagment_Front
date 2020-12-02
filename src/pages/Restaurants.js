@@ -22,9 +22,10 @@ import MobileFiltersDialog from "../components/Restaurants/MobileFiltersDialog";
 import RestaurantFilters from "../components/Restaurants/RestaurantFilters";
 import RestaurantCard from "../components/Restaurants/RestaurantCard";
 
-
-
 const useStyles = makeStyles((theme)=>({
+    pageBackground:{
+        backgroundColor:'rgba(248,248,248)',
+    },
     filtersPaperStyle:{
         padding:theme.spacing(1),
         borderRadius:theme.spacing(2),
@@ -81,14 +82,16 @@ const Restaurants = () =>{
     }
 
     return (
-        <>
+        <Box className={classes.pageBackground}>
             <Navbar/>
             <Container>
                 <Box mt={mdDown ? 5 : 10}/>
                 <Grid container spacing={3}>
-                    <Grid item md = {3}>
+                    <Grid item md = {3} >
                         <Hidden mdDown>
-                            <RestaurantFilters isCuisineTypeCollapse={isCuisineTypeCollapse} handleCuisineTypeCollapse={handleCuisineTypeCollapse}/>
+                            <Box style={{position:'sticky' ,top: 30}}>
+                                <RestaurantFilters isCuisineTypeCollapse={isCuisineTypeCollapse} handleCuisineTypeCollapse={handleCuisineTypeCollapse}/>
+                            </Box>
                         </Hidden>
                     </Grid>
                     <Grid item md = {mdDown ? 12 : 9} xs={12}>
@@ -120,6 +123,12 @@ const Restaurants = () =>{
                         <Box m={3}/>
                             <RestaurantCard/>
                             <RestaurantCard/>
+                        <RestaurantCard/>
+                        <RestaurantCard/>
+                        <RestaurantCard/>
+                        <RestaurantCard/>
+                        <RestaurantCard/>
+                        <RestaurantCard/>
                         <Box mb={3}/>
                         <Divider/>
                         <Box m={4} display="flex" justifyContent="center">
@@ -135,7 +144,7 @@ const Restaurants = () =>{
             >
                 <RestaurantFilters isCuisineTypeCollapse={isCuisineTypeCollapse} handleCuisineTypeCollapse={handleCuisineTypeCollapse}/>
             </MobileFiltersDialog>
-        </>
+        </Box>
     )
 }
 export default Restaurants;
