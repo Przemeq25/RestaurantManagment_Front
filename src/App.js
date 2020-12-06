@@ -20,6 +20,7 @@ import Restaurants from "./pages/Restaurants";
 import SingleRestaurantMenu from "./pages/SingleRestaurantMenu";
 import SingleRestaurantReservation from "./pages/SingleRestaurantReservation";
 import SingleRestaurantContact from "./pages/SingleRestaurantContact";
+import ShoppingBasket from "./pages/ShoppingBasket";
 
 
 const App =()=>{
@@ -39,6 +40,7 @@ const App =()=>{
                 <Route path={routes.SINGLERESTAURANTMENU} component={SingleRestaurantMenu}/>
                 <Route path={routes.SINGLERESTAURANTRESERVATION} component={SingleRestaurantReservation}/>
                 <Route path={routes.SINGLERESTAURANTCONTACT} component={SingleRestaurantContact}/>
+                <Route path={routes.SHOPPINGBASKET} component={ShoppingBasket}/>
                 <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
                         <AdminPanelPage {...props}>
                             <AdminDashboard {...props} />

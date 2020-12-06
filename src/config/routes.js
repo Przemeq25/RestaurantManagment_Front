@@ -7,6 +7,7 @@ export const routes ={
     SINGLERESTAURANTMENU:'/restaurant/menu',
     SINGLERESTAURANTRESERVATION:'/restaurant/reservation',
     SINGLERESTAURANTCONTACT:'/restaurant/contact',
+    SHOPPINGBASKET:"/shopping_basket",
     PROFILE:"/profile",
     CLIENT_ORDERS:'/your_orders',
     ADMIN_PANEL:'/admin',

@@ -6,7 +6,6 @@ import Rating from "@material-ui/lab/Rating/Rating";
 import {NavLink} from "react-router-dom";
 import {routes} from "../config/routes";
 import AppLogo from "./AppLogo";
-import OpinionsCard from "./Restaurants/OpinionsCard";
 
 
 const useStyles = makeStyles((theme)=>({

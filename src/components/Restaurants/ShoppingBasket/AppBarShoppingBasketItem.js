@@ -4,7 +4,7 @@ import AppLogo from "../../AppLogo";
 import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme=>({
-    cartPaperStyle: {
+    basketPaperStyle: {
         height: 100,
         cursor: 'pointer',
         overflow: 'hidden',
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme=>({
         justifyContent: 'center',
         width: 100,
     },
-    cartPaperContentStyle: {
+    basketPaperContentStyle: {
         display: "flex",
         alignItems:'center',
         justifyContent:'space-between',
@@ -27,16 +27,16 @@ const useStyles = makeStyles(theme=>({
         width: 300,
     },
 }))
-const AppBarShoppingCartItem =({product, amount, price})=>{
+const AppBarShoppingBasketItem =({product, amount, price})=>{
     const classes = useStyles();
     return(
-        <Box className={classes.cartPaperStyle}>
+        <Box className={classes.basketPaperStyle}>
             <Box display ="flex"  height="100%" >
                 <Box className={classes.cardMedia}>
                     <AppLogo size={8}/>
                 </Box>
                 <Divider orientation='vertical'/>
-                <Box className={classes.cartPaperContentStyle}>
+                <Box className={classes.basketPaperContentStyle}>
                     <Box flex="1">
                         <Typography variant="body2" color="primary"> {product}</Typography>
                     </Box>
@@ -50,4 +50,4 @@ const AppBarShoppingCartItem =({product, amount, price})=>{
         </Box>
     )
 }
-export default AppBarShoppingCartItem;
+export default AppBarShoppingBasketItem;

@@ -42,7 +42,7 @@ const theme = createMuiTheme({
         },
         h5:{
             fontSize:'1rem',
-            fontWeight:400,
+            fontWeight:500,
             lineHeight:'1.2rem',
             '@media (max-width:960px)': {
                 fontSize: '0.9rem',

@@ -9,7 +9,7 @@ import {
     Button,
     TextField,
     fade,
-    Divider,
+    Divider, Typography,
 } from "@material-ui/core";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -25,6 +25,7 @@ import RestaurantCard from "../components/Restaurants/RestaurantCard";
 const useStyles = makeStyles((theme)=>({
     pageBackground:{
         backgroundColor:'rgba(248,248,248)',
+        minHeight:'100vh',
     },
     filtersPaperStyle:{
         padding:theme.spacing(1),
@@ -85,7 +86,9 @@ const Restaurants = () =>{
         <Box className={classes.pageBackground}>
             <Navbar/>
             <Container>
-                <Box mt={mdDown ? 5 : 10}/>
+                <Box mt={mdDown ? 2 : 5} mb={mdDown ? 2 : 5}>
+                    <Typography variant="h3" color="secondary">Dostępne restauracje</Typography>
+                </Box>
                 <Grid container spacing={3}>
                     <Grid item md = {3} >
                         <Hidden mdDown>

@@ -2,11 +2,8 @@ import React from "react";
 import {
     Box,
     Button,
-    Checkbox, Collapse, fade,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText, Paper,
+    fade,
+    Paper,
     TextField,
     Typography
 } from "@material-ui/core";
