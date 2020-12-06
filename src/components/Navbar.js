@@ -15,7 +15,7 @@ import {
     Divider,
     Button,
     Badge,
-    Container
+    Container, IconButton
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import AppLogo from "./AppLogo";
@@ -28,6 +28,8 @@ import {useSelector,useDispatch} from "react-redux";
 import {history} from "../helpers/_helpers";
 import {logout} from '../redux/actions/auth';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
+import AccessTimeIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import AppBarShoppingCartItem from "./Restaurants/ShoppingCart/AppBarShoppingCartItem";
 
 const useStyles = makeStyles(theme=>({
     toolbarStyle:{
@@ -40,6 +42,7 @@ const useStyles = makeStyles(theme=>({
         borderBottomLeftRadius:theme.spacing(2),
         borderBottomRightRadius:theme.spacing(2),
         overflow:'hidden',
+
     },
     selectedItem:{
         color:theme.palette.primary.main,
@@ -152,7 +155,8 @@ const Navbar = () =>{
                                     style={{ zIndex:100, transformOrigin: " right top", transform: window.innerWidth >= theme.breakpoints.width('md') ? 'translate(10px,9px)' : 'translate(16px,5px)' }}
                                 >
                                     <Paper square elevation={2} classes={{root: classes.paperRoot}} >
-                                        <Box display ='flex' alignItems = 'center' flexDirection ="column" p={6} zIndex="100">
+                                        <Box p={2} zIndex="100">
+                                            {/*  <Box display ='flex' alignItems = 'center' flexDirection ="column" p={6} zIndex="100">
                                             <Typography
                                                 variant="h4"
                                                 color="primary"
@@ -174,7 +178,31 @@ const Navbar = () =>{
                                             >
                                                 Przejdź do restauracji
                                             </Button>
+                                            */}
+                                            <Box display="flex" alignItems ="center" justifyContent="space-between" pb={2}>
+                                                <Typography variant = "h4"> Twój koszyk </Typography>
+                                                <Box>
+                                                    <Typography variant= "subtitle2"> Wartość koszyka: </Typography>
+                                                    <Typography variant= "h4"> 155zł </Typography>
+                                                </Box>
+
+                                            </Box>
+                                            <Divider/>
+                                            <Box display="flex" flexDirection="column">
+                                                <AppBarShoppingCartItem product="Frytki z serem" price='12' amount="3"/>
+                                                <AppBarShoppingCartItem product="Frytki z serem32" price='158' amount="2"/>
+                                                <AppBarShoppingCartItem product="Frytki z serem" price='124' amount="1"/>
+
+                                            </Box>
+                                            <Box mt={1}/>
+                                            <Divider/>
+                                            <Box display="flex" alignItems ="center" justifyContent="space-between" pt={2}>
+                                                <Button variant="text"> Pokaż koszyk</Button>
+                                                <Button variant="contained" color="secondary">Do kasy</Button>
+                                            </Box>
+
                                         </Box>
+
                                     </Paper>
                                 </Grow>
                             )}
