@@ -71,7 +71,7 @@ const Restaurants = () =>{
     const mdDown = useMediaQuery(theme.breakpoints.down('md'));
     const classes = useStyles();
     const [isCuisineTypeCollapse, setCuisineTypeCollapse] = useState(false);
-    const [isToggleFiltersDialogOpen, setToggleFiltersDialogOpen] = useState(false)
+    const [isToggleFiltersDialogOpen, setToggleFiltersDialogOpen] = useState(false);
 
     const handleCuisineTypeCollapse = () =>{
         setCuisineTypeCollapse(!isCuisineTypeCollapse)
