@@ -15,7 +15,7 @@ import {
     Divider,
     Button,
     Badge,
-    Container, IconButton
+    Container,
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import AppLogo from "./AppLogo";
@@ -85,6 +85,10 @@ const useStyles = makeStyles(theme=>({
         fontWeight:600,
         fontSize:'0.6rem',
     },
+    navbarText:{
+        fontWeight: 600,
+        cursor:'pointer',
+    }
 }));
 
 const Navbar = () =>{
@@ -111,8 +115,10 @@ const Navbar = () =>{
         setMenuOpen(false);
     };
 
-    const handleToggleBasket = (e) =>{
-        setBasketOpen(prev=>!prev)
+    const handleOpenBasket = (e) =>{
+        setTimeout(()=>{
+            setBasketOpen(prev=>!prev)
+        },500)
         handleCloseMenu(e)
     };
 
@@ -130,10 +136,22 @@ const Navbar = () =>{
                     <AppLogo push size={12}/>
                     <Box>
                         <Button
+                            onClick={()=>history.push(routes.RESTAURANTS)}
+                            color="inherit"
+                            disableRipple
+                            className={classes.menuButton}
+                        >
+                            <Box display="flex" alignItems ='center' flexDirection = "column">
+                                <RestaurantIcon color="inherit"/>
+                                <Typography color="inherit" className={classes.menuButtonText}>Restauracje</Typography>
+                            </Box>
+                        </Button>
+                        <Button
                             ref={shoppingBasketRef}
-                            onMouseEnter={(e)=>mdUp ? handleToggleBasket(e)  : function () {
+                            onMouseEnter={(e)=>mdUp ? handleOpenBasket(e)  : function () {
                                 return undefined
                             } }
+                            onMouseLeave={handleCloseBasket}
                             onClick={()=>history.push(routes.SHOPPINGBASKET)}
                             color="inherit"
                             disableRipple

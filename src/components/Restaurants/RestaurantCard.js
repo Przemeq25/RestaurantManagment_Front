@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme)=>({
 const RestaurantCard = () =>{
     const classes = useStyles();
     return (
-        <Paper className={classes.restaurantsPaperStyle} variant="outlined" onClick={()=>history.push(`${routes.SINGLERESTAURANT}/nazwarestauracji`)}>
+        <Paper className={classes.restaurantsPaperStyle} variant="outlined" onClick={()=>history.push(`${routes.SINGLERESTAURANTMENU}/nazwarestauracji`)}>
             <Box display ="flex"  height="100%" >
                 <Box className={classes.cardMedia}>
                     <AppLogo size={12}/>

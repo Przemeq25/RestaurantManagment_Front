@@ -116,6 +116,15 @@ const deleteWorker = (restaurantID, workerID)=>{
     })
 };
 
+const getAllRestaurants = () =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants`,
+        {
+            headers: {
+                Authorization: `bearer ${localStorage.getItem('access_token')}`
+            }
+        })
+}
+
 
 export const restaurantService ={
     addRestaurant,
@@ -127,4 +136,5 @@ export const restaurantService ={
     addWorker,
     getWorkers,
     deleteWorker,
+    getAllRestaurants,
 }

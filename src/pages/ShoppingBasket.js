@@ -3,11 +3,12 @@ import Navbar from "../components/Navbar";
 import {Box, Container, Grid, useTheme, Paper,Typography,Button} from "@material-ui/core";
 import useMediaQuery from "@material-ui/core/useMediaQuery/useMediaQuery";
 import {makeStyles} from "@material-ui/core/styles";
-
+import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import ShoppingBasketItemWrapper from "../components/Restaurants/ShoppingBasket/ShoppingBasketItemWrapper";
 import ShoppingBasketItem from "../components/Restaurants/ShoppingBasket/ShoppingBasketItem";
 import {history} from "../helpers/_helpers";
 import {routes} from "../config/routes";
+import Jumbotron from "../components/Jumbotron";
 
 const useStyles = makeStyles(theme=>({
     pageBackground:{
@@ -87,6 +88,12 @@ const ShoppingBasket = () =>{
                         </Paper>
                     </Grid>
                 </Grid>
+                {/*<Jumbotron
+                    text="Twoj koszyk jest pusty!"
+                    handleClick={()=>history.push(routes.RESTAURANTS)}
+                    buttonText="Przejdź do restauracji"
+                    icon={<RemoveShoppingCartIcon fontSize="inherit"/>}
+                />*/}
             </Container>
         </Box>
     )

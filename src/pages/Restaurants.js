@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Container,
     Grid,
@@ -21,6 +21,7 @@ import ShortTextIcon from '@material-ui/icons/ShortText';
 import MobileFiltersDialog from "../components/Restaurants/MobileFiltersDialog";
 import RestaurantFilters from "../components/Restaurants/RestaurantFilters";
 import RestaurantCard from "../components/Restaurants/RestaurantCard";
+import {restaurantService} from "../services/restaurantService";
 
 const useStyles = makeStyles((theme)=>({
     pageBackground:{
@@ -73,6 +74,10 @@ const Restaurants = () =>{
     const classes = useStyles();
     const [isCuisineTypeCollapse, setCuisineTypeCollapse] = useState(false);
     const [isToggleFiltersDialogOpen, setToggleFiltersDialogOpen] = useState(false);
+
+    useEffect(()=>{
+        restaurantService.getAllRestaurants().then(res=>console.log(res)).catch(err=>console.log(err));
+    },[])
 
     const handleCuisineTypeCollapse = () =>{
         setCuisineTypeCollapse(!isCuisineTypeCollapse)
