@@ -11,6 +11,8 @@ const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
         position:'relative',
+        maxWidth:'1500px',
+        width:'100%',
         marginBottom:theme.spacing(1),
         boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
         borderRadius:theme.spacing(2),

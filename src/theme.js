@@ -23,6 +23,7 @@ const theme = createMuiTheme({
     typography:{
         h3:{
             fontSize:'1.7rem',
+            fontWeight:700,
             color:'var(--admin-first-color)',
             '@media (max-width:960px)': {
                 fontSize: '1.4rem',
@@ -30,15 +31,18 @@ const theme = createMuiTheme({
         },
         h4:{
             fontSize:'1.2rem',
-
+            fontWeight:700,
             color:'var(--admin-first-color)',
             '@media (max-width:960px)': {
                 fontSize: '1.1rem',
             },
+            '@media (max-width:600px)': {
+                fontSize: '1.0rem',
+            },
         },
         h5:{
             fontSize:'1rem',
-            fontWeight:400,
+            fontWeight:500,
             lineHeight:'1.2rem',
             '@media (max-width:960px)': {
                 fontSize: '0.9rem',
@@ -47,6 +51,9 @@ const theme = createMuiTheme({
         subtitle2:{
             fontSize:'12px',
             color:'#6C6C6C',
+            '@media (max-width:600px)': {
+                fontSize: '10px',
+            },
         },
         fontFamily: [
             'Montserrat',

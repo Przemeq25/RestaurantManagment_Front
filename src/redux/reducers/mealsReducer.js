@@ -4,6 +4,8 @@ import {mealsConstants} from '../types';
 const initialState = {
     isRequesting:false,
     isDeleteRequesting:false,
+    isEditRequesting:false,
+    isAddRequesting:false,
     meals:[],
     error:null,
     editedMeal:null,
@@ -30,16 +32,22 @@ export const mealsReducer = (state=initialState, action)=>{
                 isRequesting: false,
                 error: action.payload,
             }
+        case mealsConstants.ADD_MEAL_REQUEST:{
+            return {
+                ...state,
+                isAddRequesting: true,
+            }
+        }
         case mealsConstants.ADD_MEAL_SUCCESS:
             return {
                 ...state,
-                isRequesting: false,
+                isAddRequesting: false,
                 meals: [...state.meals, action.payload],
             }
         case mealsConstants.ADD_MEAL_ERROR:
             return {
                 ...state,
-                isRequesting: false,
+                isAddRequesting: false,
                 error: action.payload,
             }
         case mealsConstants.OPEN_DRAWER:
@@ -59,19 +67,24 @@ export const mealsReducer = (state=initialState, action)=>{
                 editedMeal: action.payload,
                 isDrawerOpen: true,
             }
+        case mealsConstants.EDIT_MEAL_REQUEST:
+            return {
+                ...state,
+                isEditRequesting: true,
+            }
         case mealsConstants.EDIT_MEAL_SUCCESS:
             const foundMatchIndexOfEditingMeal = state.meals.findIndex(meal=>meal.id === action.payload.id);
             const newArrayOfMeals = [...state.meals];
             newArrayOfMeals.splice(foundMatchIndexOfEditingMeal,1,action.payload);
             return {
                 ...state,
-                isRequesting:false,
+                isEditRequesting:false,
                 meals:newArrayOfMeals
             }
         case mealsConstants.EDIT_MEAL_ERROR:
             return {
                 ...state,
-                isRequesting:false,
+                isEditRequesting:false,
                 error: action.payload,
             }
         case mealsConstants.DELETE_MEAL_REQUEST:

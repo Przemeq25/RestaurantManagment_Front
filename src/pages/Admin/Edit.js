@@ -15,7 +15,7 @@ import {
     Accordion,
     CircularProgress,
     Backdrop,
-    Fade
+    Grow
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {getCuisineTypeValue, restaurantInitialValues} from "../../helpers/_helpers";
@@ -61,7 +61,6 @@ const useStyles = makeStyles((theme)=>({
         },
     },
     addedImagePreview:{
-
         maxHeight:200,
         maxWidth:"100%",
     }
@@ -106,7 +105,7 @@ const Edit = ({match}) =>{
                       values,
                   }) => (
                     <form onSubmit={handleSubmit} className={classes.formStyle}>
-                        <Fade in={Boolean(currentRestaurantData)} timeout={500}>
+                        <Grow in={Boolean(currentRestaurantData)} timeout={500}>
                             <Grid container spacing={4} justify="center">
                                 <Grid item xs={12} md={7}>
                                     <Grid item xs="auto">
@@ -290,7 +289,7 @@ const Edit = ({match}) =>{
                                     </Grid>
                                 </Grid>
                             </Grid>
-                        </Fade>
+                        </Grow>
                     </form>
                 )
                 }

@@ -16,6 +16,11 @@ import RestaurantDashboard from "./pages/Admin/RestaurantDashboard";
 import {routes} from "./config/routes";
 import Edit from "./pages/Admin/Edit";
 import RegisterConfirmation from "./pages/Auth/RegisterConfirmation";
+import Restaurants from "./pages/Restaurants";
+import SingleRestaurantMenu from "./pages/SingleRestaurantMenu";
+import SingleRestaurantReservation from "./pages/SingleRestaurantReservation";
+import SingleRestaurantContact from "./pages/SingleRestaurantContact";
+import ShoppingBasket from "./pages/ShoppingBasket";
 
 
 const App =()=>{
@@ -31,8 +36,12 @@ const App =()=>{
                 <Route path={routes.LOGIN} component={Login}/>
                 <Route exact path={routes.REGISTER} component={Register}/>
                 <Route exact path={routes.CONFIRM} component = {RegisterConfirmation}/>
-
-                    <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
+                <Route exact path={routes.RESTAURANTS} component = {Restaurants}/>
+                <Route path={routes.SINGLERESTAURANTMENU} component={SingleRestaurantMenu}/>
+                <Route path={routes.SINGLERESTAURANTRESERVATION} component={SingleRestaurantReservation}/>
+                <Route path={routes.SINGLERESTAURANTCONTACT} component={SingleRestaurantContact}/>
+                <Route path={routes.SHOPPINGBASKET} component={ShoppingBasket}/>
+                <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
                         <AdminPanelPage {...props}>
                             <AdminDashboard {...props} />
                         </AdminPanelPage>
