@@ -44,9 +44,6 @@ const MobileFiltersDialog = ({isToggleFiltersDialogOpen,handleToggleFiltersDialo
                             Filtry
                         </Typography>
                     </Box>
-                    <Button autoFocus color="inherit" onClick={handleToggleFiltersDialog}>
-                        Szukaj
-                    </Button>
                 </Toolbar>
             </AppBar>
             <Box p={1}>

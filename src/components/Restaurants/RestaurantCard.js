@@ -1,11 +1,11 @@
 import React from "react";
-import {Box, Divider, Paper, Typography} from "@material-ui/core";
+import {Box, Divider, Slide, Paper, Typography} from "@material-ui/core";
 import AppLogo from "../AppLogo";
 import Rating from "@material-ui/lab/Rating/Rating";
 import {makeStyles} from "@material-ui/core/styles";
 import HomeIcon from '@material-ui/icons/Home';
 import PhoneIcon from '@material-ui/icons/Phone';
-import {history} from "../../helpers/_helpers";
+import {getCuisineTypeValue, history} from "../../helpers/_helpers";
 import {routes} from "../../config/routes";
 
 const useStyles = makeStyles((theme)=>({
@@ -55,10 +55,11 @@ const useStyles = makeStyles((theme)=>({
         },
     }
 }));
-const RestaurantCard = () =>{
+const RestaurantCard = ({name,category,phoneNumber,street,city,houseNumber,id}) =>{
     const classes = useStyles();
     return (
-        <Paper className={classes.restaurantsPaperStyle} variant="outlined" onClick={()=>history.push(`${routes.SINGLERESTAURANTMENU}/nazwarestauracji`)}>
+        <Slide in={true} direction="left" timeout={300}>
+        <Paper className={classes.restaurantsPaperStyle} variant="outlined" onClick={()=>history.push(`${routes.SINGLERESTAURANTMENU}/${id}`)}>
             <Box display ="flex"  height="100%" >
                 <Box className={classes.cardMedia}>
                     <AppLogo size={12}/>
@@ -66,24 +67,25 @@ const RestaurantCard = () =>{
                 <Divider orientation='vertical'/>
                 <Box className={classes.restaurantsPaperContentStyle}>
                     <Box flex="1">
-                        <Typography variant="h4" color="primary"> Nazwa restauracji</Typography>
-                        <Typography variant="subtitle2" gutterBottom>Kuchnia chińska, Sushi</Typography>
+                        <Typography variant="h4" color="primary">{name}</Typography>
+                        <Typography variant="subtitle2" gutterBottom>{getCuisineTypeValue(category).map(e => e.label).join(", ")}</Typography>
                         <Rating readOnly value={4} size="small"/>
                     </Box>
                     <Divider/>
                     <Box className={classes.contactBox}>
                         <Box mr={1} display="flex" alignItems="center">
                             <HomeIcon fontSize="small" className={classes.iconPadding}/>
-                            <Typography variant="subtitle2">Tarnów - Mickiewicza 12</Typography>
+                            <Typography variant="subtitle2">{city} - {street} {houseNumber}</Typography>
                         </Box>
                         <Box mr={1} display="flex" alignItems="center">
                             <PhoneIcon fontSize="small" className={classes.iconPadding}/>
-                            <Typography variant="subtitle2">879 726 292</Typography>
+                            <Typography variant="subtitle2">{phoneNumber}</Typography>
                         </Box>
                     </Box>
                 </Box>
             </Box>
         </Paper>
+        </Slide>
     )
 }
 export default RestaurantCard;

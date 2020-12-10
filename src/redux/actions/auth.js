@@ -1,4 +1,4 @@
-import {authConstants} from "../types";
+import {authConstants, mealsConstants, restaurantConstants, workersConstants} from "../types";
 import {userService} from "../../services/userService";
 import {history} from "../../helpers/_helpers";
 import {routes} from "../../config/routes";
@@ -62,6 +62,9 @@ export const refreshLogin = (refreshToken,dispatch) => new Promise((resolve, rej
 export const logout = () =>{
     return dispatch => {
         dispatch({type:authConstants.LOGOUT});
+        dispatch({type:restaurantConstants.RESET});
+        dispatch({type:mealsConstants.RESET});
+        dispatch({type:workersConstants.RESET});
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         history.push(routes.LOGIN)

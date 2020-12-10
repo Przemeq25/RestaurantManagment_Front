@@ -69,8 +69,8 @@ const addMeal = (restaurantID,meal) =>{
     })
 }
 
-const getRestaurants = () =>{
-    return axios.get(`${appUrl}/restaurant-api/restaurants?size=99&me=true`,
+const getRestaurantsForAdmin = () =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants`,
 {
             headers: {
                 Authorization: `bearer ${localStorage.getItem('access_token')}`
@@ -78,7 +78,7 @@ const getRestaurants = () =>{
         })
 
 }
-const getSingleRestaurant = (restaurantID) =>{
+const getSingleRestaurantForAdmin = (restaurantID) =>{
     return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}`,
         {
             headers: {
@@ -116,20 +116,24 @@ const deleteWorker = (restaurantID, workerID)=>{
     })
 };
 
-const getAllRestaurants = () =>{
-    return axios.get(`${appUrl}/restaurant-api/restaurants`,
-        {
-            headers: {
-                Authorization: `bearer ${localStorage.getItem('access_token')}`
-            }
-        })
+const getAllRestaurants = ({page,name,category,city,open,rate,sort}) =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/public`,{
+        params:{
+            page:page,
+            name:name,
+            category:category,
+            city:city,
+            rate:rate,
+            open:open,
+            sort:sort,
+        }})
 }
 
 
 export const restaurantService ={
     addRestaurant,
-    getRestaurants,
-    getSingleRestaurant,
+    getRestaurantsForAdmin,
+    getSingleRestaurantForAdmin,
     addMeal,
     editRestaurant,
     deleteRestaurant,

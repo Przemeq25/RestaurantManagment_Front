@@ -108,6 +108,8 @@ export const mealsReducer = (state=initialState, action)=>{
                 isDeleteRequesting: false,
                 error: action.payload,
             }
+        case mealsConstants.RESET:
+            return initialState;
         default:
             return state;
     }

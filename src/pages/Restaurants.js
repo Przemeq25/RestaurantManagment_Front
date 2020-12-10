@@ -9,7 +9,13 @@ import {
     Button,
     TextField,
     fade,
-    Divider, Typography,
+    Select,
+    MenuItem,
+    Divider,
+    Typography,
+    CircularProgress,
+    Slide,
+    Grow
 } from "@material-ui/core";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -22,11 +28,17 @@ import MobileFiltersDialog from "../components/Restaurants/MobileFiltersDialog";
 import RestaurantFilters from "../components/Restaurants/RestaurantFilters";
 import RestaurantCard from "../components/Restaurants/RestaurantCard";
 import {restaurantService} from "../services/restaurantService";
+import Jumbotron from "../components/Jumbotron";
+import {history} from "../helpers/_helpers";
+import {routes} from "../config/routes";
+import HomeIcon from '@material-ui/icons/Home';
+import queryString  from 'query-string';
 
 const useStyles = makeStyles((theme)=>({
     pageBackground:{
         backgroundColor:'rgba(248,248,248)',
         minHeight:'100vh',
+        overflow:'hidden',
     },
     filtersPaperStyle:{
         padding:theme.spacing(1),
@@ -68,16 +80,46 @@ const useStyles = makeStyles((theme)=>({
     },
 }))
 
-const Restaurants = () =>{
+const Options = [
+    {label:'Popularność', value: 'default'},
+    {label:"Ocena: od najwyższej", value: 'rate,asc'},
+    {label:'Ocena: od najniższej', value: 'rate,desc'},
+    {label:'Nazwa: A-Z', value: 'name,asc'},
+    {label:'Nazwa: Z-A', value: 'name,desc'}
+]
+
+const Restaurants = ({location}) =>{
     const theme = useTheme();
     const mdDown = useMediaQuery(theme.breakpoints.down('md'));
     const classes = useStyles();
+
+
     const [isCuisineTypeCollapse, setCuisineTypeCollapse] = useState(false);
     const [isToggleFiltersDialogOpen, setToggleFiltersDialogOpen] = useState(false);
+    const [restaurants, setRestaurants] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [totalPages,setTotalPages] = useState(false);
+    const [query,setQuery] = useState({
+        page:0,
+    })
 
     useEffect(()=>{
-        restaurantService.getAllRestaurants().then(res=>console.log(res)).catch(err=>console.log(err));
-    },[])
+        const queryStr = queryString.parse(location.search);
+            if (Object.keys(queryStr).length !== 0) {
+                setQuery(queryStr);
+            }
+        setIsLoading(true);
+        restaurantService.getAllRestaurants(queryString.parse(location.search))
+            .then(res=>{
+                setRestaurants(res.data.content);
+                setTotalPages(res.data.totalPages);
+                setIsLoading(false);
+            })
+            .catch(err=>{
+                console.log(err);
+                setIsLoading(false);
+            });
+    },[location.search])
 
     const handleCuisineTypeCollapse = () =>{
         setCuisineTypeCollapse(!isCuisineTypeCollapse)
@@ -86,26 +128,84 @@ const Restaurants = () =>{
     const handleToggleFiltersDialog = () =>{
         setToggleFiltersDialogOpen(!isToggleFiltersDialogOpen);
     }
+    const handleChangeFilters = (category,city,isRestaurantOpen,rate)=>{
+        const newObject = {
+            page:0,
+        };
+        if(category){
+            newObject.category = category;
+        }
+        if(city){
+            newObject.city = city;
+        }
+        if(isRestaurantOpen){
+            newObject.open = isRestaurantOpen;
+        }
+        if(rate){
+            newObject.rate = rate;
+        }
+        setQuery(newObject);
+        pushToHistory(newObject)
+        isToggleFiltersDialogOpen && handleToggleFiltersDialog();
+    }
+    const handleWriteName=(value)=>{
+        if(value.length){
+            setQuery({...query, name:value})
+            pushToHistory({...query, name:value})
+        }else if(query.name){
+            const newQuery = {...query};
+            delete newQuery.name;
+            setQuery(newQuery);
+            pushToHistory(newQuery)
+        }
+    }
+    const handleSort=(value)=>{
+        if(value !=="default"){
+            setQuery({...query, sort:value})
+            pushToHistory({...query, sort:value})
+        }else if(query.sort){
+            const newQuery = {...query};
+            delete newQuery.sort;
+            setQuery(newQuery);
+            pushToHistory(newQuery)
+        }
+    }
+
+    const pushToHistory =(query)=>{
+        const newQuery = queryString.stringify(query);
+        history.push({
+            pathname:routes.RESTAURANTS,
+            search:newQuery,
+        })
+    }
 
     return (
         <Box className={classes.pageBackground}>
             <Navbar/>
             <Container>
-                <Box mt={mdDown ? 2 : 5} mb={mdDown ? 2 : 5}>
+                <Box mt={mdDown ? 2 : 5} mb={mdDown ? 0 : 5}>
                     <Typography variant="h3" color="secondary">Dostępne restauracje</Typography>
                 </Box>
                 <Grid container spacing={3}>
                     <Grid item md = {3} >
                         <Hidden mdDown>
-                            <Box style={{position:'sticky' ,top: 30}}>
-                                <RestaurantFilters isCuisineTypeCollapse={isCuisineTypeCollapse} handleCuisineTypeCollapse={handleCuisineTypeCollapse}/>
-                            </Box>
+                            <Slide in={true} timeout={500} direction="right">
+                                <Box style={{position:'sticky' ,top: 30}}>
+                                    <RestaurantFilters
+                                        isCuisineTypeCollapse={isCuisineTypeCollapse}
+                                        handleCuisineTypeCollapse={handleCuisineTypeCollapse}
+                                        handleChangeFilters={handleChangeFilters}
+                                        query={query}
+                                    />
+                                </Box>
+                            </Slide>
                         </Hidden>
                     </Grid>
                     <Grid item md = {mdDown ? 12 : 9} xs={12}>
+                        <Slide in={true} timeout={500} direction="left">
                         <Paper className={classes.filtersPaperStyle} variant="outlined">
                             <Box className={classes.filtersBoxStyle}>
-                                <Search width={'100%'}/>
+                                <Search width={'100%'} handleBlur={(e)=> handleWriteName(e.target.value) }/>
                                 <Box display="flex" mt={mdDown ? 1 : 0} width="100%" justifyContent={mdDown ? "space-between" : "flex-end"}>
                                     <Hidden lgUp>
                                         <Box mr={1}>
@@ -114,34 +214,71 @@ const Restaurants = () =>{
                                             </Button>
                                         </Box>
                                     </Hidden>
-                                    <Autocomplete
+                                   {/* <Autocomplete
                                         size="small"
+                                        select
                                         disableClearable
-                                        autoHighlight
                                         className={classes.filtersSelectStyle}
                                         classes={{paper:classes.menuStyle, input:classes.selectInput, inputRoot:classes.selectInputRoot,popupIndicator:classes.selectIcon}}
-                                        options={['Popularność',"Ocena: od najwyższej","Ocena: od najniższej","Nazwa: A-Z","Nazwa: Z-A"]}
+                                        getOptionLabel={option => option.label}
+                                        value={query.sort ? Options.find(item=>item.value = query.sort) : Options[0]}
+                                        onChange={(item,value)=>handleSort(value)}
+                                        options={Options}
                                         renderInput={(params) => (
                                             <TextField {...params} classes={{root:classes.select}} InputProps={{...params.InputProps, disableUnderline: true,disabled:true }} />
                                         )}
-                                    />
+                                    />*/}
+                                    <Select
+                                        value={query.sort ? query.sort : 'default'}
+                                        onChange={event => handleSort(event.target.value)}
+                                    >
+                                        {
+                                            Options.map(option=>(
+                                                <MenuItem value={option.value} key = {option.label}>{option.label}</MenuItem>
+                                        ))
+                                        }
+                                    </Select>
                                 </Box>
                             </Box>
                         </Paper>
+                        </Slide>
                         <Box m={3}/>
-                            <RestaurantCard/>
-                            <RestaurantCard/>
-                        <RestaurantCard/>
-                        <RestaurantCard/>
-                        <RestaurantCard/>
-                        <RestaurantCard/>
-                        <RestaurantCard/>
-                        <RestaurantCard/>
-                        <Box mb={3}/>
-                        <Divider/>
-                        <Box m={4} display="flex" justifyContent="center">
-                            <Pagination count={10} variant="outlined" color="secondary" />
+                        <Box minHeight="50vh" position="relative">
+                        {
+                            isLoading ? (
+                                <Box display="flex" alignItems="center" justifyContent="center" minHeight="100%">
+                                    <CircularProgress color="secondary"/>
+                                </Box>
+                                ):(
+                                restaurants.length ? restaurants.map((restaurant,index)=>(
+                                        <RestaurantCard {...restaurant} />
+                                )):(
+                                    <Grow in={true} timeout={500}>
+                                    <Jumbotron
+                                        text="Brak restauracji w bazie"
+                                        icon={<HomeIcon fontSize="inherit"/>}
+                                        size={40}
+                                    />
+                                    </Grow>
+                            ))
+                        }
                         </Box>
+
+                        <Box mb={3}/>
+
+                            <>
+                            <Divider/>
+                                <Box m={4} display="flex" justifyContent="center">
+                                <Pagination
+                                    count={parseInt(totalPages)}
+                                    variant="outlined"
+                                    color="secondary"
+                                    page={parseInt(query.page+1)}
+                                    onChange={(e,value)=>setQuery({...query,page: value-1})}/>
+                                </Box>
+                            </>
+
+
 
                     </Grid>
                 </Grid>
@@ -150,7 +287,12 @@ const Restaurants = () =>{
                 isToggleFiltersDialogOpen={isToggleFiltersDialogOpen}
                 handleToggleFiltersDialog={handleToggleFiltersDialog}
             >
-                <RestaurantFilters isCuisineTypeCollapse={isCuisineTypeCollapse} handleCuisineTypeCollapse={handleCuisineTypeCollapse}/>
+                <RestaurantFilters
+                    isCuisineTypeCollapse={isCuisineTypeCollapse}
+                    handleCuisineTypeCollapse={handleCuisineTypeCollapse}
+                    handleChangeFilters={handleChangeFilters}
+                    query={query}
+                />
             </MobileFiltersDialog>
         </Box>
     )

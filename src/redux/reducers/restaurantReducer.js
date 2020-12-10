@@ -114,6 +114,8 @@ export const restaurantReducer = (state = initialState, action)=>{
                 isRequesting: false,
                 error: action.payload
             }
+        case restaurantConstants.RESET:
+            return initialState;
         default:
             return {...state}
     }

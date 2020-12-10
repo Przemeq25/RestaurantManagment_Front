@@ -41,14 +41,8 @@ export const authReducer = (state = initialState, action) =>{
 
             };
         case authConstants.LOGOUT :
-            return {
-                ...state,
-                isLoggedIn: false,
-                token:null,
-                refreshToken:null,
-                isLoading: false,
-                error: null,
-            };
+            return initialState;
+
         case authConstants.AUTHORIZATION:
             const restaurantRoles=[];
             action.payload.role.map(item => restaurantRoles.push({role:item.authority.split('_')[1], id:item.authority.split('_')[2]}) )
