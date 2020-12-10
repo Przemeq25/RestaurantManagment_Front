@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme=>({
 
 }));
 
-const Search =({width})=>{
+const Search =({width,handleBlur})=>{
     const classes = useStyles({width:width});
     return(
         <div className={classes.search}>
@@ -71,6 +71,12 @@ const Search =({width})=>{
             </div>
             <InputBase
                 placeholder="Szukaj…"
+                onBlur={handleBlur}
+                onKeyPress={e=>{
+                    if(e.key==="Enter"){
+                        handleBlur(e)
+                    }
+                }}
                 classes={{
                     root: classes.inputRoot,
                     input: classes.inputInput,

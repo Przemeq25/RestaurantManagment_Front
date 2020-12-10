@@ -66,6 +66,8 @@ export const workersReducer = (state = initialState, action)=> {
                 isDeleteRequesting: false,
                 error: action.payload,
             }
+        case workersConstants.RESET:
+            return initialState;
         default:
             return state
     }

@@ -77,7 +77,7 @@ export const closeAddRestaurantStepper = () =>{
 export const getRestaurantsForAdmin =()=>{
     return dispatch =>{
         dispatch(request());
-        restaurantService.getRestaurants()
+        restaurantService.getRestaurantsForAdmin()
             .then(response => dispatch(success(response.data.content)))
             .catch(errorMessage => dispatch(error(errorMessage)))
     }
@@ -103,7 +103,7 @@ export const unselectRestaurant = () =>{
 export const getSingleRestaurantForAdmin = (restaurantId) =>{
     return dispatch =>{
         dispatch(request());
-        restaurantService.getSingleRestaurant(restaurantId)
+        restaurantService.getSingleRestaurantForAdmin(restaurantId)
             .then(response=>dispatch(success(response.data)))
             .catch(errorMessage=>dispatch(error(errorMessage)))
     }
