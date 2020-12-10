@@ -47,16 +47,19 @@ const useStyles = makeStyles((theme)=>({
             padding:theme.spacing(1),
         },
     },
-    select: {
-        border:`1px solid ${fade(theme.palette.common.black, 0.10)}`,
-        borderRadius:theme.spacing(2),
-        padding:'4px 8px 0px'
+    select:{
+        minWidth:170,
     },
     selectInput:{
         fontSize:'0.8rem',
-    },
-    selectIcon:{
-      marginTop:'-2px',
+        border:`1px solid ${fade(theme.palette.common.black, 0.10)}`,
+        borderRadius:theme.spacing(2),
+        padding:'4px 8px 4px',
+        "&:focus": {
+            background: "transparent",
+            border:`1px solid ${fade(theme.palette.common.black, 0.10)}`,
+            borderRadius:theme.spacing(2),
+        }
     },
     menuStyle:{
         border:`1px solid ${fade(theme.palette.common.black, 0.10)}`,
@@ -77,6 +80,9 @@ const useStyles = makeStyles((theme)=>({
     filtersSelectStyle:{
         width: "100%",
         maxWidth:200,
+    },
+    menuItem:{
+        fontSize:'0.8rem',
     },
 }))
 
@@ -214,27 +220,27 @@ const Restaurants = ({location}) =>{
                                             </Button>
                                         </Box>
                                     </Hidden>
-                                   {/* <Autocomplete
-                                        size="small"
-                                        select
-                                        disableClearable
-                                        className={classes.filtersSelectStyle}
-                                        classes={{paper:classes.menuStyle, input:classes.selectInput, inputRoot:classes.selectInputRoot,popupIndicator:classes.selectIcon}}
-                                        getOptionLabel={option => option.label}
-                                        value={query.sort ? Options.find(item=>item.value = query.sort) : Options[0]}
-                                        onChange={(item,value)=>handleSort(value)}
-                                        options={Options}
-                                        renderInput={(params) => (
-                                            <TextField {...params} classes={{root:classes.select}} InputProps={{...params.InputProps, disableUnderline: true,disabled:true }} />
-                                        )}
-                                    />*/}
                                     <Select
                                         value={query.sort ? query.sort : 'default'}
                                         onChange={event => handleSort(event.target.value)}
+                                        disableUnderline
+                                        MenuProps={{
+                                            anchorOrigin: {
+                                                vertical: "bottom",
+                                                horizontal: "right"
+                                            },
+                                            transformOrigin: {
+                                                vertical: "top",
+                                                horizontal: "right"
+                                            },
+                                            getContentAnchorEl: null,
+                                            classes:{paper:classes.menuStyle}
+                                        }}
+                                        classes={{select:classes.selectInput, root:classes.select}}
                                     >
                                         {
                                             Options.map(option=>(
-                                                <MenuItem value={option.value} key = {option.label}>{option.label}</MenuItem>
+                                                <MenuItem value={option.value} key = {option.label} className={classes.menuItem}>{option.label}</MenuItem>
                                         ))
                                         }
                                     </Select>
