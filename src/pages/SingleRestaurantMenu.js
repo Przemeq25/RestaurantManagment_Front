@@ -7,7 +7,7 @@ import MenuCard from "../components/Restaurants/MenuCard";
 import Search from "../components/Search";
 import ShortTextIcon from '@material-ui/icons/ShortText';
 import MobileFiltersDialog from "../components/Restaurants/MobileFiltersDialog";
-import SingleRestaurantWrapper from "../components/SingleRestaurantWrapper";
+import Jumbotron from "../components/Jumbotron";
 
 const useStyles = makeStyles((theme)=>({
     filtersBoxStyle:{
@@ -32,17 +32,19 @@ const useStyles = makeStyles((theme)=>({
         backgroundColor:theme.palette.secondary.dark,
     }
 }));
-const SingleRestaurantMenu = () =>{
+const SingleRestaurantMenu = ({restaurant}) =>{
     const classes = useStyles();
     const theme = useTheme();
     const mdDown = useMediaQuery(theme.breakpoints.down('md'));
-    const [isToggleFiltersDialogOpen, setToggleFiltersDialogOpen] = useState(false)
+    const [isToggleFiltersDialogOpen, setToggleFiltersDialogOpen] = useState(false);
+
 
     const handleToggleFiltersDialog = () =>{
         setToggleFiltersDialogOpen(!isToggleFiltersDialogOpen);
     }
+
     return(
-       <SingleRestaurantWrapper>
+        <>
            <Box mt={mdDown ? 5 : 10}/>
            <Grid container spacing={3}>
                <Grid item md = {3} >
@@ -70,15 +72,11 @@ const SingleRestaurantMenu = () =>{
                    <Paper className={classes.categoryPaperStyle} variant="outlined">
                        <Typography variant="h4">Kebaby</Typography>
                    </Paper>
-                   <MenuCard/>
-                   <MenuCard/>
-                   <MenuCard/>
-                   <MenuCard/>
-                   <Paper className={classes.categoryPaperStyle} variant="outlined">
-                       <Typography variant="h4">Alkohole</Typography>
-                   </Paper>
-                   <MenuCard/>
-                   <MenuCard/>
+                   {restaurant && restaurant.meals ? restaurant.meals.map(meal =>(
+                       <MenuCard {...meal} key={meal.id}/>
+                   )):(
+                       <Jumbotron size={40} text="Brak posiłków"/>
+                   )}
 
                </Grid>
            </Grid>
@@ -88,7 +86,7 @@ const SingleRestaurantMenu = () =>{
             >
             <MenuFilters/>
             </MobileFiltersDialog>
-       </SingleRestaurantWrapper>
+        </>
     )
 }
 export default SingleRestaurantMenu;

@@ -128,6 +128,9 @@ const getAllRestaurants = ({page,name,category,city,open,rate,sort}) =>{
             sort:sort,
         }})
 }
+const getSingleRestaurant = (restaurantID) =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}/public`)
+}
 
 
 export const restaurantService ={
@@ -141,4 +144,5 @@ export const restaurantService ={
     getWorkers,
     deleteWorker,
     getAllRestaurants,
+    getSingleRestaurant
 }
