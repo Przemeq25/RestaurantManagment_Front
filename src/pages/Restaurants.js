@@ -7,7 +7,6 @@ import {
     useTheme,
     Paper,
     Button,
-    TextField,
     fade,
     Select,
     MenuItem,
@@ -17,7 +16,6 @@ import {
     Slide,
     Grow
 } from "@material-ui/core";
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Navbar from "../components/Navbar";
 import {makeStyles} from "@material-ui/core/styles";

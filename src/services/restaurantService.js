@@ -54,20 +54,6 @@ const editRestaurant = (restaurantData,restaurantID)=>{
     )
 
 };
-const addMeal = (restaurantID,meal) =>{
-    return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantID}/meals`,{
-        "name": meal.name,
-        "price": meal.price,
-        "image": meal.image,
-        "ingredients": meal.ingredients,
-        "timeToDo": meal.timeToDo
-    },
-    {
-        headers:{
-            Authorization:`bearer ${localStorage.getItem('access_token')}`
-        }
-    })
-}
 
 const getRestaurantsForAdmin = () =>{
     return axios.get(`${appUrl}/restaurant-api/restaurants`,
@@ -137,7 +123,6 @@ export const restaurantService ={
     addRestaurant,
     getRestaurantsForAdmin,
     getSingleRestaurantForAdmin,
-    addMeal,
     editRestaurant,
     deleteRestaurant,
     addWorker,

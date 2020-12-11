@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme)=>({
     pageBackground: {
         backgroundColor: 'rgba(248,248,248)',
         minHeight:'100vh',
+        overflow:'hidden',
     },
     restaurantJumbotron:{
         [theme.breakpoints.down('xs')]:{
@@ -88,15 +89,23 @@ const SingleRestaurantWrapper = ({children,match}) =>{
     const classes = useStyles();
     const [isOpinionsDialogOpen,setOpinionsDialogOpen] = useState(false);
     const [restaurant, setRestaurant] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleToggleOpinionsDialog = () =>{
         setOpinionsDialogOpen(!isOpinionsDialogOpen);
     }
 
     useEffect(()=>{
+        setIsLoading(true);
         restaurantService.getSingleRestaurant(match.params.restaurantId)
-            .then(res=>setRestaurant(res.data))
-            .catch(err=>console.log(err))
+            .then(res=>{
+                setIsLoading(false);
+                setRestaurant(res.data)
+            })
+            .catch(err=>{
+                setIsLoading(false);
+                console.log(err)
+            })
     },[])
     const {name,rate,category,image,id} = restaurant;
     return(
@@ -124,7 +133,7 @@ const SingleRestaurantWrapper = ({children,match}) =>{
             </Box>
             </Slide>
                 <Container>
-                    {React.cloneElement(children, {restaurant})}
+                    {React.cloneElement(children, {restaurant,isLoading})}
                 </Container>
             <Dialog
                 fullWidth

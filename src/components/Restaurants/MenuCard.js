@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Divider, Paper, Typography, IconButton, useTheme} from "@material-ui/core";
+import {Box, Divider, Paper, Typography, IconButton, useTheme, Slide} from "@material-ui/core";
 import AppLogo from "../AppLogo";
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import {makeStyles} from "@material-ui/core/styles";
@@ -66,32 +66,34 @@ const MenuCard = ({name,id,ingredients,price,timeToDo}) =>{
     const theme = useTheme();
     const xsDown = useMediaQuery(theme.breakpoints.down('xs'));
     return (
-        <Paper className={classes.menuPaperStyle} variant="outlined" >
-            <Box display ="flex"  height="100%" >
-                <Box className={classes.cardMedia}>
-                    <AppLogo size={12}/>
-                </Box>
-                <Divider orientation='vertical'/>
-                <Box className={classes.menuPaperContentStyle}>
-                    <Box flex="1">
-                        <Typography variant="h4" color="primary"> {name}</Typography>
-                        <Typography variant="subtitle2" gutterBottom>{ingredients}</Typography>
+        <Slide in={true} direction="left" timeout={300}>
+            <Paper className={classes.menuPaperStyle} variant="outlined" >
+                <Box display ="flex"  height="100%" >
+                    <Box className={classes.cardMedia}>
+                        <AppLogo size={12}/>
                     </Box>
-                    <Typography variant="h4" color="secondary">{price} zł </Typography>
-                    <Divider/>
-                    <Box className={classes.contactBox}>
-                        <Box mr={1} display="flex" alignItems="center" >
-                            <AccessTimeIcon fontSize="small" className={classes.iconPadding}/>
-                            <Typography variant="subtitle2">{timeToDo}min</Typography>
+                    <Divider orientation='vertical'/>
+                    <Box className={classes.menuPaperContentStyle}>
+                        <Box flex="1">
+                            <Typography variant="h4" color="primary"> {name}</Typography>
+                            <Typography variant="subtitle2" gutterBottom>{ingredients}</Typography>
                         </Box>
+                        <Typography variant="h4" color="secondary">{price} zł </Typography>
+                        <Divider/>
+                        <Box className={classes.contactBox}>
+                            <Box mr={1} display="flex" alignItems="center" >
+                                <AccessTimeIcon fontSize="small" className={classes.iconPadding}/>
+                                <Typography variant="subtitle2">{timeToDo}min</Typography>
+                            </Box>
 
+                        </Box>
                     </Box>
                 </Box>
-            </Box>
-            <IconButton className={classes.buyButton} size={xsDown ? "small" : "medium"}>
-                <ShoppingCartOutlinedIcon color="secondary" fontSize={xsDown ? "small" : "medium"}/>
-            </IconButton>
-        </Paper>
+                <IconButton className={classes.buyButton} size={xsDown ? "small" : "medium"}>
+                    <ShoppingCartOutlinedIcon color="secondary" fontSize={xsDown ? "small" : "default"}/>
+                </IconButton>
+            </Paper>
+        </Slide>
     )
 }
 export default MenuCard;
