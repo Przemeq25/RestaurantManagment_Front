@@ -7,6 +7,8 @@ import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import useMediaQuery from "@material-ui/core/useMediaQuery/useMediaQuery";
 import {useDispatch} from "react-redux";
 import {addProduct} from "../../redux/actions/basket";
+import {isValidUrl} from "../../helpers/_helpers";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles((theme)=>({
     menuPaperStyle: {
@@ -60,9 +62,13 @@ const useStyles = makeStyles((theme)=>({
         position:'absolute',
         bottom:10,
         right:10,
+    },
+    avatar:{
+        minHeight: "100%",
+        minWidth:'100%'
     }
 }));
-const MenuCard = ({name,id,ingredients,price,timeToDo,restaurantName, restaurantId}) =>{
+const MenuCard = ({name,id,ingredients,price,timeToDo,restaurantName, restaurantId,image}) =>{
     const classes = useStyles();
     const theme = useTheme();
     const xsDown = useMediaQuery(theme.breakpoints.down('xs'));
@@ -71,6 +77,7 @@ const MenuCard = ({name,id,ingredients,price,timeToDo,restaurantName, restaurant
     const mealObject = {
         name:name,
         id:id,
+        image:image,
         unitPrice: price,
         restaurantName: restaurantName,
         restaurantId: restaurantId,
@@ -80,7 +87,11 @@ const MenuCard = ({name,id,ingredients,price,timeToDo,restaurantName, restaurant
             <Paper className={classes.menuPaperStyle} variant="outlined" >
                 <Box display ="flex"  height="100%" >
                     <Box className={classes.cardMedia}>
-                        <AppLogo size={12}/>
+                        {isValidUrl(image) ?
+                            <Avatar variant="square" src={image} className={classes.avatar}/>
+                            :
+                            <AppLogo size={12}/>
+                        }
                     </Box>
                     <Divider orientation='vertical'/>
                     <Box className={classes.menuPaperContentStyle}>

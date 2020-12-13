@@ -64,15 +64,6 @@ const getRestaurantsForAdmin = () =>{
         })
 
 }
-const getSingleRestaurantForAdmin = (restaurantID) =>{
-    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}`,
-        {
-            headers: {
-                Authorization: `bearer ${localStorage.getItem('access_token')}`
-            }
-        })
-
-}
 const addWorker = (email,restaurantID)=>{
     return axios.post(`${appUrl}/user-api/restaurants/${restaurantID}/workers`,{},
         {
@@ -101,6 +92,16 @@ const deleteWorker = (restaurantID, workerID)=>{
         }
     })
 };
+const addPicture = async(picture) =>{
+    const fd = new FormData();
+    fd.append("file", picture);
+    fd.append("tags", `przemeq`);
+    fd.append("upload_preset", `itsfqhtq`);
+    fd.append("api_key", "247926998118615");
+    fd.append("timestamp", (Date.now() / 1000) || 0);
+    console.log(fd);
+    return await axios.post("https://api.cloudinary.com/v1_1/przemeq25/image/upload", fd);
+}
 
 const getAllRestaurants = ({page,name,category,city,open,rate,sort}) =>{
     return axios.get(`${appUrl}/restaurant-api/restaurants/public`,{
@@ -122,12 +123,12 @@ const getSingleRestaurant = (restaurantID) =>{
 export const restaurantService ={
     addRestaurant,
     getRestaurantsForAdmin,
-    getSingleRestaurantForAdmin,
     editRestaurant,
     deleteRestaurant,
     addWorker,
     getWorkers,
     deleteWorker,
+    addPicture,
     getAllRestaurants,
     getSingleRestaurant
 }

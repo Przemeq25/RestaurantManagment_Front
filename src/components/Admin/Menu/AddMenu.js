@@ -91,7 +91,7 @@ const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isAddRequesting,i
                       }) => (
                           <>
                                 {values.image ? (
-                                        <Avatar src = {URL.createObjectURL(values.image)} variant="rounded" className={classes.imageStyle}/>
+                                        <Avatar src = {(typeof values.image === 'string' || values.image instanceof String) ? values.image : URL.createObjectURL(values.image)} variant="rounded" className={classes.imageStyle}/>
                                     ):(
                                         <Avatar variant="rounded" className={classes.imageStyle}>
                                             <AppLogo size={12}/>
@@ -215,7 +215,7 @@ const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isAddRequesting,i
                                                     <Box display="flex" alignItems="center" flexDirection="column" p={2} pt={0}>
                                                         {isDeleteRequesting ? (
                                                             <>
-                                                                <Typography variant="h4" color="primary" paragraph>
+                                                                <Typography variant="h4" color="primary" paragraph align="center">
                                                                     Proszę czekać, trwa usuwanie posiłku ...
                                                                 </Typography>
                                                                 <CircularProgress color="inherit"/>

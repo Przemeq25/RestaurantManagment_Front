@@ -155,8 +155,12 @@ const Edit = ({match}) =>{
                                         <Card className={classes.root}>
                                             <Box display="flex" alignItems="center" justifyContent="center">
                                                 <Avatar variant="rounded" className={classes.avatar}
-                                                        src={values.image && URL.createObjectURL(values.image)}>
-                                                    {!values.image && <AppLogo/>}
+                                                        src={
+                                                           (typeof values.image === 'string' || values.image instanceof String) ?
+                                                                values.image :
+                                                                URL.createObjectURL(values.image)}
+                                                >
+                                                    {!values.image && <AppLogo size={12}/>}
                                                 </Avatar>
                                             </Box>
                                             <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>

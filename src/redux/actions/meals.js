@@ -1,5 +1,7 @@
 import {mealsService} from "../../services/mealsService";
 import {mealsConstants} from "../types";
+import {restaurantService} from "../../services/restaurantService";
+import {scaleImageByUrl} from "../../helpers/_helpers";
 
 
 export const getMeals = (restaurantID) =>{
@@ -17,12 +19,19 @@ export const getMeals = (restaurantID) =>{
 export const addMeal = (meal,restaurantID)=>{
     return dispatch =>{
         dispatch(request());
-        mealsService.addMeal(meal,restaurantID)
-            .then(response=>{
-                dispatch(success(response.data))
-                dispatch(closeDrawer());
+        restaurantService.addPicture(meal.image)
+            .then(res=>{
+                mealsService.addMeal(Object.assign(meal,{image:scaleImageByUrl(res.data.secure_url)}),restaurantID)
+                    .then(response=>{
+                        dispatch(success(response.data))
+                        dispatch(closeDrawer());
+                    })
+                    .catch(errorMessage=>dispatch(error(errorMessage)));
             })
-            .catch(errorMessage=>dispatch(error(errorMessage)));
+            .catch(err=>{
+                dispatch(error(err));
+            })
+
     };
     function request(){ return{type:mealsConstants.ADD_MEAL_REQUEST}}
     function success(meal){ return {type:mealsConstants.ADD_MEAL_SUCCESS, payload:meal}}
@@ -43,12 +52,16 @@ export const openDrawerToEditMeal = (meal) =>{
 export const editMeal =(meal,restaurantID)=>{
     return dispatch=>{
         dispatch(request());
-        mealsService.editMeal(meal,restaurantID,meal.id)
-            .then(response=>{
-                dispatch(success(response.data));
-                dispatch(closeDrawer())
+        restaurantService.addPicture(meal.image)
+            .then(res=> {
+                mealsService.editMeal(Object.assign(meal, {image: scaleImageByUrl(res.data.secure_url)}), restaurantID, meal.id)
+                    .then(response => {
+                        dispatch(success(response.data));
+                        dispatch(closeDrawer())
+                    })
+                    .catch(errorMessage => dispatch(error(errorMessage)));
             })
-            .catch(errorMessage=>dispatch(error(errorMessage)));
+            .catch(errorMessage => dispatch(error(errorMessage)));
     };
     function request(){ return{type:mealsConstants.EDIT_MEAL_REQUEST}}
     function success(meal){ return {type:mealsConstants.EDIT_MEAL_SUCCESS, payload:meal}}

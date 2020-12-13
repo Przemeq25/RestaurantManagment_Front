@@ -1,23 +1,29 @@
 import {restaurantService} from "../../services/restaurantService";
 import {restaurantConstants} from "../types";
 import {refreshLogin} from "./auth";
-import {history} from "../../helpers/_helpers";
+import {history, scaleImageByUrl} from "../../helpers/_helpers";
 import {routes} from "../../config/routes";
 
 export const addRestaurant = (restaurant,refreshToken)=>{
     return dispatch =>{
         dispatch(request());
-        restaurantService.addRestaurant(restaurant)
-            .then(response =>{
-                setTimeout(()=>{
-                    refreshLogin(refreshToken,dispatch)
-                        .then(()=> {
-                            dispatch(success(response.data))
-                        }).catch((errorMessage)=>dispatch(error(errorMessage)))
-                },30000)
+        restaurantService.addPicture(restaurant.image)
+            .then(res=> {
+                restaurantService.addRestaurant(Object.assign(restaurant,{image:scaleImageByUrl(res.data.secure_url)}))
+                    .then(response => {
+                        setTimeout(() => {
+                            refreshLogin(refreshToken, dispatch)
+                                .then(() => {
+                                    dispatch(success(response.data))
+                                }).catch((errorMessage) => dispatch(error(errorMessage)))
+                        }, 20000)
 
+                    })
+                    .catch(errorMessage => {
+                        dispatch(error(errorMessage));
+                    })
             })
-            .catch(errorMessage=>{
+            .catch(errorMessage => {
                 dispatch(error(errorMessage));
             })
     }
@@ -49,11 +55,17 @@ export const deleteRestaurant = (restaurantID)=>{
 export const editRestaurant = (restaurantData, restaurantID) =>{
     return dispatch =>{
         dispatch(request());
-        restaurantService.editRestaurant(restaurantData,restaurantID)
-            .then(response =>{
-                dispatch(success(response.data))
+        restaurantService.addPicture(restaurantData.image)
+            .then(res=> {
+                restaurantService.editRestaurant(Object.assign(restaurantData, {image: scaleImageByUrl(res.data.secure_url)}), restaurantID)
+                    .then(response => {
+                        dispatch(success(response.data))
+                    })
+                    .catch(errorMessage => {
+                        dispatch(error(errorMessage));
+                    })
             })
-            .catch(errorMessage=>{
+            .catch(errorMessage => {
                 dispatch(error(errorMessage));
             })
     }
@@ -103,7 +115,7 @@ export const unselectRestaurant = () =>{
 export const getSingleRestaurantForAdmin = (restaurantId) =>{
     return dispatch =>{
         dispatch(request());
-        restaurantService.getSingleRestaurantForAdmin(restaurantId)
+        restaurantService.getSingleRestaurant(restaurantId)
             .then(response=>dispatch(success(response.data)))
             .catch(errorMessage=>dispatch(error(errorMessage)))
     }

@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import {List,ListItem, Typography,ListItemIcon,ListItemText,Drawer} from "@material-ui/core";
-import {Link, NavLink} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu';
@@ -9,9 +9,9 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import PeopleIcon from '@material-ui/icons/People';
 import {makeStyles} from "@material-ui/core/styles";
 import {Desktop, Mobile} from "../../../helpers/_helpers";
-import appLogo from "../../../helpers/_helpers";
 import {routes} from "../../../config/routes";
 import SettingsIcon from '@material-ui/icons/Settings';
+import AppLogo from "../../AppLogo";
 
 
 
@@ -159,9 +159,7 @@ const AdminDrawer = ({isDrawerOpen,closeDrawer,match}) =>{
                     classes={{paperAnchorLeft:classes.drawerMobile}}
                 >
                     <div className={classes.logo}>
-                        <Link to="/">
-                            <img src = {appLogo} alt="Logo"/>
-                        </Link>
+                        <AppLogo push color="secondary" size={12}/>
                     </div>
                     {drawerList()}
                 </Drawer>
