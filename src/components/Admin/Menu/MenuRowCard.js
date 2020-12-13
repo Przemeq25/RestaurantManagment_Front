@@ -119,7 +119,7 @@ const MenuRowCard = ({id,name,image,ingredients,timeToDo,price}) =>{
                 {image ? (
                         <CardMedia
                             className={classes.cover}
-                            image="https://res.cloudinary.com/przemeq25/image/upload/v1593706499/frytki_dnooac.jpg"
+                            image={image}
                         />
                     ):(
                         <Box className = {classes.cardMedia}>

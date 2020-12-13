@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {fade, makeStyles} from "@material-ui/core/styles";
 import Navbar from "../components/Navbar";
-import {Box, Button, Container, ButtonGroup, Typography, Dialog, DialogTitle, DialogContent,Paper,Divider,TextField,Slide,Fade} from "@material-ui/core";
+import {Box, Button, Container, ButtonGroup, Typography, Dialog, DialogTitle, DialogContent,Paper,Divider,TextField,Slide} from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating/Rating";
 import {NavLink} from "react-router-dom";
 import {routes} from "../config/routes";
 import AppLogo from "./AppLogo";
-import {getCuisineTypeValue, history} from "../helpers/_helpers";
+import {getCuisineTypeValue, isValidUrl} from "../helpers/_helpers";
 import {restaurantService} from "../services/restaurantService";
+import Avatar from "@material-ui/core/Avatar";
+import StarBorderIcon from '@material-ui/icons/StarBorder';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -34,10 +36,17 @@ const useStyles = makeStyles((theme)=>({
     ratingBox:{
         cursor:'pointer',
         position: "absolute",
-        bottom:10,
+        bottom:0,
         left:'50%',
         transform:'translateX(-50%)',
         zIndex:100,
+        background: 'linear-gradient(0deg, rgba(0,0,0,0.767927239255077) 0%, rgba(244,244,244,0) 40%)',
+        width: '100%',
+        padding:theme.spacing(1),
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'flex-end',
+        height: "100%",
     },
     activeButton:{
         background: theme.palette.primary.main,
@@ -65,7 +74,7 @@ const useStyles = makeStyles((theme)=>({
         display: 'flex',
         position:'relative',
         backgroundColor: '#ededed',
-        background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(210,210,210,0.38697485830269607) 32%, rgba(64,64,64,0) 64%, rgba(22,22,22,0.675490264465161) 100%)',
+        overflow:'hidden',
         height: 150,
         alignItems: 'center',
         justifyContent: 'center',
@@ -84,6 +93,10 @@ const useStyles = makeStyles((theme)=>({
     selectInput: {
         fontSize: '0.8rem',
     },
+    avatar:{
+        minHeight: "100%",
+        minWidth:'100%'
+    }
 }));
 const SingleRestaurantWrapper = ({children,match}) =>{
     const classes = useStyles();
@@ -117,9 +130,13 @@ const SingleRestaurantWrapper = ({children,match}) =>{
                 <Typography variant = "h3" gutterBottom>{name}</Typography>
                 <Typography variant="subtitle2" paragraph>{ category && getCuisineTypeValue(category).map(e => e.label).join(", ")}</Typography>
                 <Box className={classes.cardMedia}>
-                    <AppLogo size={12}/>
+                    {isValidUrl(image) ?
+                        <Avatar variant="rounded" src={image} className={classes.avatar} />
+                        :
+                        <AppLogo size={12} color="secondary"/>
+                    }
                     <Box className={classes.ratingBox} onClick={handleToggleOpinionsDialog}>
-                        <Rating readOnly value={rate ? Number(rate) : 0} size="small"/>
+                        <Rating readOnly value={rate ? Number(rate) : 0} size="small" emptyIcon={<StarBorderIcon color="secondary" fontSize="small"/>}/>
                     </Box>
                 </Box>
 

@@ -25,7 +25,7 @@ import {
 } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
-import appLogo, {getAdminType, toLocalTime, worksTimeDaysTranslate} from '../../helpers/_helpers';
+import {getAdminType, toLocalTime, worksTimeDaysTranslate} from '../../helpers/_helpers';
 import AddRestaurantStepper from "../../components/Admin/AddRestaurant/AddRestaurantStepper";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -35,6 +35,8 @@ import {
 } from "../../redux/actions/restaurant";
 import PhoneIcon from '@material-ui/icons/Phone';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import App from "../../App";
+import AppLogo from "../../components/AppLogo";
 
 const useStyles = makeStyles(theme=>({
     fab: {
@@ -61,7 +63,8 @@ const useStyles = makeStyles(theme=>({
         "&:hover": {
             boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)"
         },
-        borderRadius:theme.spacing(2)
+        borderRadius:theme.spacing(2),
+        maxWidth:450,
     },
     cardChip:{
         position:'absolute',
@@ -115,10 +118,10 @@ const AdminDashboard = () =>{
             ):(
                 <>
                     <AddRestaurantStepper isDialogOpen={isDialogOpen} setDialogOpen={handleToggleDialog} firstRegister={Boolean(userType && userType.length <= 0)}/>
-                    <Grid container spacing={4}>
+                    <Grid container spacing={2} justify="center">
                         {restaurants.length ? restaurants.map(restaurant=>(
                             <Grow in = {Boolean(restaurants.length > 0)} key={restaurant.id}>
-                            <Grid item xs={12} md = {6} lg = {4} xl = {3} key={restaurant.id}>
+                            <Grid container item xs={12} sm = {6} md = {6} lg = {4} xl = {3} key={restaurant.id} justify="center">
                                 <Card className={classes.card}>
                                     <CardActionArea onClick={()=>dispatch(selectRestaurant(restaurant))}>
                                         <Chip
@@ -126,12 +129,18 @@ const AdminDashboard = () =>{
                                             color="primary"
                                             className={classes.cardChip}
                                         />
-                                        <CardMedia
-                                            component="img"
-                                            alt="Contemplative Reptile"
-                                            height="200"
-                                            image={appLogo}
-                                        />
+                                        {restaurant.image ?
+                                            <CardMedia
+                                                component="img"
+                                                alt="Logo"
+                                                height="200"
+                                                image={restaurant.image}
+                                            />
+                                            :
+                                            <Box height="200px" width="100%" display="flex" alignItems="center" justifyContent="center">
+                                                <AppLogo color="secondary"/>
+                                            </Box>
+                                        }
                                         <CardContent>
 
                                             <Typography
@@ -235,7 +244,7 @@ const AdminDashboard = () =>{
                     </Grid>
                 </>
             )}
-            <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleToggleDialog} variant = "extended">
+            <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleToggleDialog} variant = "extended" size="small">
                 <AddIcon className={classes.extendedIcon}/>
                 Dodaj restaurację
             </Fab>

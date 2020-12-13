@@ -1,11 +1,8 @@
-import logo from "../images/logo2.png";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createBrowserHistory } from 'history';
 import moment from 'moment';
 
 export const history = createBrowserHistory();
-
-export default logo;
 
 export const Desktop = ({ children }) => {
     const isDesktop = useMediaQuery('(min-width:960px)')
@@ -129,6 +126,23 @@ export const menuInitialValues = {
     price:'',
     ingredients:'',
     timeToDo:'',
+}
+
+export const scaleImageByUrl = (url) =>{
+    const newSecureUrl = url.split('/');
+    newSecureUrl[6] = "h_200,c_scale";
+    return newSecureUrl.join('/');
+}
+export const isValidUrl = (url) =>{
+    let expression = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi;
+    let regex = new RegExp(expression);
+    if (!url){
+        return false;
+    }else if (url.match(regex)){
+        return true;
+    }else{
+        return false;
+    }
 }
 
 

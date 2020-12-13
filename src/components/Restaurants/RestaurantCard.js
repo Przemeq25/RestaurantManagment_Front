@@ -5,8 +5,9 @@ import Rating from "@material-ui/lab/Rating/Rating";
 import {makeStyles} from "@material-ui/core/styles";
 import HomeIcon from '@material-ui/icons/Home';
 import PhoneIcon from '@material-ui/icons/Phone';
-import {getCuisineTypeValue, history} from "../../helpers/_helpers";
+import {getCuisineTypeValue, history, isValidUrl} from "../../helpers/_helpers";
 import {routes} from "../../config/routes";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles((theme)=>({
     restaurantsPaperStyle: {
@@ -53,16 +54,24 @@ const useStyles = makeStyles((theme)=>({
         [theme.breakpoints.down('xs')]: {
             marginTop:'3px',
         },
+    },
+    avatar:{
+        minHeight: "100%",
+        minWidth:'100%'
     }
 }));
-const RestaurantCard = ({name,category,phoneNumber,street,city,houseNumber,id,rate}) =>{
+const RestaurantCard = ({name,category,phoneNumber,street,city,houseNumber,id,rate,image}) =>{
     const classes = useStyles();
     return (
         <Slide in={true} direction="left" timeout={300}>
         <Paper className={classes.restaurantsPaperStyle} variant="outlined" onClick={()=>history.push(`${routes.SINGLERESTAURANTMENU}/${id}`)}>
             <Box display ="flex"  height="100%" >
                 <Box className={classes.cardMedia}>
-                    <AppLogo size={12}/>
+                    {isValidUrl(image) ?
+                        <Avatar variant="square" src={image} className={classes.avatar}/>
+                        :
+                        <AppLogo size={12}/>
+                    }
                 </Box>
                 <Divider orientation='vertical'/>
                 <Box className={classes.restaurantsPaperContentStyle}>
