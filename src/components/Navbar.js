@@ -101,6 +101,7 @@ const Navbar = () =>{
     const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
     const dispatch = useDispatch();
     const mdUp = useMediaQuery(theme.breakpoints.up('md'));
+    const basketLength = useSelector(state=> state.basket.numberOfProducts);
 
 
     const handleToggleMenu = (e) => {
@@ -160,8 +161,7 @@ const Navbar = () =>{
                             <Box display="flex" alignItems ='center' flexDirection = "column">
                                 <Badge
                                     color="primary"
-                                    badgeContent={0}
-                                    variant="dot"
+                                    badgeContent={basketLength}
                                 >
                                     <ShoppingCartOutlinedIcon color="inherit"/>
                                 </Badge>

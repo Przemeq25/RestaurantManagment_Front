@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Divider, Typography, useTheme} from "@material-ui/core";
+import {Box, Divider, Typography, useTheme,IconButton} from "@material-ui/core";
 import AppLogo from "../../AppLogo";
 import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import AddBoxIcon from '@material-ui/icons/AddBox';
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme=>({
         height: 100,
         overflow: 'hidden',
         position: 'relative',
-        marginBottom:theme.spacing(1),
+        margin:`${theme.spacing(1)}px 0px`
     },
     cardMedia: {
         display: 'flex',
@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme=>({
         alignItems:'center',
         justifyContent:'space-between',
         padding: theme.spacing(1),
-        width: '100%',
+        flex:'auto',
     },
     buttonActions:{
         cursor:'pointer',
@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme=>({
     }
 }))
 
-const ShoppingBasketItem = ({product, handleDelete, handleAdd, handleSubtract, amount, price}) =>{
+const ShoppingBasketItem = ({id,name, handleDeleteProduct, handleIncrementProduct, handleDecrementProduct, amount, unitPrice,totalPrice}) =>{
     const classes = useStyles();
     const theme = useTheme();
     const xsDown = useMediaQuery(theme.breakpoints.down('xs'));
@@ -53,19 +53,42 @@ const ShoppingBasketItem = ({product, handleDelete, handleAdd, handleSubtract, a
                 </Box>
                 <Box className={classes.basketContent}>
                     <Box flex="1">
-                        <Typography variant="body2" color="primary"> {product}</Typography>
+                        <Typography variant="body2" color="primary"> {name}</Typography>
                     </Box>
                     <Box display="flex" alignItems = "center" justifyContent="space-around" flexDirection={xsDown ? "column" : "row"} mr={1} ml={1}>
-                        <IndeterminateCheckBoxIcon fontSize={xsDown ? "medium" :"large"} color="secondary" className={classes.buttonActions}/>
-                        <AddBoxIcon fontSize={xsDown ? "medium" :"large"} color="secondary" className={classes.buttonActions}/>
+                        <IconButton
+                            size="small"
+                            onClick={()=>handleDecrementProduct(id)}
+                            disabled={amount <= 1}
+                            color="secondary"
+                        >
+                            <IndeterminateCheckBoxIcon
+                                fontSize={xsDown ? "default" :"large"}
+                                color="inherit"
+                                className={classes.buttonActions}
+                            />
+                        </IconButton>
+                        <IconButton
+                            size="small"
+                            onClick={()=>handleIncrementProduct(id)}
+                            color="secondary"
+                        >
+                            <AddBoxIcon
+                                fontSize={xsDown ? "default" :"large"}
+                                color="inherit"
+                                className={classes.buttonActions}
+                            />
+                        </IconButton>
                         <Box ml={xsDown ? 0 : 2} mt={xsDown ? 2 : 0}>
-                            <DeleteIcon fontSize={xsDown ? "small" :"medium"} color="action" className={classes.buttonActions}/>
+                            <DeleteIcon fontSize={xsDown ? "small" :"default"} color="action" className={classes.buttonActions} onClick={()=>handleDeleteProduct(id)}/>
                         </Box>
                     </Box>
                     <Divider orientation="vertical"/>
-                    <Box ml = {1} minWidth="70px">
+                    <Box ml = {1} minWidth={xsDown ? "50px" : "70px"}>
                         <Typography variant="body2"> x{amount}</Typography>
-                        <Typography variant="h6"> {price} zł</Typography>
+                        <Typography variant="h6" paragraph> {totalPrice} zł</Typography>
+                        <Divider/>
+                        <Typography variant="subtitle2"> 1 szt: <b>{unitPrice} zł</b></Typography>
                     </Box>
                 </Box>
             </Box>

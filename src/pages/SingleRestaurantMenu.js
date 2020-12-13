@@ -134,7 +134,7 @@ const SingleRestaurantMenu = ({restaurant,isLoading}) =>{
                                    </Box>
                                ):(
                                    restaurant.meals && restaurant.meals.length ? restaurant.meals.map(meal =>(
-                                       <MenuCard {...meal} key={meal.id}/>
+                                       <MenuCard {...meal} restaurantName={restaurant.name} restaurantId={restaurant.id} key={meal.id}/>
                                    )):(
                                        <Grow in={true} timeout={500}>
                                             <Jumbotron size={40} text="Brak posiłków" icon={<LayersClearIcon fontSize="inherit"/> }/>

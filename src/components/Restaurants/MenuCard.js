@@ -5,6 +5,8 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import {makeStyles} from "@material-ui/core/styles";
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import useMediaQuery from "@material-ui/core/useMediaQuery/useMediaQuery";
+import {useDispatch} from "react-redux";
+import {addProduct} from "../../redux/actions/basket";
 
 const useStyles = makeStyles((theme)=>({
     menuPaperStyle: {
@@ -14,7 +16,6 @@ const useStyles = makeStyles((theme)=>({
             boxShadow: "-1px 10px 29px 0px rgba(0,0,0,0.2)"
         },
         height: 200,
-        cursor: 'pointer',
         marginBottom: theme.spacing(1),
         [theme.breakpoints.down('xs')]: {
             height: 120,
@@ -61,10 +62,19 @@ const useStyles = makeStyles((theme)=>({
         right:10,
     }
 }));
-const MenuCard = ({name,id,ingredients,price,timeToDo}) =>{
+const MenuCard = ({name,id,ingredients,price,timeToDo,restaurantName, restaurantId}) =>{
     const classes = useStyles();
     const theme = useTheme();
     const xsDown = useMediaQuery(theme.breakpoints.down('xs'));
+    const dispatch = useDispatch();
+
+    const mealObject = {
+        name:name,
+        id:id,
+        unitPrice: price,
+        restaurantName: restaurantName,
+        restaurantId: restaurantId,
+    };
     return (
         <Slide in={true} direction="left" timeout={300}>
             <Paper className={classes.menuPaperStyle} variant="outlined" >
@@ -89,7 +99,13 @@ const MenuCard = ({name,id,ingredients,price,timeToDo}) =>{
                         </Box>
                     </Box>
                 </Box>
-                <IconButton className={classes.buyButton} size={xsDown ? "small" : "medium"}>
+                <IconButton
+                    className={classes.buyButton}
+                    size={xsDown ? "small" : "medium"}
+                    onClick={()=>
+                        dispatch(addProduct(mealObject))
+                    }
+                >
                     <ShoppingCartOutlinedIcon color="secondary" fontSize={xsDown ? "small" : "default"}/>
                 </IconButton>
             </Paper>
