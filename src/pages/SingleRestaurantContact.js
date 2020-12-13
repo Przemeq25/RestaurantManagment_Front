@@ -1,5 +1,4 @@
 import React from "react";
-import SingleRestaurantWrapper from "../components/SingleRestaurantWrapper";
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import {Box, Divider, Hidden, Table, TableBody, TableCell, TableRow, Typography} from "@material-ui/core";
 import PhoneIcon from '@material-ui/icons/Phone';
@@ -31,7 +30,7 @@ const center = {
 const SingleRestaurantContact = () =>{
     const classes = useStyles();
     return (
-        <SingleRestaurantWrapper>
+        <>
             <Box mt={3} mb={6}>
                 <LoadScript
                     googleMapsApiKey="YOUR_API_KEY"
@@ -115,7 +114,7 @@ const SingleRestaurantContact = () =>{
                 </Box>
 
             </Box>
-        </SingleRestaurantWrapper>
+        </>
     )
 }
 export default SingleRestaurantContact;

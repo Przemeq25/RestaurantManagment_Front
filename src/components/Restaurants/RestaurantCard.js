@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme)=>({
         },
     }
 }));
-const RestaurantCard = ({name,category,phoneNumber,street,city,houseNumber,id}) =>{
+const RestaurantCard = ({name,category,phoneNumber,street,city,houseNumber,id,rate}) =>{
     const classes = useStyles();
     return (
         <Slide in={true} direction="left" timeout={300}>
@@ -69,7 +69,7 @@ const RestaurantCard = ({name,category,phoneNumber,street,city,houseNumber,id}) 
                     <Box flex="1">
                         <Typography variant="h4" color="primary">{name}</Typography>
                         <Typography variant="subtitle2" gutterBottom>{getCuisineTypeValue(category).map(e => e.label).join(", ")}</Typography>
-                        <Rating readOnly value={4} size="small"/>
+                        <Rating readOnly value={rate ? Number(rate) : 0} size="small"/>
                     </Box>
                     <Divider/>
                     <Box className={classes.contactBox}>

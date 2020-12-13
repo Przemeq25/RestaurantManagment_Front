@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {fade, makeStyles} from "@material-ui/core/styles";
 import Navbar from "../components/Navbar";
 import {Box, Button, Container, ButtonGroup, Typography, Dialog, DialogTitle, DialogContent,Paper,Divider,TextField,Slide,Fade} from "@material-ui/core";
@@ -6,12 +6,15 @@ import Rating from "@material-ui/lab/Rating/Rating";
 import {NavLink} from "react-router-dom";
 import {routes} from "../config/routes";
 import AppLogo from "./AppLogo";
+import {getCuisineTypeValue, history} from "../helpers/_helpers";
+import {restaurantService} from "../services/restaurantService";
 
 
 const useStyles = makeStyles((theme)=>({
     pageBackground: {
         backgroundColor: 'rgba(248,248,248)',
         minHeight:'100vh',
+        overflow:'hidden',
     },
     restaurantJumbotron:{
         [theme.breakpoints.down('xs')]:{
@@ -82,42 +85,56 @@ const useStyles = makeStyles((theme)=>({
         fontSize: '0.8rem',
     },
 }));
-const SingleRestaurantWrapper = ({children}) =>{
+const SingleRestaurantWrapper = ({children,match}) =>{
     const classes = useStyles();
     const [isOpinionsDialogOpen,setOpinionsDialogOpen] = useState(false);
+    const [restaurant, setRestaurant] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleToggleOpinionsDialog = () =>{
         setOpinionsDialogOpen(!isOpinionsDialogOpen);
     }
+
+    useEffect(()=>{
+        setIsLoading(true);
+        restaurantService.getSingleRestaurant(match.params.restaurantId)
+            .then(res=>{
+                setIsLoading(false);
+                setRestaurant(res.data)
+            })
+            .catch(err=>{
+                setIsLoading(false);
+                console.log(err)
+            })
+    },[])
+    const {name,rate,category,image,id} = restaurant;
     return(
 
         <Box className={classes.pageBackground}>
             <Navbar/>
-            <Fade in={true} timeout={700}>
+            <Slide in={Boolean(restaurant)} timeout={1000} direction="down">
             <Box className={classes.restaurantJumbotron}>
-                <Typography variant = "h3" gutterBottom>Nazwa restauracji</Typography>
-                <Typography variant="subtitle2" paragraph>Kuchnia tajska, sushi</Typography>
+                <Typography variant = "h3" gutterBottom>{name}</Typography>
+                <Typography variant="subtitle2" paragraph>{ category && getCuisineTypeValue(category).map(e => e.label).join(", ")}</Typography>
                 <Box className={classes.cardMedia}>
                     <AppLogo size={12}/>
                     <Box className={classes.ratingBox} onClick={handleToggleOpinionsDialog}>
-                        <Rating readOnly value={4} size="small"/>
+                        <Rating readOnly value={rate ? Number(rate) : 0} size="small"/>
                     </Box>
                 </Box>
 
                 <Box mt={4}>
                     <ButtonGroup variant="text" color="primary" >
-                        <Button component={NavLink} to={routes.SINGLERESTAURANTMENU} activeClassName={classes.activeButton} >Menu</Button>
-                        <Button  component={NavLink} to={routes.SINGLERESTAURANTRESERVATION} activeClassName={classes.activeButton} >Rezerwacje</Button>
-                        <Button component={NavLink} to={routes.SINGLERESTAURANTCONTACT} activeClassName={classes.activeButton}>Kontakt</Button>
+                        <Button component={NavLink} to={`${routes.SINGLERESTAURANTMENU}/${id}`} activeClassName={classes.activeButton} >Menu</Button>
+                        <Button  component={NavLink} to={`${routes.SINGLERESTAURANTRESERVATION}/${id}`} activeClassName={classes.activeButton} >Rezerwacje</Button>
+                        <Button component={NavLink} to={`${routes.SINGLERESTAURANTCONTACT}/${id}`} activeClassName={classes.activeButton}>Kontakt</Button>
                     </ButtonGroup>
                 </Box>
             </Box>
-            </Fade>
-            <Slide in={true} direction="right">
-                <Container>
-                    {children}
-                </Container>
             </Slide>
+                <Container>
+                    {React.cloneElement(children, {restaurant,isLoading})}
+                </Container>
             <Dialog
                 fullWidth
                 open={isOpinionsDialogOpen}

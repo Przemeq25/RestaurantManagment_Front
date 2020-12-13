@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme=>({
         width: 300,
     },
 }))
-const AppBarShoppingBasketItem =({product, amount, price})=>{
+const AppBarShoppingBasketItem =({id,amount,totalPrice,unitPrice,name})=>{
     const classes = useStyles();
     return(
         <Box className={classes.basketPaperStyle}>
@@ -35,15 +35,16 @@ const AppBarShoppingBasketItem =({product, amount, price})=>{
                 <Box className={classes.cardMedia}>
                     <AppLogo size={8}/>
                 </Box>
-                <Divider orientation='vertical'/>
                 <Box className={classes.basketPaperContentStyle}>
                     <Box flex="1">
-                        <Typography variant="body2" color="primary"> {product}</Typography>
+                        <Typography variant="body2" color="primary"> {name}</Typography>
                     </Box>
                     <Divider orientation="vertical"/>
                     <Box ml = {1} minWidth="70px">
                         <Typography variant="body2"> x{amount}</Typography>
-                        <Typography variant="h6"> {price} zł</Typography>
+                        <Typography variant="h6" paragraph> {totalPrice} zł</Typography>
+                        <Divider/>
+                        <Typography variant="subtitle2"> 1 szt: <b>{unitPrice} zł</b></Typography>
                     </Box>
                 </Box>
             </Box>

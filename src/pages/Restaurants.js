@@ -7,7 +7,6 @@ import {
     useTheme,
     Paper,
     Button,
-    TextField,
     fade,
     Select,
     MenuItem,
@@ -17,7 +16,6 @@ import {
     Slide,
     Grow
 } from "@material-ui/core";
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Navbar from "../components/Navbar";
 import {makeStyles} from "@material-ui/core/styles";
@@ -150,6 +148,9 @@ const Restaurants = ({location}) =>{
         if(rate){
             newObject.rate = rate;
         }
+        if(query.sort){
+            newObject.sort= query.sort;
+        }
         setQuery(newObject);
         pushToHistory(newObject)
         isToggleFiltersDialogOpen && handleToggleFiltersDialog();
@@ -167,10 +168,10 @@ const Restaurants = ({location}) =>{
     }
     const handleSort=(value)=>{
         if(value !=="default"){
-            setQuery({...query, sort:value})
-            pushToHistory({...query, sort:value})
+            setQuery({...query, sort:value, page:0})
+            pushToHistory({...query, sort:value, page:0})
         }else if(query.sort){
-            const newQuery = {...query};
+            const newQuery = {...query, page:0};
             delete newQuery.sort;
             setQuery(newQuery);
             pushToHistory(newQuery)
@@ -279,8 +280,11 @@ const Restaurants = ({location}) =>{
                                     count={parseInt(totalPages)}
                                     variant="outlined"
                                     color="secondary"
-                                    page={parseInt(query.page+1)}
-                                    onChange={(e,value)=>setQuery({...query,page: value-1})}/>
+                                    page={Number(query.page)+1}
+                                    onChange={(e,value)=> {
+                                        setQuery({...query, page: value - 1})
+                                        pushToHistory({...query,page:value-1});
+                                    }}/>
                                 </Box>
                             </>
 

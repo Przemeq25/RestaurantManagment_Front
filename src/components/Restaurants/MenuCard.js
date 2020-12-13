@@ -1,9 +1,12 @@
 import React from "react";
-import {Box, Divider, Paper, Typography,IconButton} from "@material-ui/core";
+import {Box, Divider, Paper, Typography, IconButton, useTheme, Slide} from "@material-ui/core";
 import AppLogo from "../AppLogo";
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import {makeStyles} from "@material-ui/core/styles";
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
+import useMediaQuery from "@material-ui/core/useMediaQuery/useMediaQuery";
+import {useDispatch} from "react-redux";
+import {addProduct} from "../../redux/actions/basket";
 
 const useStyles = makeStyles((theme)=>({
     menuPaperStyle: {
@@ -13,7 +16,6 @@ const useStyles = makeStyles((theme)=>({
             boxShadow: "-1px 10px 29px 0px rgba(0,0,0,0.2)"
         },
         height: 200,
-        cursor: 'pointer',
         marginBottom: theme.spacing(1),
         [theme.breakpoints.down('xs')]: {
             height: 120,
@@ -34,12 +36,14 @@ const useStyles = makeStyles((theme)=>({
         },
     },
     menuPaperContentStyle: {
+        width:'calc(100% - 250px)',
         display: "flex",
         flexDirection: "column",
         alignItems:"space-between",
         padding: theme.spacing(2),
         [theme.breakpoints.down('xs')]: {
             padding: `${theme.spacing(1)}px ${theme.spacing(1)}px 3px`,
+            width:'calc(100% - 160px)',
         },
     },
     iconPadding:{
@@ -58,35 +62,55 @@ const useStyles = makeStyles((theme)=>({
         right:10,
     }
 }));
-const MenuCard = () =>{
+const MenuCard = ({name,id,ingredients,price,timeToDo,restaurantName, restaurantId}) =>{
     const classes = useStyles();
-    return (
-        <Paper className={classes.menuPaperStyle} variant="outlined" >
-            <Box display ="flex"  height="100%" >
-                <Box className={classes.cardMedia}>
-                    <AppLogo size={12}/>
-                </Box>
-                <Divider orientation='vertical'/>
-                <Box className={classes.menuPaperContentStyle}>
-                    <Box flex="1">
-                        <Typography variant="h4" color="primary"> Frytki</Typography>
-                        <Typography variant="subtitle2" gutterBottom>Opis</Typography>
-                    </Box>
-                    <Typography variant="h4" color="secondary">15 zł </Typography>
-                    <Divider/>
-                    <Box className={classes.contactBox}>
-                        <Box mr={1} display="flex" alignItems="center" >
-                            <AccessTimeIcon fontSize="small" className={classes.iconPadding}/>
-                            <Typography variant="subtitle2">15min</Typography>
-                        </Box>
+    const theme = useTheme();
+    const xsDown = useMediaQuery(theme.breakpoints.down('xs'));
+    const dispatch = useDispatch();
 
+    const mealObject = {
+        name:name,
+        id:id,
+        unitPrice: price,
+        restaurantName: restaurantName,
+        restaurantId: restaurantId,
+    };
+    return (
+        <Slide in={true} direction="left" timeout={300}>
+            <Paper className={classes.menuPaperStyle} variant="outlined" >
+                <Box display ="flex"  height="100%" >
+                    <Box className={classes.cardMedia}>
+                        <AppLogo size={12}/>
+                    </Box>
+                    <Divider orientation='vertical'/>
+                    <Box className={classes.menuPaperContentStyle}>
+                        <Box flex="1">
+                            <Typography variant="h4" color="primary"> {name}</Typography>
+                            <Typography variant="subtitle2" gutterBottom>{ingredients}</Typography>
+                        </Box>
+                        <Typography variant="h4" color="secondary">{price} zł </Typography>
+                        <Divider/>
+                        <Box className={classes.contactBox}>
+                            <Box mr={1} display="flex" alignItems="center" >
+                                <AccessTimeIcon fontSize="small" className={classes.iconPadding}/>
+                                <Typography variant="subtitle2">{timeToDo}min</Typography>
+                            </Box>
+
+                        </Box>
                     </Box>
                 </Box>
-            </Box>
-            <IconButton className={classes.buyButton}>
-                <ShoppingCartOutlinedIcon color="secondary"/>
-            </IconButton>
-        </Paper>
+                <IconButton
+                    className={classes.buyButton}
+                    size={xsDown ? "small" : "medium"}
+                    onClick={()=>
+                        dispatch(addProduct(mealObject))
+                    }
+                >
+                    <ShoppingCartOutlinedIcon color="secondary" fontSize={xsDown ? "small" : "default"}/>
+                </IconButton>
+            </Paper>
+        </Slide>
     )
 }
 export default MenuCard;
+

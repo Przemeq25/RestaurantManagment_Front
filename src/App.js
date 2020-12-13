@@ -21,12 +21,15 @@ import SingleRestaurantMenu from "./pages/SingleRestaurantMenu";
 import SingleRestaurantReservation from "./pages/SingleRestaurantReservation";
 import SingleRestaurantContact from "./pages/SingleRestaurantContact";
 import ShoppingBasket from "./pages/ShoppingBasket";
+import SingleRestaurantWrapper from "./components/SingleRestaurantWrapper";
+import {getBasket} from "./redux/actions/basket";
 
 
 const App =()=>{
     const dispatch = useDispatch();
     useEffect(()=>{
         dispatch(checkIsLoggedIn());
+        dispatch(getBasket());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
     return (
@@ -37,9 +40,24 @@ const App =()=>{
                 <Route exact path={routes.REGISTER} component={Register}/>
                 <Route exact path={routes.CONFIRM} component = {RegisterConfirmation}/>
                 <Route exact path={routes.RESTAURANTS} component = {Restaurants}/>
-                <Route path={routes.SINGLERESTAURANTMENU} component={SingleRestaurantMenu}/>
-                <Route path={routes.SINGLERESTAURANTRESERVATION} component={SingleRestaurantReservation}/>
-                <Route path={routes.SINGLERESTAURANTCONTACT} component={SingleRestaurantContact}/>
+                <Route path={`${routes.SINGLERESTAURANTMENU}/:restaurantId`} exact render={(props)=>(
+                    <SingleRestaurantWrapper {...props}>
+                        <SingleRestaurantMenu {...props} />
+                    </SingleRestaurantWrapper>
+                )}
+                />
+                <Route path={`${routes.SINGLERESTAURANTRESERVATION}/:restaurantId`} exact render={(props)=>(
+                    <SingleRestaurantWrapper {...props}>
+                        <SingleRestaurantReservation {...props} />
+                    </SingleRestaurantWrapper>
+                )}
+                />
+                <Route path={`${routes.SINGLERESTAURANTCONTACT}/:restaurantId`} exact render={(props)=>(
+                    <SingleRestaurantWrapper {...props}>
+                        <SingleRestaurantContact {...props} />
+                    </SingleRestaurantWrapper>
+                )}
+                />
                 <Route path={routes.SHOPPINGBASKET} component={ShoppingBasket}/>
                 <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
                         <AdminPanelPage {...props}>
