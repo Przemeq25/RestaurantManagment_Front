@@ -82,6 +82,7 @@ const ShoppingBasket = () =>{
                                                 unitPrice={product.unitPrice}
                                                 totalPrice={product.totalPrice}
                                                 amount={product.amount}
+                                                image={product.image}
                                                 id={product.id}
                                                 handleDeleteProduct={handleDeleteProduct}
                                                 handleIncrementProduct={handleIncrementProduct}

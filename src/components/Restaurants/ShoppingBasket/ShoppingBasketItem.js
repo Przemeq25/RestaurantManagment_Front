@@ -6,6 +6,8 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {makeStyles} from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery/useMediaQuery";
+import {isValidUrl} from "../../../helpers/_helpers";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles(theme=>({
     basketBoxItem:{
@@ -38,10 +40,14 @@ const useStyles = makeStyles(theme=>({
         '&:active':{
             transform:'scale(0.95)'
         }
+    },
+    avatar:{
+        minHeight: "100%",
+        minWidth:'100%'
     }
 }))
 
-const ShoppingBasketItem = ({id,name, handleDeleteProduct, handleIncrementProduct, handleDecrementProduct, amount, unitPrice,totalPrice}) =>{
+const ShoppingBasketItem = ({id,name,image, handleDeleteProduct, handleIncrementProduct, handleDecrementProduct, amount, unitPrice,totalPrice}) =>{
     const classes = useStyles();
     const theme = useTheme();
     const xsDown = useMediaQuery(theme.breakpoints.down('xs'));
@@ -49,7 +55,11 @@ const ShoppingBasketItem = ({id,name, handleDeleteProduct, handleIncrementProduc
         <Box className={classes.basketBoxItem}>
             <Box display ="flex"  height="100%" >
                 <Box className={classes.cardMedia}>
-                    <AppLogo size={8}/>
+                    {isValidUrl(image) ?
+                        <Avatar variant="rounded" src={image} className={classes.avatar} />
+                        :
+                        <AppLogo size={8}/>
+                    }
                 </Box>
                 <Box className={classes.basketContent}>
                     <Box flex="1">

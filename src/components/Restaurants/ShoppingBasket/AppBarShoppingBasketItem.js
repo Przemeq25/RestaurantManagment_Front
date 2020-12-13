@@ -2,6 +2,8 @@ import React from 'react';
 import {Box, Divider, Typography} from "@material-ui/core";
 import AppLogo from "../../AppLogo";
 import {makeStyles} from "@material-ui/core/styles";
+import {isValidUrl} from "../../../helpers/_helpers";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles(theme=>({
     basketPaperStyle: {
@@ -26,14 +28,22 @@ const useStyles = makeStyles(theme=>({
         padding: theme.spacing(1),
         width: 300,
     },
+    avatar:{
+        minHeight: "100%",
+        minWidth:'100%'
+    }
 }))
-const AppBarShoppingBasketItem =({id,amount,totalPrice,unitPrice,name})=>{
+const AppBarShoppingBasketItem =({amount,totalPrice,unitPrice,name,image})=>{
     const classes = useStyles();
     return(
         <Box className={classes.basketPaperStyle}>
             <Box display ="flex"  height="100%" >
                 <Box className={classes.cardMedia}>
-                    <AppLogo size={8}/>
+                    {isValidUrl(image) ?
+                        <Avatar variant="rounded" src={image} className={classes.avatar} />
+                        :
+                        <AppLogo size={8}/>
+                    }
                 </Box>
                 <Box className={classes.basketPaperContentStyle}>
                     <Box flex="1">
