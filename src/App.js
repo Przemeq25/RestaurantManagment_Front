@@ -22,12 +22,14 @@ import SingleRestaurantReservation from "./pages/SingleRestaurantReservation";
 import SingleRestaurantContact from "./pages/SingleRestaurantContact";
 import ShoppingBasket from "./pages/ShoppingBasket";
 import SingleRestaurantWrapper from "./components/SingleRestaurantWrapper";
+import {getBasket} from "./redux/actions/basket";
 
 
 const App =()=>{
     const dispatch = useDispatch();
     useEffect(()=>{
         dispatch(checkIsLoggedIn());
+        dispatch(getBasket());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
     return (

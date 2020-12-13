@@ -102,6 +102,8 @@ const Navbar = () =>{
     const dispatch = useDispatch();
     const mdUp = useMediaQuery(theme.breakpoints.up('md'));
     const basketLength = useSelector(state=> state.basket.numberOfProducts);
+    const basket = useSelector(state=>state.basket.basket);
+    const basketTotalPrice = useSelector(state=>state.basket.totalPrice);
 
 
     const handleToggleMenu = (e) => {
@@ -131,6 +133,7 @@ const Navbar = () =>{
         setBasketOpen(false);
     }
     return(
+
         <AppBar position="relative" color="secondary" elevation={2} >
             <Container>
                 <Toolbar className={classes.toolbarStyle} disableGutters>
@@ -183,64 +186,69 @@ const Navbar = () =>{
                                     style={{ zIndex:100, transformOrigin: " right top", transform: window.innerWidth >= theme.breakpoints.width('md') ? 'translate(10px,9px)' : 'translate(16px,5px)' }}
                                 >
                                     <Paper square elevation={2} classes={{root: classes.paperRoot}} >
+                                        <ClickAwayListener onClickAway={handleCloseBasket}>
                                         <Box p={2} zIndex="100">
-                                            {/*  <Box display ='flex' alignItems = 'center' flexDirection ="column" p={6} zIndex="100">
-                                            <Typography
-                                                variant="h4"
-                                                color="primary"
-                                                gutterBottom
-                                            >
-                                                Twój koszyk jest pusty
-                                            </Typography>
-                                            <Typography
-                                                variant="subtitle2"
-                                                color="primary"
-                                                paragraph
-                                            >
-                                                Szukasz restauracji?
-                                            </Typography>
-                                            <Button
-                                                variant="outlined"
-                                                color="primary"
-                                                onClick={()=>history.push(routes.RESTAURANTS)}
-                                            >
-                                                Przejdź do restauracji
-                                            </Button>
-                                            */}
-                                            <Box display="flex" alignItems ="center" justifyContent="space-between" pb={2}>
-                                                <Typography variant = "h4"> Twój koszyk </Typography>
-                                                <Box>
-                                                    <Typography variant= "subtitle2"> Wartość koszyka: </Typography>
-                                                    <Typography variant= "h4"> 155zł </Typography>
-                                                </Box>
+                                            {basket.length ? (
+                                                <>
+                                                    <Box display="flex" alignItems ="center" justifyContent="space-between" pb={2}>
+                                                        <Typography variant = "h4"> Twój koszyk </Typography>
+                                                        <Box>
+                                                            <Typography variant= "subtitle2"> Wartość koszyka: </Typography>
+                                                            <Typography variant= "h4"> {basketTotalPrice} zł </Typography>
+                                                        </Box>
 
-                                            </Box>
-                                            <Divider/>
-                                            <Box display="flex" flexDirection="column">
-                                                <AppBarShoppingBasketItem product="Frytki z serem" price='12' amount="3"/>
-                                                <AppBarShoppingBasketItem product="Frytki z serem32" price='158' amount="2"/>
-                                                <AppBarShoppingBasketItem product="Frytki z serem" price='124' amount="1"/>
-
-                                            </Box>
-                                            <Box mt={1}/>
-                                            <Divider/>
-                                            <Box display="flex" alignItems ="center" justifyContent="space-between" pt={2}>
-                                                <Button
-                                                    variant="text"
-                                                    onClick={()=>history.push(routes.SHOPPINGBASKET)}
-                                                >
-                                                    Pokaż koszyk
-                                                </Button>
-                                                <Button variant="contained" color="secondary">Do kasy</Button>
-                                            </Box>
-
+                                                        </Box>
+                                                        <Divider/>
+                                                        <Box display="flex" flexDirection="column">
+                                                            {basket.map(product=>(
+                                                                <AppBarShoppingBasketItem {...product}/>
+                                                                ))}
+                                                        </Box>
+                                                            <Box mt={1}/>
+                                                            <Divider/>
+                                                            <Box display="flex" alignItems ="center" justifyContent="space-between" pt={2}>
+                                                            <Button
+                                                                variant="text"
+                                                                onClick={()=>history.push(routes.SHOPPINGBASKET)}
+                                                            >
+                                                                Pokaż koszyk
+                                                            </Button>
+                                                            <Button variant="contained" color="secondary">Do kasy</Button>
+                                                    </Box>
+                                                </>
+                                                ):(
+                                                    <Box display ='flex' alignItems = 'center' flexDirection ="column" p={6} zIndex="100">
+                                                        <Typography
+                                                            variant="h4"
+                                                            color="primary"
+                                                            gutterBottom
+                                                        >
+                                                            Twój koszyk jest pusty
+                                                        </Typography>
+                                                        <Typography
+                                                            variant="subtitle2"
+                                                            color="primary"
+                                                            paragraph
+                                                        >
+                                                            Szukasz restauracji?
+                                                        </Typography>
+                                                        <Button
+                                                            variant="outlined"
+                                                            color="primary"
+                                                            onClick={()=>history.push(routes.RESTAURANTS)}
+                                                        >
+                                                            Przejdź do restauracji
+                                                        </Button>
+                                                    </Box>
+                                               )
+                                           }
                                         </Box>
-
+                                        </ClickAwayListener>
                                     </Paper>
                                 </Grow>
                             )}
                         </Popper>
-                        <Button ref={anchorRef}  onMouseEnter={handleToggleMenu} color="inherit" disableRipple className={classes.menuButton}>
+                        <Button ref={anchorRef}  onClick={handleToggleMenu} color="inherit" disableRipple className={classes.menuButton}>
                                 <Box display="flex" alignItems ='center' flexDirection = "column">
                                     <PersonOutlineIcon color="inherit"/>
                                     <Typography color="inherit" className={classes.menuButtonText}>Twoje konto</Typography>

@@ -125,7 +125,7 @@ const ShoppingBasket = () =>{
                     ):(
                         <Box position="relative" height="70vh">
                             <Jumbotron
-                                text="Twoj koszyk jest pusty!"
+                                text="Twój koszyk jest pusty!"
                                 handleClick={()=>history.push(routes.RESTAURANTS)}
                                 buttonText="Przejdź do restauracji"
                                 icon={<RemoveShoppingCartIcon fontSize="inherit"/>}

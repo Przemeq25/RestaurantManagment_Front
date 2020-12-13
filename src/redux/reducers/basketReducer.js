@@ -32,11 +32,13 @@ export const basketReducer = (state=initialState, action)=>{
         case basketConstants.COUNT_PRODUCTS_AND_PRICE:
             const amount = state.basket.length;
             const totalPrice = state.basket.map(item=>item.totalPrice).reduce((total,productPrice)=> total += productPrice, 0);
+            localStorage.setItem("basket", JSON.stringify(Object.assign(state,{numberOfProducts:amount,totalPrice:totalPrice})));
             return {
                 ...state,
                 numberOfProducts: amount,
                 totalPrice: totalPrice,
             }
+
 
         case basketConstants.DELETE_PRODUCT:
             const foundProductIndex = state.basket.findIndex(product => product.id === action.payload.id);
@@ -73,6 +75,14 @@ export const basketReducer = (state=initialState, action)=>{
             return {
                 ...state,
                 basket: newBasketWithDecrementProducts,
+            }
+        case basketConstants.GET_BASKET:
+            const basketFromLocalStorage = localStorage.getItem("basket");
+            if(basketFromLocalStorage){
+                return JSON.parse(basketFromLocalStorage);
+            }
+            else{
+                return {...state}
             }
 
         default:

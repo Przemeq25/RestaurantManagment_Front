@@ -30,5 +30,10 @@ export const decrementProduct = (productId)=>{
     function decrementProduct(productId){return{type:basketConstants.DECREMENT_PRODUCT, payload:productId}}
 }
 const countProductsAndPrice =()=>{
-    return dispatch => dispatch({type:basketConstants.COUNT_PRODUCTS_AND_PRICE})
+    return dispatch => {
+        dispatch({type:basketConstants.COUNT_PRODUCTS_AND_PRICE})
+    }
+}
+export const getBasket =()=>{
+    return dispatch=>dispatch({type:basketConstants.GET_BASKET})
 }
