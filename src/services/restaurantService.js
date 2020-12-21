@@ -56,7 +56,7 @@ const editRestaurant = (restaurantData,restaurantID)=>{
 };
 
 const getRestaurantsForAdmin = () =>{
-    return axios.get(`${appUrl}/restaurant-api/restaurants`,
+    return axios.get(`${appUrl}/restaurant-api/restaurants?size=99`,
 {
             headers: {
                 Authorization: `bearer ${localStorage.getItem('access_token')}`

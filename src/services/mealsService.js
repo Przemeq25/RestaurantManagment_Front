@@ -49,10 +49,14 @@ const deleteMeal = (mealID,restaurantID) =>{
         }
     })
 }
+const getMealsFromRestaurant = (restaurantID) =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}/meals/public`);
+}
 
 export const mealsService = {
     getMeals,
     addMeal,
     editMeal,
-    deleteMeal
+    deleteMeal,
+    getMealsFromRestaurant
 }

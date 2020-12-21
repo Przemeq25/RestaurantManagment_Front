@@ -12,6 +12,9 @@ import LayersClearIcon from '@material-ui/icons/LayersClear';
 import queryString from "query-string";
 import {history} from "../helpers/_helpers";
 import {routes} from "../config/routes";
+import {useDispatch} from "react-redux";
+import {getMealsFromRestaurant} from "../redux/actions/meals";
+import {mealsService} from "../services/mealsService";
 
 const useStyles = makeStyles((theme)=>({
     filtersBoxStyle:{
@@ -36,14 +39,29 @@ const useStyles = makeStyles((theme)=>({
         backgroundColor:theme.palette.secondary.dark,
     }
 }));
-const SingleRestaurantMenu = ({restaurant,isLoading}) =>{
+const SingleRestaurantMenu = ({restaurant}) =>{
     const classes = useStyles();
     const theme = useTheme();
-    const mdDown = useMediaQuery(theme.breakpoints.down('md'));
+    const mdDown = useMediaQuery(theme.breakpoints.down('md'))
+    const [meals,setMeals] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [isToggleFiltersDialogOpen, setToggleFiltersDialogOpen] = useState(false);
-    const [query,setQuery] = useState({
-    })
+    const [query,setQuery] = useState({})
+
+    useEffect(()=>{
+        setIsLoading(true);
+        restaurant.id &&
+            mealsService.getMealsFromRestaurant(restaurant.id)
+                .then(response=>{
+                    setMeals(response.data.content)
+                    setIsLoading(false);
+                })
+                .catch(err=>{
+                    console.log(err)
+                    setIsLoading(false);
+                })
+    },[restaurant])
 
 
     const handleToggleFiltersDialog = () =>{
@@ -123,7 +141,7 @@ const SingleRestaurantMenu = ({restaurant,isLoading}) =>{
                    <Box position='relative' minHeight="70vh">
                        <Slide in={true} direction="left" timeout={300}>
                            <Paper className={classes.categoryPaperStyle} variant="outlined">
-                               <Typography variant="h4">Kebaby</Typography>
+                               <Typography variant="h4">Pizza</Typography>
                            </Paper>
                        </Slide>
 
@@ -133,7 +151,7 @@ const SingleRestaurantMenu = ({restaurant,isLoading}) =>{
                                        <CircularProgress color="secondary"/>
                                    </Box>
                                ):(
-                                   restaurant.meals && restaurant.meals.length ? restaurant.meals.map(meal =>(
+                                   meals && meals.length ? meals.map(meal =>(
                                        <MenuCard {...meal} restaurantName={restaurant.name} restaurantId={restaurant.id} key={meal.id}/>
                                    )):(
                                        <Grow in={true} timeout={500}>

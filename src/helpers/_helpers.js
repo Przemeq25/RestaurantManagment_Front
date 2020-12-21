@@ -127,6 +127,15 @@ export const menuInitialValues = {
     ingredients:'',
     timeToDo:'',
 }
+export const personalDataInitialValues = {
+    forename: "",
+    surname: "",
+    street: "",
+    city: "",
+    postCode: "",
+    phoneNumber: "",
+    houseNumber: "",
+}
 
 export const scaleImageByUrl = (url) =>{
     const newSecureUrl = url.split('/');

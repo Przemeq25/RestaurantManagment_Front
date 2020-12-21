@@ -99,7 +99,7 @@ const AdminDrawer = ({isDrawerOpen,closeDrawer,match}) =>{
                     </ListItemIcon>
                     <ListItemText>Zamówienia</ListItemText>
                 </ListItem>
-                <ListItem disableGutters button component={NavLink} to={`/admin/my_restaurant/${restaurantId}`} activeClassName="Mui-selected">
+                <ListItem disableGutters button component={NavLink} to={`${routes.SINGLERESTAURANTMENU}/${restaurantId}`} activeClassName="Mui-selected">
                     <ListItemIcon className={classes.icon}>
                         <VisibilityIcon/>
                         <Desktop>

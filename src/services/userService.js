@@ -48,11 +48,25 @@ const postPersonalData = (personalData,login) =>{
         phoneNumber,
     })
 }
-const getUserData = (access_token) =>{
+const getUserData = () =>{
     return axios.get(`${appUrl}/resource-api/me`,{
         headers:{
-            Authorization:`bearer ${access_token}`
+            Authorization:`bearer ${localStorage.getItem('access_token')}`
         }
+    })
+}
+const getPersonalData = () =>{
+    return axios.get(`${appUrl}/user-api/me`,{
+        headers:{
+            Authorization:`bearer ${localStorage.getItem('access_token')}`
+        }
+    })
+}
+const changePersonalData = (userData)=>{
+    return axios.put(`${appUrl}/user-api/me`,userData,{
+            headers:{
+                Authorization:`bearer ${localStorage.getItem('access_token')}`
+            }
     })
 }
 const activateAccount = (login,activationKey) =>{
@@ -67,5 +81,7 @@ export const userService = {
     postPersonalData,
     getUserData,
     refreshLogin,
-    activateAccount
+    activateAccount,
+    getPersonalData,
+    changePersonalData
 };

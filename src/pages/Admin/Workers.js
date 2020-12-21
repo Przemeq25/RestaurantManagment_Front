@@ -69,6 +69,7 @@ const Workers = ({match}) =>{
                 variant = "extended"
                 className={classes.fab}
                 onClick={handleToggleDialog}
+                size="small"
             >
                 <AddIcon className={classes.extendedIcon}/>
                 Dodaj pracownika

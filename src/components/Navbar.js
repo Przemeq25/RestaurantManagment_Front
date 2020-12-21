@@ -201,7 +201,7 @@ const Navbar = () =>{
                                                         <Divider/>
                                                         <Box display="flex" flexDirection="column">
                                                             {basket.map(product=>(
-                                                                <AppBarShoppingBasketItem {...product}/>
+                                                                <AppBarShoppingBasketItem {...product} key={product.id}/>
                                                                 ))}
                                                         </Box>
                                                             <Box mt={1}/>

@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react'
-import AdminPanel from "../components/Admin/AdminPanel/AdminPanel";
+import AdminPanel from "../../components/Admin/AdminPanel/AdminPanel";
 import {useDispatch, useSelector} from "react-redux";
-import {routes} from "../config/routes";
-import DelayedRedirect from "../components/DelayedRedirect";
-import {authorization} from "../redux/actions/auth";
-import {getSingleRestaurantForAdmin} from "../redux/actions/restaurant";
+import {routes} from "../../config/routes";
+import DelayedRedirect from "../../components/DelayedRedirect";
+import {authorization} from "../../redux/actions/auth";
+import {getSingleRestaurantForAdmin} from "../../redux/actions/restaurant";
 
 
 
@@ -15,7 +15,7 @@ const AdminPanelPage = ({children,location,match}) => {
     const dispatch = useDispatch();
 
     useEffect(()=>{
-        isLoggedIn && !userType && authorization(localStorage.getItem("access_token"),dispatch);
+        isLoggedIn && !userType && authorization(dispatch);
         // eslint-disable-next-line react-hooks/exhaustive-deps
 
     },[isLoggedIn])

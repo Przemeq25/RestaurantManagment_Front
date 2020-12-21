@@ -39,7 +39,7 @@ export const refreshLogin = (refreshToken,dispatch) => new Promise((resolve, rej
                 localStorage.setItem('access_token', response.data.access_token);
                 localStorage.setItem('refresh_token', response.data.refresh_token);
                 dispatch(success(response.data))
-                    authorization(response.data.access_token,dispatch)
+                    authorization(dispatch)
                         .then(()=>resolve())
                         .catch(()=>reject())
 
@@ -76,9 +76,9 @@ export const checkIsLoggedIn =()=>{
     };
     function isLoggedIn(authData){return {type:authConstants.LOGIN_SUCCESS, payload:authData}};
 }
-export const authorization = (access_token,dispatch) => new Promise((resolve, reject) =>{
+export const authorization = (dispatch) => new Promise((resolve, reject) =>{
         dispatch(request());
-        userService.getUserData(access_token)
+        userService.getUserData()
             .then(response=>{
                 dispatch(getUserType(response.data))
                 resolve();
@@ -87,7 +87,35 @@ export const authorization = (access_token,dispatch) => new Promise((resolve, re
                 reject();
                 history.push(routes.LOGIN)
             })
+        userService.getPersonalData()
+            .then(response=>{
+                dispatch(getPersonalData(response.data))
+                resolve();
+            })
+            .catch(()=>{
+                reject();
+                history.push(routes.LOGIN)
+            })
 
     function request(){return {type:authConstants.LOGIN_REQUEST}};
-    function getUserType(user){ return {type:authConstants.AUTHORIZATION, payload:{role: user.authorities, user:user.principal }}}
+    function getUserType(user){ return {type:authConstants.AUTHORIZATION, payload:{role: user.authorities}}}
+    function getPersonalData(userData){return {type:authConstants.PERSONAL_DATA_SUCCESS, payload:userData}}
 });
+export const changePersonalData =(personalData)=>{
+    return dispatch=>{
+        dispatch(request());
+        userService.changePersonalData(personalData)
+            .then(response=>{
+                dispatch(success(response.data));
+            })
+            .catch(errorMessage=>{
+                dispatch(error(errorMessage))
+            })
+    }
+    function request(){return {type:authConstants.PERSONAL_DATA_REQUEST}};
+    function success(personalData){return {type:authConstants.PERSONAL_DATA_SUCCESS, payload:personalData}};
+    function error(error){return {type:authConstants.PERSONAL_DATA_ERROR, payload:error}};
+}
+
+export const changePersonalDataToDelivery = (personalData)=> dispatch => dispatch({type:authConstants.PERSONAL_DATA_SUCCESS, payload:personalData})
+

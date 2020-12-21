@@ -3,7 +3,7 @@ import "./App.css";
 import Home from "./pages/HomePage";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import {Switch,Route,Router} from "react-router-dom";
-import AdminPanelPage from "./pages/AdminPanelPage";
+import AdminPanelPage from "./pages/Admin/AdminPanelPage";
 import Menu from "./pages/Admin/Menu";
 import Orders from "./pages/Admin/Orders";
 import Workers from "./pages/Admin/Workers";
@@ -23,6 +23,7 @@ import SingleRestaurantContact from "./pages/SingleRestaurantContact";
 import ShoppingBasket from "./pages/ShoppingBasket";
 import SingleRestaurantWrapper from "./components/SingleRestaurantWrapper";
 import {getBasket} from "./redux/actions/basket";
+import DeliveryAndPayment from "./pages/DeliveryAndPayment";
 
 
 const App =()=>{
@@ -36,7 +37,7 @@ const App =()=>{
         <Router history = {history}>
             <Switch>
                 <Route exact path={routes.HOMEPAGE} component={Home}/>
-                <Route path={routes.LOGIN} component={Login}/>
+                <Route exact path={routes.LOGIN} component={Login}/>
                 <Route exact path={routes.REGISTER} component={Register}/>
                 <Route exact path={routes.CONFIRM} component = {RegisterConfirmation}/>
                 <Route exact path={routes.RESTAURANTS} component = {Restaurants}/>
@@ -59,6 +60,7 @@ const App =()=>{
                 )}
                 />
                 <Route path={routes.SHOPPINGBASKET} component={ShoppingBasket}/>
+                <Route path={routes.DELIVERYANDPAYMENT} component = {DeliveryAndPayment}/>
                 <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
                         <AdminPanelPage {...props}>
                             <AdminDashboard {...props} />

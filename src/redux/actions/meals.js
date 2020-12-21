@@ -74,7 +74,7 @@ export const deleteMeal = (mealID,restaurantID)=>{
         mealsService.deleteMeal(mealID,restaurantID)
             .then(()=>{
                 dispatch(success(mealID));
-                dispatch(closeDrawer())
+                dispatch(closeDrawer());
             })
             .catch(errorMessage=>dispatch(error(errorMessage)));
     };
@@ -82,3 +82,4 @@ export const deleteMeal = (mealID,restaurantID)=>{
     function success(meal){ return {type:mealsConstants.DELETE_MEAL_SUCCESS, payload:meal}}
     function error(error) { return {type:mealsConstants.DELETE_MEAL_ERROR, payload:error}}
 }
+

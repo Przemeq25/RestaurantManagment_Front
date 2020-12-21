@@ -107,8 +107,9 @@ const ShoppingBasket = () =>{
                                         variant="contained"
                                         color="secondary"
                                         fullWidth
+                                        onClick={()=>history.push(routes.DELIVERYANDPAYMENT)}
                                     >
-                                        Do kasy
+                                        Dostawa i płatność
                                     </Button>
                                     <Box m={2}/>
                                     <Button

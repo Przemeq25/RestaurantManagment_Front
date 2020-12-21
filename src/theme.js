@@ -55,6 +55,9 @@ const theme = createMuiTheme({
                 fontSize: '10px',
             },
         },
+        subtitle1:{
+            fontSize:'10px',
+        },
         h6:{
             '@media (max-width:600px)': {
                 fontSize: '1.1rem',

@@ -95,7 +95,7 @@ const Menu = ({match}) =>{
                     )
                 }
             </Box>
-            <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleOpenDrawer} variant="extended">
+            <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleOpenDrawer} variant="extended" size="small">
                 <AddIcon/>
                 Dodaj posiłek
             </Fab>
