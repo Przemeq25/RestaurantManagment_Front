@@ -166,5 +166,16 @@ export const renderBastekProducts = (basket) =>{
     }, Object.create(null));
     return result;
 }
+export const searchWriteName = (value,setQuery,query,pushToHistory)=>{
+    if(value.length){
+        setQuery({...query, name:value})
+        pushToHistory({...query, name:value})
+    }else if(query.name){
+        const newQuery = {...query};
+        delete newQuery.name;
+        setQuery(newQuery);
+        pushToHistory(newQuery)
+    }
+}
 
 

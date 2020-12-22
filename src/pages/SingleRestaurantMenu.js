@@ -12,8 +12,6 @@ import LayersClearIcon from '@material-ui/icons/LayersClear';
 import queryString from "query-string";
 import {history} from "../helpers/_helpers";
 import {routes} from "../config/routes";
-import {useDispatch} from "react-redux";
-import {getMealsFromRestaurant} from "../redux/actions/meals";
 import {mealsService} from "../services/mealsService";
 
 const useStyles = makeStyles((theme)=>({
@@ -39,7 +37,7 @@ const useStyles = makeStyles((theme)=>({
         backgroundColor:theme.palette.secondary.dark,
     }
 }));
-const SingleRestaurantMenu = ({restaurant}) =>{
+const SingleRestaurantMenu = ({restaurant,location}) =>{
     const classes = useStyles();
     const theme = useTheme();
     const mdDown = useMediaQuery(theme.breakpoints.down('md'))
@@ -50,9 +48,14 @@ const SingleRestaurantMenu = ({restaurant}) =>{
     const [query,setQuery] = useState({})
 
     useEffect(()=>{
+
+        const queryStr = queryString.parse(location.search);
+        if (Object.keys(queryStr).length !== 0) {
+            setQuery(queryStr);
+        }
         setIsLoading(true);
         restaurant.id &&
-            mealsService.getMealsFromRestaurant(restaurant.id)
+            mealsService.getMeals(restaurant.id,queryString.parse(location.search))
                 .then(response=>{
                     setMeals(response.data.content)
                     setIsLoading(false);
@@ -61,7 +64,7 @@ const SingleRestaurantMenu = ({restaurant}) =>{
                     console.log(err)
                     setIsLoading(false);
                 })
-    },[restaurant])
+    },[restaurant,location.search])
 
 
     const handleToggleFiltersDialog = () =>{
@@ -79,25 +82,25 @@ const SingleRestaurantMenu = ({restaurant}) =>{
             pushToHistory(newQuery)
         }
     }
-    const handleChangeFilters = (category,city,isRestaurantOpen,rate)=>{
+    const handleChangeFilters = (category,fromPrice,toPrice,fromTime,toTime)=>{
         const newObject = {};
         if(category){
             newObject.category = category;
         }
-        if(city){
-            newObject.city = city;
+        if(fromPrice){
+            newObject.fromPrice = fromPrice;
         }
-        if(isRestaurantOpen){
-            newObject.open = isRestaurantOpen;
+        if(toPrice){
+            newObject.toPrice = toPrice;
         }
-        if(rate){
-            newObject.rate = rate;
+        if(fromTime){
+            newObject.fromTime = fromTime;
         }
-        if(query.sort){
-            newObject.sort= query.sort;
+        if(toTime){
+            newObject.toTime = toTime;
         }
         setQuery(newObject);
-        pushToHistory(newObject)
+        pushToHistory(newObject);
         isToggleFiltersDialogOpen && handleToggleFiltersDialog();
     }
     const pushToHistory =(query)=>{
@@ -179,7 +182,11 @@ const SingleRestaurantMenu = ({restaurant}) =>{
                 isToggleFiltersDialogOpen={isToggleFiltersDialogOpen}
                 handleToggleFiltersDialog={handleToggleFiltersDialog}
             >
-            <MenuFilters handleChangeFilters={handleChangeFilters}/>
+                <MenuFilters
+                    handleChangeFilters={handleChangeFilters}
+                    handleChangeFilters={handleChangeFilters}
+                    query={query}
+                />
             </MobileFiltersDialog>
         </>
     )

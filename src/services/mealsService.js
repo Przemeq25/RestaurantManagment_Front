@@ -2,8 +2,12 @@ import axios from 'axios';
 import {appUrl} from "../config/app.config";
 
 
-const getMeals = (restaurantID) =>{
-    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}/meals/public`)
+const getMeals = (restaurantID,{category,fromPrice,toPrice,fromTime,toTime}) =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}/meals/public`,{
+        params:{
+            category,fromPrice,toPrice,fromTime,toTime
+        }
+    })
 }
 
 const addMeal = (meal,restaurantID)=>{
@@ -47,14 +51,10 @@ const deleteMeal = (mealID,restaurantID) =>{
         }
     })
 }
-const getMealsFromRestaurant = (restaurantID) =>{
-    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}/meals/public`);
-}
 
 export const mealsService = {
     getMeals,
     addMeal,
     editMeal,
     deleteMeal,
-    getMealsFromRestaurant
 }
