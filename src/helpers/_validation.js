@@ -79,3 +79,23 @@ export const menuValidationSchema = Yup.object().shape({
             value => (value + "").match(/^[0-9]*$/g))
         .required('Pole wymagane'),
 });
+
+export const personalDataValidationSchema = Yup.object().shape({
+    forename: Yup.string()
+        .required('Pole wymagane'),
+    surname: Yup.string()
+        .required('Pole wymagane'),
+    city: Yup.string()
+        .required('Pole wymagane'),
+    street: Yup.string()
+        .required('Pole wymagane'),
+    postCode: Yup.string()
+        .matches(/^[0-9]{2}-[0-9]{3}$/, "Podany kod pocztowy jest błędny")
+        .required('Pole wymagane'),
+    phoneNumber: Yup.string()
+        .matches(/(?<!\w)(\(?(\+|00)?([0-9]{2})\)?)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}(?!\w)/, "Podany numer telefonu jest błędny")
+        .required('Pole wymagane'),
+    houseNumber: Yup.string()
+        .required('Pole wymagane'),
+});
+

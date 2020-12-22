@@ -167,6 +167,11 @@ const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isAddRequesting,i
                                         onInput = {(e)=>onlyNumbers(e)}
                                     />
                                     <TextField
+                                        label="Kategoria:"
+                                        fullWidth
+                                        margin="dense"
+                                    />
+                                    <TextField
                                         label="Opis (składniki):"
                                         fullWidth
                                         margin="dense"

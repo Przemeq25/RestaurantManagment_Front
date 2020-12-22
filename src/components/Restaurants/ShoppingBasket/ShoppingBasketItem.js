@@ -65,40 +65,42 @@ const ShoppingBasketItem = ({id,name,image, handleDeleteProduct, handleIncrement
                     <Box flex="1">
                         <Typography variant="body2" color="primary"> {name}</Typography>
                     </Box>
-                    <Box display="flex" alignItems = "center" justifyContent="space-around" flexDirection={xsDown ? "column" : "row"} mr={1} ml={1}>
-                        <IconButton
-                            size="small"
-                            onClick={()=>handleDecrementProduct(id)}
-                            disabled={amount <= 1}
-                            color="secondary"
-                        >
-                            <IndeterminateCheckBoxIcon
-                                fontSize={xsDown ? "default" :"large"}
-                                color="inherit"
-                                className={classes.buttonActions}
-                            />
-                        </IconButton>
-                        <IconButton
-                            size="small"
-                            onClick={()=>handleIncrementProduct(id)}
-                            color="secondary"
-                        >
-                            <AddBoxIcon
-                                fontSize={xsDown ? "default" :"large"}
-                                color="inherit"
-                                className={classes.buttonActions}
-                            />
-                        </IconButton>
-                        <Box ml={xsDown ? 0 : 2} mt={xsDown ? 2 : 0}>
-                            <DeleteIcon fontSize={xsDown ? "small" :"default"} color="action" className={classes.buttonActions} onClick={()=>handleDeleteProduct(id)}/>
+                    {handleIncrementProduct && handleDecrementProduct && handleDeleteProduct && (
+                        <Box display="flex" alignItems = "center" justifyContent="space-around" flexDirection={xsDown ? "column" : "row"} mr={1} ml={1}>
+                            <IconButton
+                                size="small"
+                                onClick={()=>handleDecrementProduct(id)}
+                                disabled={amount <= 1}
+                                color="secondary"
+                            >
+                                <IndeterminateCheckBoxIcon
+                                    fontSize={xsDown ? "default" :"large"}
+                                    color="inherit"
+                                    className={classes.buttonActions}
+                                />
+                            </IconButton>
+                            <IconButton
+                                size="small"
+                                onClick={()=>handleIncrementProduct(id)}
+                                color="secondary"
+                            >
+                                <AddBoxIcon
+                                    fontSize={xsDown ? "default" :"large"}
+                                    color="inherit"
+                                    className={classes.buttonActions}
+                                />
+                            </IconButton>
+                            <Box ml={xsDown ? 0 : 2} mt={xsDown ? 2 : 0}>
+                                <DeleteIcon fontSize={xsDown ? "small" :"default"} color="action" className={classes.buttonActions} onClick={()=>handleDeleteProduct(id)}/>
+                            </Box>
                         </Box>
-                    </Box>
+                    )}
                     <Divider orientation="vertical"/>
                     <Box ml = {1} minWidth={xsDown ? "50px" : "70px"}>
                         <Typography variant="body2"> x{amount}</Typography>
-                        <Typography variant="h6" paragraph> {totalPrice} zł</Typography>
+                        <Typography variant="h6" paragraph> {totalPrice.toFixed(2)} zł</Typography>
                         <Divider/>
-                        <Typography variant="subtitle2"> 1 szt: <b>{unitPrice} zł</b></Typography>
+                        <Typography variant="subtitle2"> 1 szt: <b>{unitPrice.toFixed(2)} zł</b></Typography>
                     </Box>
                 </Box>
             </Box>

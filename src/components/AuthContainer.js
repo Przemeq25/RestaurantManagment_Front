@@ -39,7 +39,7 @@ const AuthContainer = ({title, children}) =>{
     const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
 
     useEffect(()=>{
-        isLoggedIn && history.push(routes.HOMEPAGE)
+        isLoggedIn && !history.location.from && history.push(routes.HOMEPAGE)
         !isLoggedIn && dispatch({type:authConstants.RETURN_INITIAL_STATE})
         !isLoggedIn && dispatch({type:registerConstants.RETURN_INITIAL_STATE})
     },[isLoggedIn])

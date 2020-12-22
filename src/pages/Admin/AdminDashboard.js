@@ -65,6 +65,7 @@ const useStyles = makeStyles(theme=>({
         },
         borderRadius:theme.spacing(2),
         maxWidth:450,
+        width: '100%',
     },
     cardChip:{
         position:'absolute',
@@ -118,10 +119,10 @@ const AdminDashboard = () =>{
             ):(
                 <>
                     <AddRestaurantStepper isDialogOpen={isDialogOpen} setDialogOpen={handleToggleDialog} firstRegister={Boolean(userType && userType.length <= 0)}/>
-                    <Grid container spacing={2} justify="center">
+                    <Grid container spacing={2}>
                         {restaurants.length ? restaurants.map(restaurant=>(
                             <Grow in = {Boolean(restaurants.length > 0)} key={restaurant.id}>
-                            <Grid container item xs={12} sm = {6} md = {6} lg = {4} xl = {3} key={restaurant.id} justify="center">
+                            <Grid container item xs={12} sm = {6} md = {6} lg = {4} xl = {3} key={restaurant.id}>
                                 <Card className={classes.card}>
                                     <CardActionArea onClick={()=>dispatch(selectRestaurant(restaurant))}>
                                         <Chip
@@ -220,15 +221,15 @@ const AdminDashboard = () =>{
                                                 <Box display = 'flex' justifyContent = "center" width="100%">
                                                     <Table size="small">
                                                         <TableBody>
-                                                            {restaurant.worksTime.map((row) => (
-                                                                <TableRow key={row.day}>
-                                                                    <TableCell>
-                                                                        {worksTimeDaysTranslate(row.day)}
-                                                                    </TableCell>
-                                                                    <TableCell align="right">{row.from ? toLocalTime(row.from) : "Zamknięte"}</TableCell>
-                                                                    <TableCell align="right">{row.to ? toLocalTime(row.to) : "Zamknięte"}</TableCell>
-                                                                </TableRow>
-                                                            ))}
+                                                            {/*{restaurant.worksTime.map((row) => (*/}
+                                                            {/*    <TableRow key={row.day}>*/}
+                                                            {/*        <TableCell>*/}
+                                                            {/*            {worksTimeDaysTranslate(row.day)}*/}
+                                                            {/*        </TableCell>*/}
+                                                            {/*        <TableCell align="right">{row.from ? toLocalTime(row.from) : "Zamknięte"}</TableCell>*/}
+                                                            {/*        <TableCell align="right">{row.to ? toLocalTime(row.to) : "Zamknięte"}</TableCell>*/}
+                                                            {/*    </TableRow>*/}
+                                                            {/*))}*/}
                                                         </TableBody>
                                                     </Table>
                                                 </Box>

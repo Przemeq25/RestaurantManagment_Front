@@ -47,13 +47,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const OrderRow = () =>{
+const OrderRow = ({number,title,time}) =>{
     const classes = useStyles();
 
     const [rows] = useState([
         { id: 1, meal: 'Frytki', amount: 'x2'},
-        { id: 2, meal: 'Kebab', amount: 'x1'},
-        { id: 3, meal: 'Hamburger', amount: 'x1'},
+        { id: 2, meal: 'Polędwica w sosie', amount: 'x1'},
     ]);
     return (
         <div className={classes.root}>
@@ -62,18 +61,16 @@ const OrderRow = () =>{
                     expandIcon={<ExpandMoreIcon />}
                     classes={{root:classes.accordionSummary}}
                 >
-                    <Grid container spacing={1}>
-                        <Grid item xs = {4} md = {2}>
-                            <Typography variant = "h4">#1</Typography>
+                    <Grid container spacing={1} alignItems="center">
+                        <Grid item xs = {2} md = {2}>
+                            <Typography variant = "h4" >#{number}</Typography>
                         </Grid>
-                        <Hidden smDown>
-                            <Grid container wrap="nowrap" item md = {6} >
-                                <Grid item xs zeroMinWidth>
-                                    <Typography variant = "subtitle1" noWrap>Polędwica w sosie własnym, frytki, ziemniaki frytki frytki frytki frytki frytki </Typography>
-                                </Grid>
+                        <Hidden xsDown>
+                            <Grid container item md = {6} xs={6}>
+                                    <Typography variant = "body2" >{title}</Typography>
                             </Grid>
                         </Hidden>
-                        <Grid item xs = {4} md = {2}>
+                        <Grid item xs = {2} md = {2}>
                             <Chip
                                 icon={<DirectionsCarIcon />}
                                 label="Dostawa"
@@ -81,9 +78,10 @@ const OrderRow = () =>{
                                 color="secondary"
                             />
                         </Grid>
-                        <Grid container item xs = {3} md = {2} justify="flex-end" alignItems="center">
+                        <Grid container item xs = {2} md = {2} justify="flex-end" alignItems="center">
                             <AlarmOnIcon color="primary" fontSize="small"/>
-                            <Typography variant="h5" color="primary">30 min</Typography>
+                            <Box ml={1}/>
+                            <Typography variant="h5" color="primary">{time} min</Typography>
                         </Grid>
                     </Grid>
                 </AccordionSummary>
@@ -118,9 +116,6 @@ const OrderRow = () =>{
                                                 <TableCell padding="checkbox" align="center">{row.id}</TableCell>
                                                 <TableCell>{row.meal}</TableCell>
                                                 <TableCell padding="checkbox" align="center">{row.amount}</TableCell>
-                                                <TableCell padding="checkbox" align="center">
-                                                    <Button variant="outlined" color="primary">Przepis</Button>
-                                                </TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
@@ -128,7 +123,7 @@ const OrderRow = () =>{
                             </TableContainer>
                             <Box mt={2}/>
                             <Typography variant='h4'> Komentarz do zamówienia: </Typography>
-                            <Typography variant='subtitle2'> Frytki bez keczupu </Typography>
+                            <Typography variant='subtitle2'> Frytki bez soli </Typography>
                             <Hidden mdUp>
                                 <Box mb={2}/>
                                 <Divider variant="horizontal"/>
@@ -146,9 +141,9 @@ const OrderRow = () =>{
                                     <MapIcon color="secondary"/>
                                 </Box>
                                 <Box>
-                                    <Typography variant="h5">Przemysław Cichoń</Typography>
-                                    <Typography variant="h5">32-432 Tarnów</Typography>
-                                    <Typography variant="h5" gutterBottom>ul. Mickiewicza 123</Typography>
+                                    <Typography variant="body2">Zbigniew Kicaj</Typography>
+                                    <Typography variant="body2">32-432 Tarnów</Typography>
+                                    <Typography variant="body2" gutterBottom>ul. Mickiewicza 123</Typography>
                                 </Box>
 
                             </Box>
@@ -156,14 +151,14 @@ const OrderRow = () =>{
                                 <Box mr={1}>
                                     <PhoneIcon color="secondary"/>
                                 </Box>
-                                <Typography variant="h5">828 827 912</Typography>
+                                <Typography variant="body2">828 827 912</Typography>
                             </Box>
                         </Grid>
                     </Grid>
                 </AccordionDetails>
                 <Divider />
                 <AccordionActions classes={{root:classes.accordionActions}}>
-                    <Typography variant = "subtitle2">2020-10-12 15:00</Typography>
+                    <Typography variant = "subtitle2">2020-12-15 15:00</Typography>
                     <Box>
                         <Button size="small" color="primary" startIcon={<TimerOffIcon/>} variant="outlined">Opóźnienie</Button>
                         <Button size="small" color="secondary" startIcon={<DoubleArrowIcon/>} variant="outlined">

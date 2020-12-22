@@ -38,7 +38,7 @@ const Menu = ({match}) =>{
     const isAddRequesting = useSelector(state=>state.meals.isAddRequesting);
     const editedMeal = useSelector(state=>state.meals.editedMeal);
     useEffect(()=>{
-        mealsArray.length <=0 && dispatch(getMeals(match.params.restaurantId))
+        dispatch(getMeals(match.params.restaurantId))
     },[])
 
     const handleCloseDrawer = () =>{
@@ -95,7 +95,7 @@ const Menu = ({match}) =>{
                     )
                 }
             </Box>
-            <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleOpenDrawer} variant="extended">
+            <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleOpenDrawer} variant="extended" size="small">
                 <AddIcon/>
                 Dodaj posiłek
             </Fab>

@@ -61,7 +61,7 @@ const Login =()=>{
                                 name="login"
                             />
                             <TextField
-                                label = "Password"
+                                label = "Hasło"
                                 margin="dense"
                                 fullWidth
                                 error = { errors.password && touched.password ? true : false }

@@ -194,14 +194,14 @@ const Navbar = () =>{
                                                         <Typography variant = "h4"> Twój koszyk </Typography>
                                                         <Box>
                                                             <Typography variant= "subtitle2"> Wartość koszyka: </Typography>
-                                                            <Typography variant= "h4"> {basketTotalPrice} zł </Typography>
+                                                            <Typography variant= "h4"> {basketTotalPrice.toFixed(2)} zł </Typography>
                                                         </Box>
 
                                                         </Box>
                                                         <Divider/>
                                                         <Box display="flex" flexDirection="column">
                                                             {basket.map(product=>(
-                                                                <AppBarShoppingBasketItem {...product}/>
+                                                                <AppBarShoppingBasketItem {...product} key={product.id}/>
                                                                 ))}
                                                         </Box>
                                                             <Box mt={1}/>

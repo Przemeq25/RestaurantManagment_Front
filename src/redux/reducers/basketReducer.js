@@ -22,7 +22,7 @@ export const basketReducer = (state=initialState, action)=>{
                     basket: newBasket,
                 }
             }else{
-                const newProduct = Object.assign({totalPrice: action.payload.unitPrice, amount:1},action.payload);
+                const newProduct = Object.assign(action.payload,{totalPrice: Number(action.payload.unitPrice), amount:1, unitPrice:Number(action.payload.unitPrice)});
                 return {
                     ...state,
                     basket: [...state.basket, newProduct]
@@ -52,7 +52,6 @@ export const basketReducer = (state=initialState, action)=>{
         case basketConstants.INCREMENT_PRODUCT:
             const existedIncrementProduct = state.basket.find(item => item.id === action.payload);
             const existedIncrementProductIndex = state.basket.findIndex(item => item.id === action.payload)
-            console.log(existedIncrementProduct);
             existedIncrementProduct.amount += 1;
             existedIncrementProduct.totalPrice += existedIncrementProduct.unitPrice;
             const newBasketWithIncrementProducts = [...state.basket];

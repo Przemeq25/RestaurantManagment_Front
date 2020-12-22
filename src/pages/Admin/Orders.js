@@ -86,8 +86,8 @@ const Orders = () =>{
                 </Box>
                 <Typography variant="subtitle2" paragraph >Przejmij kontrolę nad zamówieniami!</Typography>
 
-                <OrderRow/>
-                <OrderRow/>
+                <OrderRow number="242" time="50" title="Polędwica w sosie własnym, frytki"/>
+                <OrderRow number="243" time="20" title="Kotlet schabowy, ziemniaki, surówka"/>
                 <BottomNavigation
                     showLabels
                     classes={{root:classes.root}}

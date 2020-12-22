@@ -48,9 +48,24 @@ export const authReducer = (state = initialState, action) =>{
             action.payload.role.map(item => restaurantRoles.push({role:item.authority.split('_')[1], id:item.authority.split('_')[2]}) )
             return {
                 ...state,
-                isLoading:false,
                 userType: restaurantRoles,
-                userData: action.payload.user
+            }
+        case authConstants.PERSONAL_DATA_REQUEST:
+            return {
+                ...state,
+                isLoading:true,
+            }
+        case authConstants.PERSONAL_DATA_SUCCESS:
+            return {
+                ...state,
+                userData: action.payload,
+                isLoading: false,
+            }
+        case authConstants.PERSONAL_DATA_ERROR:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
             }
         default:
             return state;

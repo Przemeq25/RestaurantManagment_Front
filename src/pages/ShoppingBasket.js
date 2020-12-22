@@ -6,7 +6,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import ShoppingBasketItemWrapper from "../components/Restaurants/ShoppingBasket/ShoppingBasketItemWrapper";
 import ShoppingBasketItem from "../components/Restaurants/ShoppingBasket/ShoppingBasketItem";
-import {history} from "../helpers/_helpers";
+import {history, renderBastekProducts} from "../helpers/_helpers";
 import {routes} from "../config/routes";
 import Jumbotron from "../components/Jumbotron";
 import {useDispatch, useSelector} from "react-redux";
@@ -43,19 +43,6 @@ const ShoppingBasket = () =>{
     }
     const handleDecrementProduct = (productId) =>{
         dispatch(decrementProduct(productId));
-    }
-
-    const renderBastekProducts = (basket) =>{
-        const result = [];
-
-        basket.forEach(function (a) {
-            if (!this[a.restaurantId]) {
-                this[a.restaurantId] = { restaurantId: a.restaurantId, restaurantName: a.restaurantName,  products: [] };
-                result.push(this[a.restaurantId]);
-            }
-            this[a.restaurantId].products.push(a);
-        }, Object.create(null));
-        return result;
     }
 
     return (
@@ -98,7 +85,7 @@ const ShoppingBasket = () =>{
                                     <Box display="flex" alignItems="center" justifyContent = "space-between" mb={3}>
                                         <Typography variant="subtitle2"> Całkowity koszt:</Typography>
                                         <Box>
-                                            <Typography variant="h3" align="right"> {basket.totalPrice} zł </Typography>
+                                            <Typography variant="h3" align="right"> {basket.totalPrice.toFixed(2)} zł </Typography>
                                             <Typography variant = "subtitle2"align="right"> + dostawa </Typography>
                                         </Box>
                                     </Box>
@@ -107,8 +94,9 @@ const ShoppingBasket = () =>{
                                         variant="contained"
                                         color="secondary"
                                         fullWidth
+                                        onClick={()=>history.push(routes.DELIVERYANDPAYMENT)}
                                     >
-                                        Do kasy
+                                        Dostawa i płatność
                                     </Button>
                                     <Box m={2}/>
                                     <Button
