@@ -12,8 +12,6 @@ import LayersClearIcon from '@material-ui/icons/LayersClear';
 import queryString from "query-string";
 import {history} from "../helpers/_helpers";
 import {routes} from "../config/routes";
-import {useDispatch} from "react-redux";
-import {getMealsFromRestaurant} from "../redux/actions/meals";
 import {mealsService} from "../services/mealsService";
 
 const useStyles = makeStyles((theme)=>({
@@ -39,7 +37,7 @@ const useStyles = makeStyles((theme)=>({
         backgroundColor:theme.palette.secondary.dark,
     }
 }));
-const SingleRestaurantMenu = ({restaurant}) =>{
+const SingleRestaurantMenu = ({restaurant,location}) =>{
     const classes = useStyles();
     const theme = useTheme();
     const mdDown = useMediaQuery(theme.breakpoints.down('md'))
@@ -50,9 +48,14 @@ const SingleRestaurantMenu = ({restaurant}) =>{
     const [query,setQuery] = useState({})
 
     useEffect(()=>{
+
+        const queryStr = queryString.parse(location.search);
+        if (Object.keys(queryStr).length !== 0) {
+            setQuery(queryStr);
+        }
         setIsLoading(true);
         restaurant.id &&
-            mealsService.getMealsFromRestaurant(restaurant.id)
+            mealsService.getMeals(restaurant.id,queryString.parse(location.search))
                 .then(response=>{
                     setMeals(response.data.content)
                     setIsLoading(false);
@@ -61,7 +64,7 @@ const SingleRestaurantMenu = ({restaurant}) =>{
                     console.log(err)
                     setIsLoading(false);
                 })
-    },[restaurant])
+    },[restaurant,location.search])
 
 
     const handleToggleFiltersDialog = () =>{
@@ -79,25 +82,25 @@ const SingleRestaurantMenu = ({restaurant}) =>{
             pushToHistory(newQuery)
         }
     }
-    const handleChangeFilters = (category,city,isRestaurantOpen,rate)=>{
+    const handleChangeFilters = (category,fromPrice,toPrice,fromTime,toTime)=>{
         const newObject = {};
         if(category){
             newObject.category = category;
         }
-        if(city){
-            newObject.city = city;
+        if(fromPrice){
+            newObject.fromPrice = fromPrice;
         }
-        if(isRestaurantOpen){
-            newObject.open = isRestaurantOpen;
+        if(toPrice){
+            newObject.toPrice = toPrice;
         }
-        if(rate){
-            newObject.rate = rate;
+        if(fromTime){
+            newObject.fromTime = fromTime;
         }
-        if(query.sort){
-            newObject.sort= query.sort;
+        if(toTime){
+            newObject.toTime = toTime;
         }
         setQuery(newObject);
-        pushToHistory(newObject)
+        pushToHistory(newObject);
         isToggleFiltersDialogOpen && handleToggleFiltersDialog();
     }
     const pushToHistory =(query)=>{
@@ -108,6 +111,14 @@ const SingleRestaurantMenu = ({restaurant}) =>{
         })
     }
 
+    const handleRenderMenuByCategory = (meals) => meals.reduce(
+            (acc, current)=> ({
+                ...acc,
+                [current['category']] :[
+                ...(acc[current['category']] || []),current]
+            })
+        ,{}
+    );
     return(
         <>
            <Box mt={mdDown ? 5 : 10}/>
@@ -139,21 +150,25 @@ const SingleRestaurantMenu = ({restaurant}) =>{
                        </Paper>
                    </Slide>
                    <Box position='relative' minHeight="70vh">
-                       <Slide in={true} direction="left" timeout={300}>
-                           <Paper className={classes.categoryPaperStyle} variant="outlined">
-                               <Typography variant="h4">Pizza</Typography>
-                           </Paper>
-                       </Slide>
-
                            {
                                isLoading ? (
                                    <Box display="flex" alignItems="center" justifyContent="center" minHeight="100%">
                                        <CircularProgress color="secondary"/>
                                    </Box>
                                ):(
-                                   meals && meals.length ? meals.map(meal =>(
-                                       <MenuCard {...meal} restaurantName={restaurant.name} restaurantId={restaurant.id} key={meal.id}/>
-                                   )):(
+                                   meals && meals.length ? (
+                                       Object.entries(handleRenderMenuByCategory(meals)).map((category,i) => (
+                                           <Box key={i}>
+                                           <Paper className={classes.categoryPaperStyle} variant="outlined" >
+                                               <Typography variant="h4">{category[0] !== "null" ? category[0] : "Inne" }</Typography>
+                                           </Paper>
+                                           {category[1].map(meal=>(
+                                               <MenuCard {...meal} restaurantName={restaurant.name} restaurantId={restaurant.id} key={meal.id}/>
+                                           ))}
+                                           </Box>
+                                       ))
+
+                                ):(
                                        <Grow in={true} timeout={500}>
                                             <Jumbotron size={40} text="Brak posiłków" icon={<LayersClearIcon fontSize="inherit"/> }/>
                                        </Grow>
@@ -167,7 +182,11 @@ const SingleRestaurantMenu = ({restaurant}) =>{
                 isToggleFiltersDialogOpen={isToggleFiltersDialogOpen}
                 handleToggleFiltersDialog={handleToggleFiltersDialog}
             >
-            <MenuFilters handleChangeFilters={handleChangeFilters}/>
+                <MenuFilters
+                    handleChangeFilters={handleChangeFilters}
+                    handleChangeFilters={handleChangeFilters}
+                    query={query}
+                />
             </MobileFiltersDialog>
         </>
     )

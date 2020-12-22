@@ -126,6 +126,7 @@ export const menuInitialValues = {
     price:'',
     ingredients:'',
     timeToDo:'',
+    category:'',
 }
 export const personalDataInitialValues = {
     forename: "",
@@ -164,6 +165,17 @@ export const renderBastekProducts = (basket) =>{
         this[a.restaurantId].products.push(a);
     }, Object.create(null));
     return result;
+}
+export const searchWriteName = (value,setQuery,query,pushToHistory)=>{
+    if(value.length){
+        setQuery({...query, name:value})
+        pushToHistory({...query, name:value})
+    }else if(query.name){
+        const newQuery = {...query};
+        delete newQuery.name;
+        setQuery(newQuery);
+        pushToHistory(newQuery)
+    }
 }
 
 

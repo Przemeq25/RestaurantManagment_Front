@@ -53,13 +53,23 @@ const useStyles = makeStyles((theme)=>({
     }
 ));
 
-const MenuFilters = ({handleChangeFilters,query}) =>{
+const MenuFilters = ({handleChangeFilters,query,categories}) =>{
     const classes = useStyles();
     const [priceFrom, setPriceFrom] = useState('');
     const [priceTo,setPriceTo] = useState('');
     const [prepareFrom,setPrepareFrom] = useState('');
     const [prepareTo,setPrepareTo] = useState('');
     const [category,setCategory] = useState('');
+
+    useEffect(()=>{
+        if(query){
+            query.fromPrice && setPriceFrom(query.fromPrice);
+            query.toPrice && setPriceTo(query.toPrice);
+            query.fromTime && setPrepareFrom(query.fromTime);
+            query.toTime && setPrepareTo(query.toTime);
+            query.category && setCategory(query.category);
+        }
+    },[]);
 
 
 
@@ -98,7 +108,11 @@ const MenuFilters = ({handleChangeFilters,query}) =>{
                 value={category}
                 onChange={(e)=>setCategory(e.target.value)}
             >
-                    <MenuItem value="1" className={classes.menuItem}>weleo</MenuItem>
+                <MenuItem value="" className={classes.menuItem}>Wszystkie</MenuItem>
+                {categories.map(category=>(
+                    <MenuItem value={category} className={classes.menuItem}>{category}</MenuItem>
+                ))}
+
             </Select>
             <Box mb={2}/>
             <Typography variant="body2" className={classes.filtersSubtitleStyle} paragraph>Cena:</Typography>
@@ -145,3 +159,7 @@ const MenuFilters = ({handleChangeFilters,query}) =>{
     )
 }
 export default MenuFilters;
+
+MenuFilters.defaultProps={
+    categories:[]
+}

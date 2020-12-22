@@ -27,7 +27,7 @@ import RestaurantFilters from "../components/Restaurants/RestaurantFilters";
 import RestaurantCard from "../components/Restaurants/RestaurantCard";
 import {restaurantService} from "../services/restaurantService";
 import Jumbotron from "../components/Jumbotron";
-import {history} from "../helpers/_helpers";
+import {history, searchWriteName} from "../helpers/_helpers";
 import {routes} from "../config/routes";
 import HomeIcon from '@material-ui/icons/Home';
 import queryString  from 'query-string';
@@ -155,17 +155,7 @@ const Restaurants = ({location}) =>{
         pushToHistory(newObject)
         isToggleFiltersDialogOpen && handleToggleFiltersDialog();
     }
-    const handleWriteName=(value)=>{
-        if(value.length){
-            setQuery({...query, name:value})
-            pushToHistory({...query, name:value})
-        }else if(query.name){
-            const newQuery = {...query};
-            delete newQuery.name;
-            setQuery(newQuery);
-            pushToHistory(newQuery)
-        }
-    }
+
     const handleSort=(value)=>{
         if(value !=="default"){
             setQuery({...query, sort:value, page:0})
@@ -212,7 +202,7 @@ const Restaurants = ({location}) =>{
                         <Slide in={true} timeout={500} direction="left">
                         <Paper className={classes.filtersPaperStyle} variant="outlined">
                             <Box className={classes.filtersBoxStyle}>
-                                <Search width={'100%'} handleBlur={(e)=> handleWriteName(e.target.value) }/>
+                                <Search width={'100%'} handleBlur={(e)=> searchWriteName(e.target.value,setQuery,query,pushToHistory) }/>
                                 <Box display="flex" mt={mdDown ? 1 : 0} width="100%" justifyContent={mdDown ? "space-between" : "flex-end"}>
                                     <Hidden lgUp>
                                         <Box mr={1}>
@@ -257,8 +247,8 @@ const Restaurants = ({location}) =>{
                                     <CircularProgress color="secondary"/>
                                 </Box>
                                 ):(
-                                restaurants.length ? restaurants.map((restaurant,index)=>(
-                                        <RestaurantCard {...restaurant} />
+                                restaurants.length ? restaurants.map((restaurant)=>(
+                                        <RestaurantCard {...restaurant} key={restaurant.id} />
                                 )):(
                                     <Grow in={true} timeout={500}>
                                     <Jumbotron

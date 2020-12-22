@@ -170,17 +170,22 @@ const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isAddRequesting,i
                                         label="Kategoria:"
                                         fullWidth
                                         margin="dense"
+                                        onChange={handleChange}
+                                        value={values.category || ""}
+                                        onBlur={handleBlur}
+                                        name="category"
                                     />
+                                    <Box mb={1}/>
                                     <TextField
                                         label="Opis (składniki):"
+                                        variant="outlined"
                                         fullWidth
                                         margin="dense"
                                         name="ingredients"
+                                        rows={2}
                                         multiline
                                         onChange={handleChange}
                                         value={values.ingredients}
-                                        error = { errors.ingredients && touched.ingredients ? true : false }
-                                        helperText={touched.ingredients && errors.ingredients}
                                         onBlur={handleBlur}
                                     />
 

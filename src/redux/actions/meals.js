@@ -52,10 +52,15 @@ export const openDrawerToEditMeal = (meal) =>{
 export const editMeal =(meal,restaurantID)=>{
     return dispatch=>{
         dispatch(request());
-        if(meal.image instanceof FormData){
+        if(meal.image['type'].split('/')[0] === 'image'){
             restaurantService.addPicture(meal.image)
                 .then(res=> {
-
+                    mealsService.editMeal(Object.assign(meal, {image:res.data.secure_url}), restaurantID, meal.id)
+                        .then(response => {
+                            dispatch(success(response.data));
+                            dispatch(closeDrawer())
+                        })
+                        .catch(errorMessage => dispatch(error(errorMessage)));
                 })
                 .catch(errorMessage => dispatch(error(errorMessage)));
         }else{

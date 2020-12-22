@@ -97,14 +97,14 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const MenuRowCard = ({id,name,image,ingredients,timeToDo,price}) =>{
+const MenuRowCard = ({id,name,image,ingredients,timeToDo,price,category}) =>{
     const classes = useStyles();
     const dispatch = useDispatch();
     return(
         <Grow in={true} timeout={500}>
             <Card className={classes.root}>
                 <Box className={classes.editingButtons}>
-                    <IconButton size="small" onClick={()=>dispatch(openDrawerToEditMeal({id,name,image,ingredients,timeToDo,price}))}>
+                    <IconButton size="small" onClick={()=>dispatch(openDrawerToEditMeal({id,name,image,ingredients,timeToDo,price,category}))}>
                         <EditIcon fontSize="small" color="secondary"/>
                     </IconButton>
                 </Box>
