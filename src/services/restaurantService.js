@@ -99,7 +99,6 @@ const addPicture = async(picture) =>{
     fd.append("upload_preset", `itsfqhtq`);
     fd.append("api_key", "247926998118615");
     fd.append("timestamp", (Date.now() / 1000) || 0);
-    console.log(fd);
     return await axios.post("https://api.cloudinary.com/v1_1/przemeq25/image/upload", fd);
 }
 

@@ -3,11 +3,7 @@ import {appUrl} from "../config/app.config";
 
 
 const getMeals = (restaurantID) =>{
-    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}/meals`,{
-        headers: {
-            Authorization: `bearer ${localStorage.getItem('access_token')}`
-        }
-    })
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}/meals/public`)
 }
 
 const addMeal = (meal,restaurantID)=>{

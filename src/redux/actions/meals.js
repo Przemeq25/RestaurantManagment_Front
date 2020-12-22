@@ -8,7 +8,7 @@ export const getMeals = (restaurantID) =>{
     return dispatch =>{
         dispatch(request());
         mealsService.getMeals(restaurantID)
-            .then(response=>dispatch(success(response.data)))
+            .then(response=>dispatch(success(response.data.content)))
             .catch(errorMessage=>dispatch(error(errorMessage)));
     }
     function request(){ return{type:mealsConstants.MEALS_REQUEST}}
@@ -52,16 +52,21 @@ export const openDrawerToEditMeal = (meal) =>{
 export const editMeal =(meal,restaurantID)=>{
     return dispatch=>{
         dispatch(request());
-        restaurantService.addPicture(meal.image)
-            .then(res=> {
-                mealsService.editMeal(Object.assign(meal, {image: scaleImageByUrl(res.data.secure_url)}), restaurantID, meal.id)
-                    .then(response => {
-                        dispatch(success(response.data));
-                        dispatch(closeDrawer())
-                    })
-                    .catch(errorMessage => dispatch(error(errorMessage)));
-            })
-            .catch(errorMessage => dispatch(error(errorMessage)));
+        if(meal.image instanceof FormData){
+            restaurantService.addPicture(meal.image)
+                .then(res=> {
+
+                })
+                .catch(errorMessage => dispatch(error(errorMessage)));
+        }else{
+            mealsService.editMeal(meal, restaurantID, meal.id)
+                .then(response => {
+                    dispatch(success(response.data));
+                    dispatch(closeDrawer())
+                })
+                .catch(errorMessage => dispatch(error(errorMessage)));
+        }
+
     };
     function request(){ return{type:mealsConstants.EDIT_MEAL_REQUEST}}
     function success(meal){ return {type:mealsConstants.EDIT_MEAL_SUCCESS, payload:meal}}

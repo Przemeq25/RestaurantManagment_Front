@@ -6,11 +6,12 @@ import useMediaQuery from "@material-ui/core/useMediaQuery/useMediaQuery";
 import ShoppingBasketItemWrapper from "../components/Restaurants/ShoppingBasket/ShoppingBasketItemWrapper";
 import ShoppingBasketItem from "../components/Restaurants/ShoppingBasket/ShoppingBasketItem";
 import {useDispatch, useSelector} from "react-redux";
-import {history, personalDataInitialValues} from "../helpers/_helpers";
+import {history, personalDataInitialValues, renderBastekProducts} from "../helpers/_helpers";
 import {routes} from "../config/routes";
 import {authorization} from "../redux/actions/auth";
 import PersonalDataForm from "../components/PersonalDataForm";
 import CircularProgress from "../components/CircularProgress";
+import clsx from "clsx";
 
 const useStyles = makeStyles(theme=>({
     pageBackground:{
@@ -27,6 +28,10 @@ const useStyles = makeStyles(theme=>({
             padding:theme.spacing(2),
             marginBottom:theme.spacing(1),
         }
+    },
+    sticky:{
+        position:'sticky',
+        top:30,
     }
 
 }));
@@ -53,18 +58,7 @@ const DeliveryAndPayment = () =>{
         setUpdatePersonalData(!updatePersonalData);
     }
 
-    const renderBastekProducts = (basket) =>{
-        const result = [];
 
-        basket.forEach(function (a) {
-            if (!this[a.restaurantId]) {
-                this[a.restaurantId] = { restaurantId: a.restaurantId, restaurantName: a.restaurantName,  products: [] };
-                result.push(this[a.restaurantId]);
-            }
-            this[a.restaurantId].products.push(a);
-        }, Object.create(null));
-        return result;
-    }
 
     return(
         <Box className={classes.pageBackground}>
@@ -205,7 +199,7 @@ const DeliveryAndPayment = () =>{
                         </Paper>
                     </Grid>
                     <Grid item md = {4} sm = {12} xs={12}>
-                        <Paper className={classes.paperStyle} variant="outlined">
+                        <Paper className={clsx(classes.paperStyle,classes.sticky)} variant="outlined">
                             <Typography variant="h4" paragraph> Podsumowanie:</Typography>
                             <Box display="flex" alignItems="center" justifyContent = "space-between" mb={3}>
                                 <Box>
@@ -213,7 +207,7 @@ const DeliveryAndPayment = () =>{
                                     <Typography variant="body2"> W tym dostawa:</Typography>
                                 </Box>
                                 <Box>
-                                    <Typography variant="h3" align="right"> {basket.totalPrice} zł </Typography>
+                                    <Typography variant="h3" align="right"> {basket.totalPrice.toFixed(2)} zł </Typography>
                                     <Typography variant = "body2"align="right"> 15.00 zł </Typography>
                                 </Box>
                             </Box>

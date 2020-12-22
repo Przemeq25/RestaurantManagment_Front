@@ -153,5 +153,17 @@ export const isValidUrl = (url) =>{
         return false;
     }
 }
+export const renderBastekProducts = (basket) =>{
+    const result = [];
+
+    basket.forEach(function (a) {
+        if (!this[a.restaurantId]) {
+            this[a.restaurantId] = { restaurantId: a.restaurantId, restaurantName: a.restaurantName,  products: [] };
+            result.push(this[a.restaurantId]);
+        }
+        this[a.restaurantId].products.push(a);
+    }, Object.create(null));
+    return result;
+}
 
 

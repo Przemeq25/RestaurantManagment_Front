@@ -52,9 +52,9 @@ const AppBarShoppingBasketItem =({amount,totalPrice,unitPrice,name,image})=>{
                     <Divider orientation="vertical"/>
                     <Box ml = {1} minWidth="70px">
                         <Typography variant="body2"> x{amount}</Typography>
-                        <Typography variant="h6" paragraph> {totalPrice} zł</Typography>
+                        <Typography variant="h6" paragraph> {totalPrice.toFixed(2)} zł</Typography>
                         <Divider/>
-                        <Typography variant="subtitle2"> 1 szt: <b>{unitPrice} zł</b></Typography>
+                        <Typography variant="subtitle2"> 1 szt: <b>{unitPrice.toFixed(2)} zł</b></Typography>
                     </Box>
                 </Box>
             </Box>

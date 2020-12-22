@@ -194,7 +194,7 @@ const Navbar = () =>{
                                                         <Typography variant = "h4"> Twój koszyk </Typography>
                                                         <Box>
                                                             <Typography variant= "subtitle2"> Wartość koszyka: </Typography>
-                                                            <Typography variant= "h4"> {basketTotalPrice} zł </Typography>
+                                                            <Typography variant= "h4"> {basketTotalPrice.toFixed(2)} zł </Typography>
                                                         </Box>
 
                                                         </Box>
