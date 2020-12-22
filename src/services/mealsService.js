@@ -7,13 +7,14 @@ const getMeals = (restaurantID) =>{
 }
 
 const addMeal = (meal,restaurantID)=>{
-    const {image, name, price, ingredients, timeToDo } = meal;
+    const {image, name, price, ingredients, timeToDo,category } = meal;
     return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantID}/meals`,{
         name,
         price,
         image,
         ingredients,
-        timeToDo
+        timeToDo,
+        category
     },
         {
             headers:{
@@ -23,13 +24,14 @@ const addMeal = (meal,restaurantID)=>{
 }
 
 const editMeal = (meal,restaurantID,mealID)=>{
-    const {image, name, price, ingredients, timeToDo } = meal;
+    const {image, name, price, ingredients, timeToDo,category } = meal;
     return axios.put(`${appUrl}/restaurant-api/restaurants/${restaurantID}/meals/${mealID}`,{
             name,
             price,
             image,
             ingredients,
-            timeToDo
+            timeToDo,
+            category
         },
         {
             headers:{

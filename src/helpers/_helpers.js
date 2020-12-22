@@ -126,6 +126,7 @@ export const menuInitialValues = {
     price:'',
     ingredients:'',
     timeToDo:'',
+    category:'',
 }
 export const personalDataInitialValues = {
     forename: "",

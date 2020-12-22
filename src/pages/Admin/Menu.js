@@ -78,15 +78,10 @@ const Menu = ({match}) =>{
                             <CircularProgress color="inherit" />
                         </Backdrop>
                     ):(
-                        mealsArray.length ? mealsArray.map(({id,name,image,ingredients,timeToDo,price})=>(
+                        mealsArray.length ? mealsArray.map(meal=>(
                             <MenuRowCard
-                                key = {id}
-                                id={id}
-                                name={name}
-                                image={image}
-                                ingredients={ingredients}
-                                timeToDo={timeToDo}
-                                price={price}
+                                key = {meal.id}
+                                {...meal}
                             />
                         )
                             ):(
