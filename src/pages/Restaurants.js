@@ -257,8 +257,8 @@ const Restaurants = ({location}) =>{
                                     <CircularProgress color="secondary"/>
                                 </Box>
                                 ):(
-                                restaurants.length ? restaurants.map((restaurant,index)=>(
-                                        <RestaurantCard {...restaurant} />
+                                restaurants.length ? restaurants.map((restaurant)=>(
+                                        <RestaurantCard {...restaurant} key={restaurant.id} />
                                 )):(
                                     <Grow in={true} timeout={500}>
                                     <Jumbotron

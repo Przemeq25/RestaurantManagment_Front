@@ -108,6 +108,14 @@ const SingleRestaurantMenu = ({restaurant}) =>{
         })
     }
 
+    const handleRenderMenuByCategory = (meals) => meals.reduce(
+            (acc, current)=> ({
+                ...acc,
+                [current['category']] :[
+                ...(acc[current['category']] || []),current]
+            })
+        ,{}
+    );
     return(
         <>
            <Box mt={mdDown ? 5 : 10}/>
@@ -139,21 +147,25 @@ const SingleRestaurantMenu = ({restaurant}) =>{
                        </Paper>
                    </Slide>
                    <Box position='relative' minHeight="70vh">
-                       <Slide in={true} direction="left" timeout={300}>
-                           <Paper className={classes.categoryPaperStyle} variant="outlined">
-                               <Typography variant="h4">Pizza</Typography>
-                           </Paper>
-                       </Slide>
-
                            {
                                isLoading ? (
                                    <Box display="flex" alignItems="center" justifyContent="center" minHeight="100%">
                                        <CircularProgress color="secondary"/>
                                    </Box>
                                ):(
-                                   meals && meals.length ? meals.map(meal =>(
-                                       <MenuCard {...meal} restaurantName={restaurant.name} restaurantId={restaurant.id} key={meal.id}/>
-                                   )):(
+                                   meals && meals.length ? (
+                                       Object.entries(handleRenderMenuByCategory(meals)).map((category,i) => (
+                                           <Box key={i}>
+                                           <Paper className={classes.categoryPaperStyle} variant="outlined" >
+                                               <Typography variant="h4">{category[0] !== "null" ? category[0] : "Inne" }</Typography>
+                                           </Paper>
+                                           {category[1].map(meal=>(
+                                               <MenuCard {...meal} restaurantName={restaurant.name} restaurantId={restaurant.id} key={meal.id}/>
+                                           ))}
+                                           </Box>
+                                       ))
+
+                                ):(
                                        <Grow in={true} timeout={500}>
                                             <Jumbotron size={40} text="Brak posiłków" icon={<LayersClearIcon fontSize="inherit"/> }/>
                                        </Grow>
