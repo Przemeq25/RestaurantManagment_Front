@@ -21,7 +21,7 @@ import SingleRestaurantMenu from "./pages/SingleRestaurantMenu";
 import SingleRestaurantReservation from "./pages/SingleRestaurantReservation";
 import SingleRestaurantContact from "./pages/SingleRestaurantContact";
 import ShoppingBasket from "./pages/ShoppingBasket";
-import SingleRestaurantWrapper from "./components/SingleRestaurantWrapper";
+import SingleRestaurantWrapper from "./components/Restaurants/SingleRestaurantWrapper";
 import {getBasket} from "./redux/actions/basket";
 import DeliveryAndPayment from "./pages/DeliveryAndPayment";
 
