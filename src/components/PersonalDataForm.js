@@ -9,7 +9,7 @@ import FormControl from "@material-ui/core/FormControl";
 import {useDispatch} from "react-redux";
 import {changePersonalData, changePersonalDataToDelivery} from "../redux/actions/auth";
 
-const PersonalDataForm = ({initial,update,handleClose}) =>{
+const PersonalDataForm = ({initial,update,handleClose, showUpdate}) =>{
     const [updatePersonalData, setUpdatePersonalData] = useState(false);
     const dispatch = useDispatch();
 
@@ -141,7 +141,7 @@ const PersonalDataForm = ({initial,update,handleClose}) =>{
                             </Button>
                         </Grid>
                     </Grid>
-                    {update && (
+                    {showUpdate && (
                         <FormControl size="small">
                             <Box display = "flex" alignItems = "center">
                                 <Checkbox size="small" checked={updatePersonalData} onChange={handleChangeRadioStatus}/>

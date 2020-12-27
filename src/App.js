@@ -24,6 +24,7 @@ import ShoppingBasket from "./pages/ShoppingBasket";
 import SingleRestaurantWrapper from "./components/Restaurants/SingleRestaurantWrapper";
 import {getBasket} from "./redux/actions/basket";
 import DeliveryAndPayment from "./pages/DeliveryAndPayment";
+import UserAccount from "./pages/UserAccount";
 
 
 const App =()=>{
@@ -41,6 +42,7 @@ const App =()=>{
                 <Route exact path={routes.REGISTER} component={Register}/>
                 <Route exact path={routes.CONFIRM} component = {RegisterConfirmation}/>
                 <Route exact path={routes.RESTAURANTS} component = {Restaurants}/>
+                <Route exact path={routes.PROFILE} component = {UserAccount}/>
                 <Route path={`${routes.SINGLERESTAURANTMENU}/:restaurantId`} exact render={(props)=>(
                     <SingleRestaurantWrapper {...props}>
                         <SingleRestaurantMenu {...props} />

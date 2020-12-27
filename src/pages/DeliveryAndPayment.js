@@ -80,7 +80,7 @@ const DeliveryAndPayment = () =>{
                                             updatePersonalData ? (
                                                     <Box p={2} >
                                                         <Typography variant="h5" paragraph> Zmień dane do wysyłki</Typography>
-                                                        <PersonalDataForm initial={userData} update={isLoggedIn} handleClose={handleToggleUpdatePersonalData}/>
+                                                        <PersonalDataForm initial={userData} update={isLoggedIn} showUpdate={isLoggedIn} handleClose={handleToggleUpdatePersonalData}/>
                                                     </Box>
                                                 ):(
                                                     <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -96,7 +96,7 @@ const DeliveryAndPayment = () =>{
                                         ):(
                                             <Box p={2} >
                                                 <Typography variant="h5" paragraph> Uzupełnij swoje dane</Typography>
-                                                <PersonalDataForm initial={personalDataInitialValues} update/>
+                                                <PersonalDataForm initial={personalDataInitialValues} update  showUpdate/>
                                             </Box>
                                     )
                                 ):(
