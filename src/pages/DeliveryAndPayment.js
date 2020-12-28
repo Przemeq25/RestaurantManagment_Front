@@ -12,6 +12,7 @@ import {authorization} from "../redux/actions/auth";
 import PersonalDataForm from "../components/PersonalDataForm";
 import CircularProgress from "../components/CircularProgress";
 import clsx from "clsx";
+import DeliveryAndPaymentWrapper from "../components/Restaurants/DeliveryAndPaymentWrapper";
 
 const useStyles = makeStyles(theme=>({
     pageBackground:{
@@ -79,7 +80,7 @@ const DeliveryAndPayment = () =>{
                                             updatePersonalData ? (
                                                     <Box p={2} >
                                                         <Typography variant="h5" paragraph> Zmień dane do wysyłki</Typography>
-                                                        <PersonalDataForm initial={userData} update={isLoggedIn} handleClose={handleToggleUpdatePersonalData}/>
+                                                        <PersonalDataForm initial={userData} update={isLoggedIn} showUpdate={isLoggedIn} handleClose={handleToggleUpdatePersonalData}/>
                                                     </Box>
                                                 ):(
                                                     <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -95,7 +96,7 @@ const DeliveryAndPayment = () =>{
                                         ):(
                                             <Box p={2} >
                                                 <Typography variant="h5" paragraph> Uzupełnij swoje dane</Typography>
-                                                <PersonalDataForm initial={personalDataInitialValues} update/>
+                                                <PersonalDataForm initial={personalDataInitialValues} update  showUpdate/>
                                             </Box>
                                     )
                                 ):(
@@ -132,67 +133,7 @@ const DeliveryAndPayment = () =>{
                                             id={product.id}
                                         />
                                     ))}
-                                    <Box mt={4} mb={4}>
-                                        <Typography variant="h5" paragraph>Dostawa i płatność</Typography>
-                                        <List style={{flex:1}}>
-                                            <ListItem dense button>
-                                                <ListItemIcon>
-                                                    <Radio
-                                                        edge="start"
-                                                        tabIndex={-1}
-                                                        disableRipple
-                                                    />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Obiór w restauracji" />
-                                                <ListItemSecondaryAction>
-                                                    <Typography variant="body2"> 0.00zł </Typography>
-                                                </ListItemSecondaryAction>
-                                            </ListItem>
-                                            <ListItem dense button>
-                                                <ListItemIcon>
-                                                    <Radio
-                                                        edge="start"
-                                                        tabIndex={-1}
-                                                        disableRipple
-                                                    />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Dostawa na adres" />
-                                                <ListItemSecondaryAction>
-                                                    <Typography variant="body2"> 15.00zł </Typography>
-                                                </ListItemSecondaryAction>
-                                            </ListItem>
-                                        </List>
-                                        <Divider />
-                                        <List style={{flex:1}}>
-                                            <ListItem dense button>
-                                                <ListItemIcon>
-                                                    <Radio
-                                                        edge="start"
-                                                        tabIndex={-1}
-                                                        disableRipple
-                                                    />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Płatność online" />
-                                            </ListItem>
-                                            <ListItem dense button>
-                                                <ListItemIcon>
-                                                    <Radio
-                                                        edge="start"
-                                                        tabIndex={-1}
-                                                        disableRipple
-                                                    />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Płatność przy odbiorze" />
-                                            </ListItem>
-                                        </List>
-                                    </Box>
-                                    <TextField
-                                        multiline
-                                        rows={3}
-                                        variant="outlined"
-                                        fullWidth
-                                        label="Komentarz do zamówienia"
-                                    />
+                                    <DeliveryAndPaymentWrapper paymentOnline/>
 
                                 </ShoppingBasketItemWrapper>
                             ))}

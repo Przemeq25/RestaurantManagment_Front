@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {fade, makeStyles} from "@material-ui/core/styles";
-import Navbar from "../components/Navbar";
+import Navbar from "../Navbar";
 import {Box, Button, Container, ButtonGroup, Typography, Dialog, DialogTitle, DialogContent,Paper,Divider,TextField,Slide} from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating/Rating";
 import {NavLink} from "react-router-dom";
-import {routes} from "../config/routes";
-import AppLogo from "./AppLogo";
-import {getCuisineTypeValue, isValidUrl} from "../helpers/_helpers";
-import {restaurantService} from "../services/restaurantService";
+import {routes} from "../../config/routes";
+import AppLogo from "../AppLogo";
+import {getCuisineTypeValue, isValidUrl} from "../../helpers/_helpers";
+import {restaurantService} from "../../services/restaurantService";
 import Avatar from "@material-ui/core/Avatar";
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 
