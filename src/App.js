@@ -25,6 +25,7 @@ import SingleRestaurantWrapper from "./components/Restaurants/SingleRestaurantWr
 import {getBasket} from "./redux/actions/basket";
 import DeliveryAndPayment from "./pages/DeliveryAndPayment";
 import UserAccount from "./pages/UserAccount";
+import TablesAndReservation from "./pages/Admin/TablesAndReservation";
 
 
 const App =()=>{
@@ -84,6 +85,12 @@ const App =()=>{
                     <Route path={`${routes.RESTAURANT_ORDERS}/:restaurantId`} exact render={(props)=>(
                         <AdminPanelPage {...props}>
                             <Orders {...props}/>
+                        </AdminPanelPage>
+                    )}
+                    />
+                    <Route path={`${routes.RESTAURANT_RESERVATION}/:restaurantId`} exact render={(props)=>(
+                        <AdminPanelPage {...props}>
+                            <TablesAndReservation {...props}/>
                         </AdminPanelPage>
                     )}
                     />

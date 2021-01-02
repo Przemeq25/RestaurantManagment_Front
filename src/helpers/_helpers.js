@@ -136,7 +136,7 @@ export const personalDataInitialValues = {
     postCode: "",
     phoneNumber: "",
     houseNumber: "",
-}
+};
 
 export const scaleImageByUrl = (url) =>{
     const newSecureUrl = url.split('/');

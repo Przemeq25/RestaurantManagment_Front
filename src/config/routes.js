@@ -17,4 +17,5 @@ export const routes ={
     RESTAURANT_ORDERS:"/admin/orders",
     RESTAURANT_WORKERS:"/admin/workers",
     RESTAURANT_EDIT:'/admin/edit',
+    RESTAURANT_RESERVATION:'/admin/reservations',
 }

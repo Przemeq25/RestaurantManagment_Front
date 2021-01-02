@@ -132,6 +132,8 @@ const AdminPanel = ({children,match}) => {
                 return 'Zamówienia';
             case 'workers':
                 return 'Pracownicy';
+            case 'reservations':
+                return 'Rezerwacje';
             default:
                 return 'Strona startowa';
         }

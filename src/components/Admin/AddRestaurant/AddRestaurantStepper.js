@@ -136,7 +136,7 @@ const AddRestaurantStepper = ({setDialogOpen,firstRegister}) => {
                             {getStepContent(activeStep)}
                         </Box>
                         <DialogActions>
-                            {isRequesting ? (
+                            {isRequesting && activeStep === stepperTable.length - 1 ? (
                                 <Typography variant = "h4">
                                     Proszę czekac, trwa konfigurowanie restauracji
                                 </Typography>

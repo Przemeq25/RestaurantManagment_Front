@@ -6,6 +6,7 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import PeopleIcon from '@material-ui/icons/People';
 import {makeStyles} from "@material-ui/core/styles";
 import {Desktop, Mobile} from "../../../helpers/_helpers";
@@ -98,6 +99,15 @@ const AdminDrawer = ({isDrawerOpen,closeDrawer,match}) =>{
                         </Desktop>
                     </ListItemIcon>
                     <ListItemText>Zamówienia</ListItemText>
+                </ListItem>
+                <ListItem disableGutters button component={NavLink} to={`${routes.RESTAURANT_RESERVATION}/${restaurantId}`} activeClassName="Mui-selected">
+                    <ListItemIcon className={classes.icon}>
+                        <AssignmentIcon/>
+                        <Desktop>
+                            {!isDrawerOpen && <Typography className={classes.iconText}>REZERWACJE</Typography>}
+                        </Desktop>
+                    </ListItemIcon>
+                    <ListItemText>REZERWACJE</ListItemText>
                 </ListItem>
                 <ListItem disableGutters button component={NavLink} to={`${routes.SINGLERESTAURANTMENU}/${restaurantId}`} activeClassName="Mui-selected">
                     <ListItemIcon className={classes.icon}>
