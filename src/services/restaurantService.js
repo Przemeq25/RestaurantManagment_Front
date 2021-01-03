@@ -117,6 +117,13 @@ const getAllRestaurants = ({page,name,category,city,open,rate,sort}) =>{
 const getSingleRestaurant = (restaurantID) =>{
     return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}/public`)
 }
+const isPaymentAvailable = (restaurantID) =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}/payment`,{
+        headers: {
+            Authorization: `bearer ${localStorage.getItem('access_token')}`
+        }
+    });
+}
 
 
 export const restaurantService ={
@@ -129,5 +136,6 @@ export const restaurantService ={
     deleteWorker,
     addPicture,
     getAllRestaurants,
-    getSingleRestaurant
+    getSingleRestaurant,
+    isPaymentAvailable
 }

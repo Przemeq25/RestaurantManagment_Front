@@ -213,7 +213,13 @@ const Navbar = () =>{
                                                             >
                                                                 Pokaż koszyk
                                                             </Button>
-                                                            <Button variant="contained" color="secondary">Do kasy</Button>
+                                                            <Button
+                                                                variant="contained"
+                                                                color="secondary"
+                                                                onClick={()=>history.push(routes.DELIVERYANDPAYMENT)}
+                                                            >
+                                                                Do kasy
+                                                            </Button>
                                                     </Box>
                                                 </>
                                                 ):(

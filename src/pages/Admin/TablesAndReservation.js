@@ -10,12 +10,6 @@ import Chip from "@material-ui/core/Chip";
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import Collapse from "@material-ui/core/Collapse";
 import moment from 'moment';
-import MomentUtils from "@date-io/moment";
-import {
-    MuiPickersUtilsProvider,
-    KeyboardTimePicker,
-    KeyboardDatePicker,
-} from '@material-ui/pickers';
 
 const useStyles = makeStyles(theme=>({
     fab: {

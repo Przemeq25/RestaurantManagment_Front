@@ -19,18 +19,28 @@ export const getMeals = (restaurantID) =>{
 export const addMeal = (meal,restaurantID)=>{
     return dispatch =>{
         dispatch(request());
-        restaurantService.addPicture(meal.image)
-            .then(res=>{
-                mealsService.addMeal(Object.assign(meal,{image:scaleImageByUrl(res.data.secure_url)}),restaurantID)
-                    .then(response=>{
-                        dispatch(success(response.data))
-                        dispatch(closeDrawer());
-                    })
-                    .catch(errorMessage=>dispatch(error(errorMessage)));
-            })
-            .catch(err=>{
-                dispatch(error(err));
-            })
+        if(meal.image){ 
+            restaurantService.addPicture(meal.image)
+                .then(res=>{
+                    mealsService.addMeal(Object.assign(meal,{image:scaleImageByUrl(res.data.secure_url)}),restaurantID)
+                        .then(response=>{
+                            dispatch(success(response.data))
+                            dispatch(closeDrawer());
+                        })
+                        .catch(errorMessage=>dispatch(error(errorMessage)));
+                })
+                .catch(err=>{
+                    dispatch(error(err));
+                })
+        }else{
+            mealsService.addMeal(Object.assign(meal),restaurantID)
+                .then(response=>{
+                    dispatch(success(response.data))
+                    dispatch(closeDrawer());
+                })
+                .catch(errorMessage=>dispatch(error(errorMessage)));
+        }
+
 
     };
     function request(){ return{type:mealsConstants.ADD_MEAL_REQUEST}}

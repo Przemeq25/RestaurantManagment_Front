@@ -13,6 +13,7 @@ import PersonalDataForm from "../components/PersonalDataForm";
 import CircularProgress from "../components/CircularProgress";
 import clsx from "clsx";
 import DeliveryAndPaymentWrapper from "../components/Restaurants/DeliveryAndPaymentWrapper";
+import {restaurantService} from "../services/restaurantService";
 
 const useStyles = makeStyles(theme=>({
     pageBackground:{
@@ -51,6 +52,7 @@ const DeliveryAndPayment = () =>{
 
     useEffect(()=>{
         isLoggedIn && authorization(dispatch);
+        isLoggedIn && restaurantService.isPaymentAvailable(basket.basket[0].restaurantId).then(res=>console.log(res)).catch(err=>console.log(err))
         // eslint-disable-next-line react-hooks/exhaustive-deps
 
     },[isLoggedIn])
@@ -133,7 +135,7 @@ const DeliveryAndPayment = () =>{
                                             id={product.id}
                                         />
                                     ))}
-                                    <DeliveryAndPaymentWrapper paymentOnline/>
+                                    <DeliveryAndPaymentWrapper />
 
                                 </ShoppingBasketItemWrapper>
                             ))}
