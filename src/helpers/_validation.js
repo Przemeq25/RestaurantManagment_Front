@@ -78,6 +78,10 @@ export const menuValidationSchema = Yup.object().shape({
             'Podaj czas w minutach',
             value => (value + "").match(/^[0-9]*$/g))
         .required('Pole wymagane'),
+    ingredients: Yup.string()
+        .required('Pole wymagane'),
+    category: Yup.string()
+        .required('Pole wymagane'),
 });
 
 export const personalDataValidationSchema = Yup.object().shape({

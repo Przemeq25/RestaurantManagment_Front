@@ -5,6 +5,7 @@ import {restaurantReducer} from "./restaurantReducer";
 import {mealsReducer} from './mealsReducer';
 import {workersReducer} from "./workersReducer";
 import {basketReducer} from "./basketReducer";
+import {alertReducer} from "./alertReducer";
 
 
 export const rootReducer = combineReducers(
@@ -15,4 +16,5 @@ export const rootReducer = combineReducers(
                 meals:mealsReducer,
                 workers:workersReducer,
                 basket:basketReducer,
+                alert:alertReducer,
             })
