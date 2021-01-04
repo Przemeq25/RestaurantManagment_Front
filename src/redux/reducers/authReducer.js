@@ -43,13 +43,21 @@ export const authReducer = (state = initialState, action) =>{
         case authConstants.LOGOUT :
             return initialState;
 
-        case authConstants.AUTHORIZATION:
+        case authConstants.AUTHORIZATION_SUCCESS:
             const restaurantRoles=[];
             action.payload.role.map(item => restaurantRoles.push({role:item.authority.split('_')[1], id:item.authority.split('_')[2]}) )
             return {
                 ...state,
                 userType: restaurantRoles,
             }
+
+        case authConstants.AUTHORIZATION_ERROR:
+            return {
+                ...state,
+                isLoading:false,
+                error: action.payload
+            }
+
         case authConstants.PERSONAL_DATA_REQUEST:
             return {
                 ...state,

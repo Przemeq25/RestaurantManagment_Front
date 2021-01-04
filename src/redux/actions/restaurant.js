@@ -3,6 +3,7 @@ import {restaurantConstants} from "../types";
 import {refreshLogin} from "./auth";
 import {history, scaleImageByUrl} from "../../helpers/_helpers";
 import {routes} from "../../config/routes";
+import {errorAlert, successAlert} from "./alert";
 
 export const addRestaurant = (restaurant,refreshToken)=>{
     return dispatch =>{
@@ -14,17 +15,22 @@ export const addRestaurant = (restaurant,refreshToken)=>{
                         setTimeout(() => {
                             refreshLogin(refreshToken, dispatch)
                                 .then(() => {
+                                    dispatch(successAlert(`${response.data.name} - pomyślnie dodano do Twojej listy!`))
                                     dispatch(success(response.data))
-                                }).catch((errorMessage) => dispatch(error(errorMessage)))
+                                }).catch(() => dispatch(error(500)))
                         }, 20000)
 
                     })
-                    .catch(errorMessage => {
-                        dispatch(error(errorMessage));
+                    .catch((errorMessage)=>{
+                        if(errorMessage.response && errorMessage.response.status === 500) {
+                            dispatch(error(500))
+                        }else{
+                            dispatch(errorAlert("Wystąpił błąd podczas dodawania restauracji, spróbuj ponownie!"))
+                        }
                     })
             })
-            .catch(errorMessage => {
-                dispatch(error(errorMessage));
+            .catch(() => {
+                dispatch(errorAlert("Wystąpił błąd podczas dodawania restauracji, spróbuj ponownie!"))
             })
     }
 
@@ -38,13 +44,19 @@ export const deleteRestaurant = (restaurantID)=>{
         dispatch(request());
         restaurantService.deleteRestaurant(restaurantID)
             .then(()=> {
+                dispatch(successAlert(`Pomyślnie usunięto restaurację!`))
                 dispatch(success());
                 history.push(routes.ADMIN_PANEL);
             })
-            .catch((errorMessage)=> {
-                dispatch(error(errorMessage))
-                history.push(routes.ADMIN_PANEL);
+            .catch((errorMessage)=>{
+                if(errorMessage.response && errorMessage.response.status === 500) {
+                    dispatch(error(500))
+                }else{
+                    dispatch(errorAlert("Wystąpił błąd podczas usuwania restauracji, spróbuj ponownie!"))
+                    history.push(routes.ADMIN_PANEL);
+                }
             })
+
 
     }
     function request(){return {type:restaurantConstants.DELETE_RESTAURANT_REQUEST}};
@@ -61,12 +73,16 @@ export const editRestaurant = (restaurantData, restaurantID) =>{
                     .then(response => {
                         dispatch(success(response.data))
                     })
-                    .catch(errorMessage => {
-                        dispatch(error(errorMessage));
+                    .catch((errorMessage)=>{
+                        if(errorMessage.response && errorMessage.response.status === 500) {
+                            dispatch(error(500))
+                        }else{
+                            dispatch(errorAlert("Wystąpił błąd podczas edytowania restauracji, spróbuj ponownie!"))
+                        }
                     })
             })
-            .catch(errorMessage => {
-                dispatch(error(errorMessage));
+            .catch(() => {
+                dispatch(errorAlert("Wystąpił błąd podczas dodawania restauracji, spróbuj ponownie!"))
             })
     }
 
@@ -91,7 +107,7 @@ export const getRestaurantsForAdmin =()=>{
         dispatch(request());
         restaurantService.getRestaurantsForAdmin()
             .then(response => dispatch(success(response.data.content)))
-            .catch(errorMessage => dispatch(error(errorMessage)))
+            .catch(() => dispatch(error(500)))
     }
     function request(){return {type:restaurantConstants.RESTAURANT_REQUEST}};
     function success(restaurants){return {type:restaurantConstants.GET_RESTAURANTS_FOR_ADMIN_SUCCESS, payload:restaurants}}
@@ -117,7 +133,7 @@ export const getSingleRestaurantForAdmin = (restaurantId) =>{
         dispatch(request());
         restaurantService.getSingleRestaurant(restaurantId)
             .then(response=>dispatch(success(response.data)))
-            .catch(errorMessage=>dispatch(error(errorMessage)))
+            .catch(()=>dispatch(error(500)))
     }
     function request(){return {type:restaurantConstants.RESTAURANT_REQUEST}};
     function success(restaurant){return {type:restaurantConstants.GET_SINGLE_RESTAURANT_FOR_ADMIN_SUCCESS, payload:restaurant}}

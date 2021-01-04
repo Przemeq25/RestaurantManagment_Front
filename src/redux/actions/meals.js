@@ -10,7 +10,7 @@ export const getMeals = (restaurantID) =>{
         dispatch(request());
         mealsService.getMeals(restaurantID)
             .then(response=>dispatch(success(response.data.content)))
-            .catch(errorMessage=>dispatch(error(errorMessage)));
+            .catch(()=>dispatch(error(500)));
     }
     function request(){ return{type:mealsConstants.MEALS_REQUEST}}
     function success(meals){ return {type:mealsConstants.GET_MEALS_SUCCESS, payload:meals}}

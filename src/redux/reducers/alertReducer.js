@@ -4,6 +4,7 @@ const initialState = {
     message:'',
     error:false,
     success:false,
+    isOpen:false,
 }
 
 export const alertReducer = (state=initialState, action)=>{
@@ -13,6 +14,7 @@ export const alertReducer = (state=initialState, action)=>{
                 ...state,
                 message: action.payload.message,
                 success: action.payload.success,
+                isOpen: true,
             }
         case alertConstants.RESET_ALERT:
             return initialState;
@@ -22,6 +24,7 @@ export const alertReducer = (state=initialState, action)=>{
                 ...state,
                 message: action.payload.message,
                 error: action.payload.error,
+                isOpen: true,
             }
         default :
             return state

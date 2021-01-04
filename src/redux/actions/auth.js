@@ -22,7 +22,7 @@ export const login = (username, password)=>{
                     dispatch(error("Błędne dane logowania"))
                 }
                 else{
-                    dispatch(error("Brak połączenia z serwerem, spróbuj jeszcze raz"))
+                    dispatch(error(500))
                 }
 
             })
@@ -48,7 +48,7 @@ export const refreshLogin = (refreshToken,dispatch) => new Promise((resolve, rej
                 if (errorMessage.response && errorMessage.response.status === 401) {
                     dispatch(error("Błędne dane logowania"))
                 } else {
-                    dispatch(error("Brak połączenia z serwerem, spróbuj jeszcze raz"))
+                    dispatch(error(500))
                 }
                 reject();
             });
@@ -83,23 +83,33 @@ export const authorization = (dispatch) => new Promise((resolve, reject) =>{
                 dispatch(getUserType(response.data))
                 resolve();
             })
-            .catch(()=>{
-                reject();
-                history.push(routes.LOGIN)
+            .catch((errorMessage)=>{
+                if(errorMessage.response && errorMessage.response.status === 401) {
+                    reject();
+                    history.push(routes.LOGIN)
+                }else{
+                    dispatch(errorAuthorization(500))
+                }
             })
         userService.getPersonalData()
             .then(response=>{
                 dispatch(getPersonalData(response.data))
                 resolve();
             })
-            .catch(()=>{
-                reject();
-                history.push(routes.LOGIN)
+            .catch((errorMessage)=>{
+                if(errorMessage.response && errorMessage.response.status === 401) {
+                    reject();
+                    history.push(routes.LOGIN)
+                }else{
+                    dispatch(errorPersonalData(500))
+                }
             })
 
     function request(){return {type:authConstants.LOGIN_REQUEST}};
-    function getUserType(user){ return {type:authConstants.AUTHORIZATION, payload:{role: user.authorities}}}
+    function getUserType(user){ return {type:authConstants.AUTHORIZATION_SUCCESS, payload:{role: user.authorities}}}
     function getPersonalData(userData){return {type:authConstants.PERSONAL_DATA_SUCCESS, payload:userData}}
+    function errorAuthorization(errorMessage){return{type:authConstants.AUTHORIZATION_ERROR, payload:errorMessage}}
+    function errorPersonalData(errorMessage){return{type:authConstants.PERSONAL_DATA_ERROR, payload:errorMessage}}
 });
 export const changePersonalData =(personalData)=>{
     return dispatch=>{
@@ -108,8 +118,12 @@ export const changePersonalData =(personalData)=>{
             .then(response=>{
                 dispatch(success(response.data));
             })
-            .catch(errorMessage=>{
-                dispatch(error(errorMessage))
+            .catch((errorMessage)=>{
+                if(errorMessage.response && errorMessage.response.status === 401) {
+                    history.push(routes.LOGIN)
+                }else{
+                    dispatch(error(500))
+                }
             })
     }
     function request(){return {type:authConstants.PERSONAL_DATA_REQUEST}};

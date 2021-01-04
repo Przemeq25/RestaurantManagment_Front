@@ -27,6 +27,7 @@ import DeliveryAndPayment from "./pages/DeliveryAndPayment";
 import UserAccount from "./pages/UserAccount";
 import TablesAndReservation from "./pages/Admin/TablesAndReservation";
 import Alert from "./components/Alert";
+import Page404 from "./pages/Page404";
 
 
 const App =()=>{
@@ -109,6 +110,7 @@ const App =()=>{
                             </AdminPanelPage>
                         )}
                         />
+                        <Route component={Page404}/>
                 </Switch>
             </Router>
         </>
