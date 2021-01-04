@@ -172,6 +172,8 @@ const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isAddRequesting,i
                                         margin="dense"
                                         onChange={handleChange}
                                         value={values.category || ""}
+                                        error = { errors.category && touched.category ? true : false }
+                                        helperText={touched.category && errors.category}
                                         onBlur={handleBlur}
                                         name="category"
                                     />
@@ -187,6 +189,8 @@ const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isAddRequesting,i
                                         onChange={handleChange}
                                         value={values.ingredients}
                                         onBlur={handleBlur}
+                                        error = { errors.ingredients && touched.ingredients ? true : false }
+                                        helperText={touched.ingredients && errors.ingredients}
                                     />
 
                                     <Box mt={2} display="flex" justifyContent ="space-between" alignItems = "center" >
@@ -242,7 +246,7 @@ const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isAddRequesting,i
                                                                     <Button
                                                                         variant="text"
                                                                         startIcon={<DoneIcon/>}
-                                                                        onClick={()=>handleDeleteMeal(values.id)}
+                                                                        onClick={()=>handleDeleteMeal(values.id,values.name)}
                                                                     >
                                                                         Usuń
                                                                     </Button>

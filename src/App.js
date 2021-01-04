@@ -26,6 +26,8 @@ import {getBasket} from "./redux/actions/basket";
 import DeliveryAndPayment from "./pages/DeliveryAndPayment";
 import UserAccount from "./pages/UserAccount";
 import TablesAndReservation from "./pages/Admin/TablesAndReservation";
+import Alert from "./components/Alert";
+import Page404 from "./pages/Page404";
 
 
 const App =()=>{
@@ -36,79 +38,82 @@ const App =()=>{
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
     return (
-        <Router history = {history}>
-            <Switch>
-                <Route exact path={routes.HOMEPAGE} component={Home}/>
-                <Route exact path={routes.LOGIN} component={Login}/>
-                <Route exact path={routes.REGISTER} component={Register}/>
-                <Route exact path={routes.CONFIRM} component = {RegisterConfirmation}/>
-                <Route exact path={routes.RESTAURANTS} component = {Restaurants}/>
-                <Route exact path={routes.PROFILE} component = {UserAccount}/>
-                <Route path={`${routes.SINGLERESTAURANTMENU}/:restaurantId`} exact render={(props)=>(
-                    <SingleRestaurantWrapper {...props}>
-                        <SingleRestaurantMenu {...props} />
-                    </SingleRestaurantWrapper>
-                )}
-                />
-                <Route path={`${routes.SINGLERESTAURANTRESERVATION}/:restaurantId`} exact render={(props)=>(
-                    <SingleRestaurantWrapper {...props}>
-                        <SingleRestaurantReservation {...props} />
-                    </SingleRestaurantWrapper>
-                )}
-                />
-                <Route path={`${routes.SINGLERESTAURANTCONTACT}/:restaurantId`} exact render={(props)=>(
-                    <SingleRestaurantWrapper {...props}>
-                        <SingleRestaurantContact {...props} />
-                    </SingleRestaurantWrapper>
-                )}
-                />
-                <Route path={routes.SHOPPINGBASKET} component={ShoppingBasket}/>
-                <Route path={routes.DELIVERYANDPAYMENT} component = {DeliveryAndPayment}/>
-                <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
-                        <AdminPanelPage {...props}>
-                            <AdminDashboard {...props} />
-                        </AdminPanelPage>
+        <>
+        <Alert hideDuration={4000}/>
+            <Router history = {history}>
+                <Switch>
+                    <Route exact path={routes.HOMEPAGE} component={Home}/>
+                    <Route exact path={routes.LOGIN} component={Login}/>
+                    <Route exact path={routes.REGISTER} component={Register}/>
+                    <Route exact path={routes.CONFIRM} component = {RegisterConfirmation}/>
+                    <Route exact path={routes.RESTAURANTS} component = {Restaurants}/>
+                    <Route exact path={routes.PROFILE} component = {UserAccount}/>
+                    <Route path={`${routes.SINGLERESTAURANTMENU}/:restaurantId`} exact render={(props)=>(
+                        <SingleRestaurantWrapper {...props}>
+                            <SingleRestaurantMenu {...props} />
+                        </SingleRestaurantWrapper>
                     )}
                     />
-                    <Route path={`${routes.RESTAURANT_DASHBOARD}/:restaurantId`} exact render={(props)=>(
-                        <AdminPanelPage {...props}>
-                            <RestaurantDashboard {...props}/>
-                        </AdminPanelPage>
+                    <Route path={`${routes.SINGLERESTAURANTRESERVATION}/:restaurantId`} exact render={(props)=>(
+                        <SingleRestaurantWrapper {...props}>
+                            <SingleRestaurantReservation {...props} />
+                        </SingleRestaurantWrapper>
                     )}
                     />
-                    <Route path={`${routes.RESTAURANT_MENU}/:restaurantId`} exact render={(props)=>(
-                        <AdminPanelPage {...props}>
-                            <Menu {...props}/>
-                        </AdminPanelPage>
+                    <Route path={`${routes.SINGLERESTAURANTCONTACT}/:restaurantId`} exact render={(props)=>(
+                        <SingleRestaurantWrapper {...props}>
+                            <SingleRestaurantContact {...props} />
+                        </SingleRestaurantWrapper>
+                    )}
+                    />
+                    <Route path={routes.SHOPPINGBASKET} component={ShoppingBasket}/>
+                    <Route path={routes.DELIVERYANDPAYMENT} component = {DeliveryAndPayment}/>
+                    <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
+                            <AdminPanelPage {...props}>
+                                <AdminDashboard {...props} />
+                            </AdminPanelPage>
                         )}
-                    />
-                    <Route path={`${routes.RESTAURANT_ORDERS}/:restaurantId`} exact render={(props)=>(
-                        <AdminPanelPage {...props}>
-                            <Orders {...props}/>
-                        </AdminPanelPage>
-                    )}
-                    />
-                    <Route path={`${routes.RESTAURANT_RESERVATION}/:restaurantId`} exact render={(props)=>(
-                        <AdminPanelPage {...props}>
-                            <TablesAndReservation {...props}/>
-                        </AdminPanelPage>
-                    )}
-                    />
-                    <Route path={`${routes.RESTAURANT_WORKERS}/:restaurantId`} exact render={(props)=>(
-                        <AdminPanelPage {...props}>
-                            <Workers {...props}/>
-                        </AdminPanelPage>
-                    )}
-                    />
-                    <Route path={`${routes.RESTAURANT_EDIT}/:restaurantId`} exact render={(props)=>(
-                        <AdminPanelPage {...props}>
-                            <Edit {...props}/>
-                        </AdminPanelPage>
-                    )}
-                    />
-            </Switch>
-        </Router>
-
+                        />
+                        <Route path={`${routes.RESTAURANT_DASHBOARD}/:restaurantId`} exact render={(props)=>(
+                            <AdminPanelPage {...props}>
+                                <RestaurantDashboard {...props}/>
+                            </AdminPanelPage>
+                        )}
+                        />
+                        <Route path={`${routes.RESTAURANT_MENU}/:restaurantId`} exact render={(props)=>(
+                            <AdminPanelPage {...props}>
+                                <Menu {...props}/>
+                            </AdminPanelPage>
+                            )}
+                        />
+                        <Route path={`${routes.RESTAURANT_ORDERS}/:restaurantId`} exact render={(props)=>(
+                            <AdminPanelPage {...props}>
+                                <Orders {...props}/>
+                            </AdminPanelPage>
+                        )}
+                        />
+                        <Route path={`${routes.RESTAURANT_RESERVATION}/:restaurantId`} exact render={(props)=>(
+                            <AdminPanelPage {...props}>
+                                <TablesAndReservation {...props}/>
+                            </AdminPanelPage>
+                        )}
+                        />
+                        <Route path={`${routes.RESTAURANT_WORKERS}/:restaurantId`} exact render={(props)=>(
+                            <AdminPanelPage {...props}>
+                                <Workers {...props}/>
+                            </AdminPanelPage>
+                        )}
+                        />
+                        <Route path={`${routes.RESTAURANT_EDIT}/:restaurantId`} exact render={(props)=>(
+                            <AdminPanelPage {...props}>
+                                <Edit {...props}/>
+                            </AdminPanelPage>
+                        )}
+                        />
+                        <Route component={Page404}/>
+                </Switch>
+            </Router>
+        </>
     );
 }
 

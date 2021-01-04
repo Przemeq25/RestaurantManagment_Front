@@ -1,7 +1,9 @@
 import {basketConstants} from "../types";
+import {successAlert} from "./alert";
 
 export const addProduct = (product)=>{
     return dispatch => {
+        dispatch(successAlert(`${product.name} - dodano  do koszyka`));
         dispatch(addProduct(product));
         dispatch(countProductsAndPrice());
     }

@@ -54,8 +54,8 @@ const Menu = ({match}) =>{
     const handleEditMeal = (meal) =>{
         dispatch(editMeal(meal,match.params.restaurantId,meal.id));
     }
-    const handleDeleteMeal = (mealID) =>{
-        dispatch(deleteMeal(mealID,match.params.restaurantId));
+    const handleDeleteMeal = (mealID,name) =>{
+        dispatch(deleteMeal(mealID,match.params.restaurantId,name));
     }
     return (
         <>

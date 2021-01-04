@@ -15,7 +15,7 @@ export const register = (email,login,password) =>{
                 else if(errorMessage.response && errorMessage.response.status === 401){
                     dispatch(error("Wpisz poprawne dane"));
                 }else{
-                    dispatch(error("Brak połączenia z serwerem, spróbuj jeszcze raz"));
+                    dispatch(error(500));
                 }
             })
     }
