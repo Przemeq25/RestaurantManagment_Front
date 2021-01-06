@@ -57,7 +57,7 @@ const SingleRestaurantMenu = ({restaurant,location}) =>{
         restaurant.id &&
             mealsService.getMeals(restaurant.id,queryString.parse(location.search))
                 .then(response=>{
-                    setMeals(response.data.content)
+                    setMeals(response.data.meals)
                     setIsLoading(false);
                 })
                 .catch(err=>{

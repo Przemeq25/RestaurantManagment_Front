@@ -6,7 +6,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import ShoppingBasketItemWrapper from "../components/Restaurants/ShoppingBasket/ShoppingBasketItemWrapper";
 import ShoppingBasketItem from "../components/Restaurants/ShoppingBasket/ShoppingBasketItem";
-import {history, renderBastekProducts} from "../helpers/_helpers";
+import {countMinTimeToPrepare, history, renderBastekProducts} from "../helpers/_helpers";
 import {routes} from "../config/routes";
 import Jumbotron from "../components/Jumbotron";
 import {useDispatch, useSelector} from "react-redux";
@@ -82,11 +82,15 @@ const ShoppingBasket = () =>{
                             </Grid>
                             <Grid item md = {4} sm = {12} xs={12}>
                                 <Paper className={classes.confirmPaper} variant="outlined">
-                                    <Box display="flex" alignItems="center" justifyContent = "space-between" mb={3}>
-                                        <Typography variant="subtitle2"> Całkowity koszt:</Typography>
+                                    <Box display="flex" justifyContent = "space-between" mb={3}>
+                                        <Box display="flex" flexDirection="column" justifyContent="space-between" pt={1}>
+                                            <Typography variant="subtitle2" paragraph> Całkowity koszt:</Typography>
+                                            <Typography variant="subtitle2"> Minimalny czas przygotowania: </Typography>
+                                        </Box>
                                         <Box>
                                             <Typography variant="h3" align="right"> {basket.totalPrice.toFixed(2)} zł </Typography>
-                                            <Typography variant = "subtitle2"align="right"> + dostawa </Typography>
+                                            <Typography variant = "subtitle1"align="right" paragraph> + dostawa </Typography>
+                                            <Typography variant = "subtitle2" align="right"> {countMinTimeToPrepare(basket.basket)} min </Typography>
                                         </Box>
                                     </Box>
                                     <Box m={3}/>

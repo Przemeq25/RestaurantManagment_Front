@@ -15,11 +15,11 @@ const useStyles = makeStyles(()=>({
     },
 }))
 
-const ProgressButton = ({label, loading, variant, color,startIcon, size}) =>{
+const ProgressButton = ({label, loading, variant, color,startIcon, size, onClick}) =>{
     const classes = useStyles();
     return(
         <Box position="relative">
-            <Button variant= {variant} color={color} fullWidth disabled={loading} type="submit" startIcon={startIcon} size={size}> {label}</Button>
+            <Button variant= {variant} color={color} fullWidth disabled={loading} type="submit" startIcon={startIcon} size={size} onClick={onClick}> {label}</Button>
             {loading && <CircularProgress size={24} className={classes.buttonProgress}/>}
         </Box>
     )

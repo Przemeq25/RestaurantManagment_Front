@@ -1,19 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Container, Grid, Typography, useTheme,Paper,Button,List,ListItem,ListItemText,ListItemSecondaryAction,ListItemIcon,Radio,Divider,TextField} from "@material-ui/core";
+import {Box, Container, Grid, Typography, useTheme,Paper,Button,CircularProgress} from "@material-ui/core";
 import Navbar from "../components/Navbar";
 import {makeStyles} from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery/useMediaQuery";
 import ShoppingBasketItemWrapper from "../components/Restaurants/ShoppingBasket/ShoppingBasketItemWrapper";
 import ShoppingBasketItem from "../components/Restaurants/ShoppingBasket/ShoppingBasketItem";
 import {useDispatch, useSelector} from "react-redux";
-import {history, personalDataInitialValues, renderBastekProducts} from "../helpers/_helpers";
+import {countMinTimeToPrepare, history, personalDataInitialValues, renderBastekProducts} from "../helpers/_helpers";
 import {routes} from "../config/routes";
 import {authorization} from "../redux/actions/auth";
 import PersonalDataForm from "../components/PersonalDataForm";
-import CircularProgress from "../components/CircularProgress";
 import clsx from "clsx";
 import DeliveryAndPaymentWrapper from "../components/Restaurants/DeliveryAndPaymentWrapper";
-import {restaurantService} from "../services/restaurantService";
+import {getOrdersToPayment, getPersonalDataToPayment, submitOrder} from "../redux/actions/payment";
+import ProgressButton from "../components/ProgressButton";
 
 const useStyles = makeStyles(theme=>({
     pageBackground:{
@@ -48,14 +48,20 @@ const DeliveryAndPayment = () =>{
     const smDown = useMediaQuery(theme.breakpoints.down('sm'));
     const basket = useSelector(state=>state.basket);
     const [updatePersonalData,setUpdatePersonalData] = useState(false);
+    const order = useSelector(state=>state.payment);
+    const isRequesting = useSelector(state=>state.payment.isRequesting)
 
 
     useEffect(()=>{
         isLoggedIn && authorization(dispatch);
-        isLoggedIn && restaurantService.isPaymentAvailable(basket.basket[0].restaurantId).then(res=>console.log(res)).catch(err=>console.log(err))
+        //isLoggedIn && restaurantService.isPaymentAvailable(basket.basket[0].restaurantId).then(res=>console.log(res)).catch(err=>console.log(err))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-
     },[isLoggedIn])
+
+    useEffect(()=>{
+        dispatch(getPersonalDataToPayment(userData));
+        dispatch(getOrdersToPayment(basket.basket));
+    },[userData])
 
     const handleToggleUpdatePersonalData = () =>{
         setUpdatePersonalData(!updatePersonalData);
@@ -74,8 +80,10 @@ const DeliveryAndPayment = () =>{
                     <Grid item md = {8} sm={12} xs={12}>
                         <Paper className={classes.paperStyle} variant="outlined">
                             <Typography variant="h4" paragraph>Dane odbiorcy</Typography>
-                            {isLoading ? (
-                                <CircularProgress />
+                            {isLoading || !Object.keys(userData).length > 0 ? (
+                                <Box display="flex" justifyContent= "center" p={2}>
+                                    <CircularProgress color="secondary"/>
+                                </Box>
                             ):(
                                 isLoggedIn || Object.values(userData).length ? (
                                     Object.values(userData).every(x => (x !== null)) ? (
@@ -135,8 +143,7 @@ const DeliveryAndPayment = () =>{
                                             id={product.id}
                                         />
                                     ))}
-                                    <DeliveryAndPaymentWrapper />
-
+                                    <DeliveryAndPaymentWrapper restaurantId={restaurant.restaurantId}/>
                                 </ShoppingBasketItemWrapper>
                             ))}
                         </Paper>
@@ -144,14 +151,16 @@ const DeliveryAndPayment = () =>{
                     <Grid item md = {4} sm = {12} xs={12}>
                         <Paper className={clsx(classes.paperStyle,classes.sticky)} variant="outlined">
                             <Typography variant="h4" paragraph> Podsumowanie:</Typography>
-                            <Box display="flex" alignItems="center" justifyContent = "space-between" mb={3}>
-                                <Box>
-                                    <Typography variant="body2"> Całkowity koszt:</Typography>
-                                    <Typography variant="body2"> W tym dostawa:</Typography>
+                            <Box display="flex" justifyContent = "space-between" mb={3}>
+                                <Box pt={1}>
+                                    <Typography variant="body2" gutterBottom> Całkowity koszt:</Typography>
+                                    <Typography variant="subtitle2" paragraph> W tym dostawa:</Typography>
+                                    <Typography variant="subtitle2"> Minimalny czas przygotowania:</Typography>
                                 </Box>
                                 <Box>
                                     <Typography variant="h3" align="right"> {basket.totalPrice.toFixed(2)} zł </Typography>
-                                    <Typography variant = "body2"align="right"> 15.00 zł </Typography>
+                                    <Typography variant = "subtitle2"align="right"paragraph> 0.00 zł </Typography>
+                                    <Typography variant = "subtitle2"align="right"> {countMinTimeToPrepare(basket.basket)} min </Typography>
                                 </Box>
                             </Box>
                             <Box mt={5}>
@@ -165,13 +174,13 @@ const DeliveryAndPayment = () =>{
                                 </Button>
                             </Box>
                             <Box mt={1} mb={1}>
-                                <Button
+                                <ProgressButton
                                     variant="contained"
                                     color="secondary"
-                                    fullWidth
-                                >
-                                    Kupuję i płacę
-                                </Button>
+                                    label="Kupuję i płacę"
+                                    loading={isRequesting}
+                                    onClick={()=>dispatch(submitOrder(order))}
+                                />
                             </Box>
                             <Typography variant="subtitle2">Klikając ten przycisk potwierdzasz zakup.</Typography>
 

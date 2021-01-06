@@ -81,6 +81,7 @@ const MenuCard = ({name,id,ingredients,price,timeToDo,restaurantName, restaurant
         unitPrice: price,
         restaurantName: restaurantName,
         restaurantId: restaurantId,
+        timeToDo:timeToDo
     };
     return (
         <Slide in={true} direction="left" timeout={300}>

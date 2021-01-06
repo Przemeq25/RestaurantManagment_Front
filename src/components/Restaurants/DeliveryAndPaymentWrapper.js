@@ -10,32 +10,46 @@ import {
     Typography,
     RadioGroup
 } from "@material-ui/core";
+import {orderType, paymentType} from "../../helpers/_helpers";
+import {changeOrderDetail} from "../../redux/actions/payment";
+import {useDispatch, useSelector} from "react-redux";
 
-const DeliveryAndPaymentWrapper = ({paymentOnline}) =>{
+const DeliveryAndPaymentWrapper = ({paymentOnline,restaurantId}) =>{
     const [comment,setComment] = useState('');
-    const [delivery,setDelivery] = useState('TAKE_AWAY');
-    const [payment,setPayment] = useState('CASH');
+    const dispatch = useDispatch();
+    const delivery = useSelector(state=>{
+        const orderIndex = state.payment.order.findIndex(order=>order.restaurantId === restaurantId);
+        if(orderIndex !== -1){
+            return state.payment.order[orderIndex].orderType
+        }
+    })
+    const payment = useSelector(state=>{
+        const orderIndex = state.payment.order.findIndex(order=>order.restaurantId === restaurantId);
+        if(orderIndex !== -1){
+            return state.payment.order[orderIndex].paymentType
+        }
+    })
 
-    const handleComment = (e) =>{
-        setComment(e.target.value);
+    const handleComment = (value) =>{
+        dispatch(changeOrderDetail('comment',value,restaurantId))
     }
-    const handleChangeDelivery = (e) =>{
-        setDelivery(e.target.value)
+    const handleChangeDelivery = (value) =>{
+        dispatch(changeOrderDetail('orderType',value,restaurantId))
     }
-    const handleChangePayment = (e) =>{
-        setPayment(e.target.value)
+    const handleChangePayment = (value) =>{
+        dispatch(changeOrderDetail('paymentType',value,restaurantId))
     }
     return(
         <>
             <Box mt={4} mb={4}>
                 <Typography variant="h5" paragraph>Dostawa i płatność</Typography>
                 <List style={{flex:1}}>
-                    <RadioGroup aria-label="gender" name="gender1" value={delivery} onChange={handleChangeDelivery}>
-                        <ListItem dense button onClick={()=>setDelivery("TAKE_AWAY")}>
+                    <RadioGroup aria-label="gender" name="gender1" value={delivery || orderType.TAKE_AWAY }>
+                        <ListItem dense button onClick={()=>handleChangeDelivery(orderType.TAKE_AWAY)}>
                             <ListItemIcon>
                                 <Radio
                                     edge="start"
-                                    value="TAKE_AWAY"
+                                    value={orderType.TAKE_AWAY}
                                     disableRipple
                                 />
                             </ListItemIcon>
@@ -44,40 +58,40 @@ const DeliveryAndPaymentWrapper = ({paymentOnline}) =>{
                                 <Typography variant="body2"> 0.00zł </Typography>
                             </ListItemSecondaryAction>
                         </ListItem>
-                        <ListItem dense button onClick={()=>setDelivery("DELIVERY")}>
+                        <ListItem dense button onClick={()=>handleChangeDelivery(orderType.DELIVERY)}>
                             <ListItemIcon>
                                 <Radio
                                     edge="start"
-                                    value="DELIVERY"
+                                    value={orderType.DELIVERY}
                                     disableRipple
                                 />
                             </ListItemIcon>
                             <ListItemText primary="Dostawa na adres" />
                             <ListItemSecondaryAction>
-                                <Typography variant="body2"> 15.00zł </Typography>
+                                <Typography variant="body2"> 0.00zł </Typography>
                             </ListItemSecondaryAction>
                         </ListItem>
                     </RadioGroup>
                 </List>
                 <Divider />
                 <List style={{flex:1}}>
-                    <RadioGroup aria-label="gender" name="gender1" value={payment} onChange={handleChangePayment}>
-                        <ListItem dense button onClick={()=>setPayment("CASH")}>
+                    <RadioGroup aria-label="gender" name="gender1" value={payment || paymentType.CASH}>
+                        <ListItem dense button onClick={()=>handleChangePayment(paymentType.CASH)}>
                             <ListItemIcon>
                                 <Radio
                                     edge="start"
-                                    value="CASH"
+                                    value={paymentType.CASH}
                                     disableRipple
                                 />
                             </ListItemIcon>
                             <ListItemText primary="Płatność przy odbiorze" />
                         </ListItem>
                         {paymentOnline && (
-                            <ListItem dense button onClick={()=>setPayment("ONLINE")}>
+                            <ListItem dense button onClick={()=>handleChangePayment(paymentType.CASH)}>
                                 <ListItemIcon>
                                     <Radio
                                         edge="start"
-                                        value="ONLINE"
+                                        value={paymentType.ONLINE}
                                         disableRipple
                                     />
                                 </ListItemIcon>
@@ -92,7 +106,8 @@ const DeliveryAndPaymentWrapper = ({paymentOnline}) =>{
                 rows={3}
                 variant="outlined"
                 value={comment}
-                onChange={handleComment}
+                onChange={(e)=>setComment(e.target.value)}
+                onBlur={()=>handleComment(comment)}
                 fullWidth
                 label="Komentarz do zamówienia"
             />

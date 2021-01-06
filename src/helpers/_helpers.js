@@ -177,5 +177,21 @@ export const searchWriteName = (value,setQuery,query,pushToHistory)=>{
         pushToHistory(newQuery)
     }
 }
+export const countMinTimeToPrepare = (basket) =>{
+    if(basket.length){
+        return Math.max.apply(Math, basket.map((product)=> product.timeToDo))
+    }else{
+        return "-";
+    }
+}
+export const orderType={
+    TAKE_AWAY:"TAKE_AWAY",
+    IN_LOCAL:"IN_LOCAL",
+    DELIVERY:"DELIVERY",
+}
+export const paymentType={
+    ONLINE:"ONLINE",
+    CASH:"CASH",
+}
 
 

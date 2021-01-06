@@ -124,6 +124,14 @@ const isPaymentAvailable = (restaurantID) =>{
         }
     });
 }
+const submitOrder = (order,restaurantID) =>{
+    return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantID}/order`,order,
+        {
+            headers:{
+                Authorization:`bearer ${ localStorage.getItem('access_token')}`
+            }
+        })
+}
 
 
 export const restaurantService ={
@@ -137,5 +145,6 @@ export const restaurantService ={
     addPicture,
     getAllRestaurants,
     getSingleRestaurant,
-    isPaymentAvailable
+    isPaymentAvailable,
+    submitOrder
 }
