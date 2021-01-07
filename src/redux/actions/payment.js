@@ -51,10 +51,10 @@ export const submitOrder = (order) =>{
             Promise.all(promises)
                 .then(() => {
                     dispatch({type:paymentConstants.PAYMENT_END})
-                    history.push(routes.PROFILE)
+                    history.push(routes.MY_ORDERS)
                     dispatch(successAlert("Zamówienie skompletowane!"))
                 })
-                .catch(()=>dispatch(errorAlert("Niektóre zamówienia nie zostało skompletowane! Spróbuj ponownie")))
+                .catch(()=>dispatch(errorAlert("Niektóre zamówienia nie zostały skompletowane! Spróbuj ponownie")))
     }
 
 

@@ -293,7 +293,7 @@ const Navbar = () =>{
                                                 <MenuItem
                                                     onClick={handleCloseMenu}
                                                     component={NavLink}
-                                                    to={routes.CLIENT_ORDERS}
+                                                    to={routes.MY_ORDERS}
                                                     activeClassName={classes.selectedItem}
                                                     className={classes.menuItem}
                                                 >

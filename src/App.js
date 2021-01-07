@@ -28,6 +28,7 @@ import UserAccount from "./pages/UserAccount";
 import TablesAndReservation from "./pages/Admin/TablesAndReservation";
 import Alert from "./components/Alert";
 import Page404 from "./pages/Page404";
+import MyOrders from "./pages/MyOrders";
 
 
 const App =()=>{
@@ -48,6 +49,7 @@ const App =()=>{
                     <Route exact path={routes.CONFIRM} component = {RegisterConfirmation}/>
                     <Route exact path={routes.RESTAURANTS} component = {Restaurants}/>
                     <Route exact path={routes.PROFILE} component = {UserAccount}/>
+                    <Route exact path={routes.MY_ORDERS} component = {MyOrders}/>
                     <Route path={`${routes.SINGLERESTAURANTMENU}/:restaurantId`} exact render={(props)=>(
                         <SingleRestaurantWrapper {...props}>
                             <SingleRestaurantMenu {...props} />

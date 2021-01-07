@@ -10,7 +10,7 @@ export const routes ={
     SHOPPINGBASKET:"/shopping_basket",
     DELIVERYANDPAYMENT:'/delivery/payment',
     PROFILE:"/profile",
-    CLIENT_ORDERS:'/your_orders',
+    MY_ORDERS:"/my_orders",
     ADMIN_PANEL:'/admin',
     RESTAURANT_DASHBOARD: `/admin/dashboard`,
     RESTAURANT_MENU:"/admin/menu",
