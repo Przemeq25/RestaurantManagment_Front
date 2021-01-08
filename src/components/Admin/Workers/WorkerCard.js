@@ -4,6 +4,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import PhoneIcon from '@material-ui/icons/Phone';
 import MailIcon from '@material-ui/icons/Mail';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import {useDispatch} from "react-redux";
+import {deleteWorker} from "../../../redux/actions/workers";
 
 const useStyles = makeStyles((theme)=>({
     cardStyle:{
@@ -19,7 +21,8 @@ const useStyles = makeStyles((theme)=>({
     }
 }))
 
-const WorkerCard = ({city,email,forename,surname,houseNumber,street,phoneNumber,postCode}) =>{
+const WorkerCard = ({id,city,email,forename,surname,houseNumber,street,phoneNumber,postCode,restaurantID}) =>{
+    const dispatch = useDispatch();
     const classes = useStyles();
     return (
         <Grow in={true} timeout={500}>
@@ -69,7 +72,14 @@ const WorkerCard = ({city,email,forename,surname,houseNumber,street,phoneNumber,
                         </Box>
                     </Box>
                     <Box>
-                        <Button variant="outlined" color="primary" startIcon={<AssignmentIndIcon/>}>Zwolnij pracownika</Button>
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            startIcon={<AssignmentIndIcon/>}
+                            onClick={()=>dispatch(deleteWorker(id,restaurantID))}
+                        >
+                            Usuń dane pracownika
+                        </Button>
                     </Box>
 
                 </Box>

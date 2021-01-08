@@ -54,7 +54,7 @@ const Workers = ({match}) =>{
 
                         workers.map(worker=>(
                             <Grid item xs ={12} sm ={6} md = {4}  xl={3} key={worker.email}>
-                                <WorkerCard {...worker}/>
+                                <WorkerCard {...worker} restaurantID={match.params.restaurantId}/>
                             </Grid>
                         ))
                     ):(

@@ -13,10 +13,12 @@ const getMyOrders = () =>{
     })
 }
 
-const getOrdersForRestaurants = (restaurantId) =>{
+const getOrdersForRestaurants = (restaurantId,orderStatus) =>{
     return axios.get(`${appUrl}/order-api/restaurants/${restaurantId}/orders`,{
         params:{
-            sort:'time,desc',
+            archived:true,
+            sort:'time,asc',
+            orderStatus:orderStatus,
         },
         headers:{
             Authorization:`bearer ${ localStorage.getItem('access_token')}`

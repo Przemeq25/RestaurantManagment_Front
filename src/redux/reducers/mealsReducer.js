@@ -2,7 +2,7 @@ import {mealsConstants} from '../types';
 
 
 const initialState = {
-    isRequesting:false,
+    isRequesting:true,
     isDeleteRequesting:false,
     isEditRequesting:false,
     isAddRequesting:false,
