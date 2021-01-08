@@ -53,7 +53,7 @@ const UserAccount = () =>{
         <Box className={classes.pageBackground}>
             <Navbar/>
             <Container>
-                <Box mt={mdDown ? 2 : 5} mb={mdDown ? 0 : 5}>
+                <Box mt={mdDown ? 2 : 5} mb={mdDown ? 2 : 5}>
                     <Typography variant="h3" color="secondary">Twoje konto</Typography>
                 </Box>
                 <Paper className={classes.paperStyle} variant="outlined">

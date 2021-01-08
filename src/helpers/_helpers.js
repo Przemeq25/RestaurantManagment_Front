@@ -193,5 +193,39 @@ export const paymentType={
     ONLINE:"ONLINE",
     CASH:"CASH",
 }
+export const orderTypeTranslate = (order) => {
+    switch(order) {
+        case orderType.TAKE_AWAY:
+            return 'Na wynos';
+        case orderType.IN_LOCAL:
+            return 'W lokalu';
+        case orderType.DELIVERY:
+            return 'Dostawa';
+        default:
+            return 'W lokalu'
+    }
+}
+export const paymentTypeTranslate = (payment)=>{
+    switch(payment) {
+        case paymentType.CASH:
+            return 'Gotówka';
+        case paymentType.CASH:
+            return 'Płatność online';
+        default:
+            return "Gotówka"
+    }
+}
+export const orderStatusTypeTranslate = (status)=>{
+    switch(status) {
+        case "IN_PROGRESS":
+            return 'W trakcie';
+        case 'DELIVERY':
+            return "W dostawie";
+        case "DONE":
+            return "Zakończone";
+        default:
+            return "W trakcie"
+    }
+}
 
 

@@ -201,7 +201,7 @@ const AdminPanel = ({children,match}) => {
                                                 <MenuItem
                                                     onClick={handleClose}
                                                     component={NavLink}
-                                                    to={routes.CLIENT_ORDERS}
+                                                    to={routes.MY_ORDERS}
                                                     activeClassName={classes.selectedItem}
                                                     className={classes.menuItem}
                                                 >
