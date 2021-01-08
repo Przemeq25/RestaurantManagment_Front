@@ -3,24 +3,52 @@ import {TableRow,TableCell,IconButton,Collapse,Box,Typography,Table,TableHead,Ta
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import PhoneIcon from '@material-ui/icons/Phone';
+import moment from 'moment';
+import {orderStatusTypeTranslate, paymentTypeTranslate, orderTypeTranslate, isValidUrl} from "../../helpers/_helpers";
+import AppLogo from "../AppLogo";
+import {makeStyles} from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme=>({
+    typographyHidden:{
+        whiteSpace: "nowrap",
+        textOverflow: "ellipsis",
+        width: "150px",
+        display: "block",
+        overflow: "hidden"
+    }
+}))
 
 const OrderTableRow = ({row}) =>{
+    const classes = useStyles();
     const [open, setOpen] = useState(false);
     return (
         <>
-            <TableRow>
+            <TableRow hover onClick={() => setOpen(!open)}>
                 <TableCell>
-                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+                    <IconButton aria-label="expand row" size="small" >
                         {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    2020-01-16
+                    <Typography variant="body2">
+                        {moment(row.time).format("DD-MM-YYYY")}
+                    </Typography>
+                    <Typography variant="subtitle2">
+                        {moment(row.time).format("HH:mm")}
+                    </Typography>
                 </TableCell>
-                <TableCell>W realizacji</TableCell>
-                <TableCell>Dostawa</TableCell>
-                <TableCell>Pizza, Zupa</TableCell>
-                <TableCell>15,50</TableCell>
+                <TableCell>
+                    <Chip label= {orderStatusTypeTranslate(row.orderStatus)} variant="outlined" color="primary"/>
+                </TableCell>
+                <TableCell>{orderTypeTranslate(row.orderType)}</TableCell>
+                <TableCell>
+                    <Typography className={classes.typographyHidden}>
+                        {row.meals.map(meal=>meal.name).join(", ")}
+                    </Typography>
+                </TableCell>
+                <TableCell>
+                    <Typography variant="body2" style={{fontWeight:500}}>{row.price.toFixed(2)} zł</Typography>
+                </TableCell>
             </TableRow>
             <TableRow>
                 <TableCell colSpan={6}>
@@ -34,23 +62,28 @@ const OrderTableRow = ({row}) =>{
                                     <TableRow>
                                         <TableCell></TableCell>
                                         <TableCell>Nazwa</TableCell>
+                                        <TableCell>Składniki</TableCell>
                                         <TableCell align="right">Ilość</TableCell>
-                                        <TableCell align="right">Cena</TableCell>
+                                        <TableCell align="right">Cena jednostkowa</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {/*{row.history.map((historyRow) => (*/}
-                                    {/*    <TableRow key={historyRow.date}>*/}
-                                    {/*        <TableCell component="th" scope="row">*/}
-                                    {/*            {historyRow.date}*/}
-                                    {/*        </TableCell>*/}
-                                    {/*        <TableCell>{historyRow.customerId}</TableCell>*/}
-                                    {/*        <TableCell align="right">{historyRow.amount}</TableCell>*/}
-                                    {/*        <TableCell align="right">*/}
-                                    {/*            {Math.round(historyRow.amount * row.price * 100) / 100}*/}
-                                    {/*        </TableCell>*/}
-                                    {/*    </TableRow>*/}
-                                    {/*))}*/}
+                                    {row.meals.map((meal) => (
+                                        <TableRow key={meal.id}>
+                                            <TableCell component="th" scope="row">
+                                                {isValidUrl(meal.image) ? (
+                                                        <img src={meal.image} alt="image" style={{width:60,height:60}}/>
+                                                    ) : (
+                                                        <AppLogo size={10}/>
+                                                    )
+                                                }
+                                            </TableCell>
+                                            <TableCell>{meal.name}</TableCell>
+                                            <TableCell><Typography variant="body2" className={classes.typographyHidden}>{meal.ingredients}</Typography></TableCell>
+                                            <TableCell align="right">x{meal.quantity}</TableCell>
+                                            <TableCell align="right">{meal.price}zł</TableCell>
+                                        </TableRow>
+                                    ))}
                                 </TableBody>
                             </Table>
                             <Divider/>
@@ -60,25 +93,25 @@ const OrderTableRow = ({row}) =>{
                                         <Typography variant="h5" gutterBottom>
                                             Płatność:
                                         </Typography>
-                                        <Typography variant="body2" display="inline" paragraph style={{marginRight:16}}>Gotówka</Typography>
-                                        <Chip label="Zapłacono" color= "secondary"/>
+                                        <Typography variant="body2" display="inline" paragraph style={{marginRight:16}}>{paymentTypeTranslate(row.paymentMethod)}</Typography>
+                                        <Chip label={row.payed ? "Zapłacono" : "Do zapłaty!"} color= "secondary"/>
                                         <Box mb={2}/>
 
                                         <Typography variant="h5" gutterBottom>
                                             Komentarz:
                                         </Typography>
-                                        <Typography variant="subtitle2">Brak</Typography>
+                                        <Typography variant="subtitle2">{row.comment ? row.comment : "Brak"}</Typography>
                                     </Grid>
                                     <Grid item xs = {12} md = {4}>
                                         <Box>
-                                            <Typography variant="body2">Zbigniew Kicaj</Typography>
-                                            <Typography variant="body2">32-432 Tarnów</Typography>
-                                            <Typography variant="body2" gutterBottom>ul. Mickiewicza 123</Typography>
+                                            <Typography variant="body2">{row.forename}  {row.surname}</Typography>
+                                            <Typography variant="body2">{row.postCode} {row.city}</Typography>
+                                            <Typography variant="body2" gutterBottom>ul. {row.street} {row.houseNumber}</Typography>
                                             <Box display="flex" alignItems="center">
                                                 <Box mr={1}>
                                                     <PhoneIcon color="secondary"/>
                                                 </Box>
-                                                <Typography variant="body2">828 827 912</Typography>
+                                                <Typography variant="body2">{row.phoneNumber}</Typography>
                                             </Box>
                                         </Box>
                                     </Grid>

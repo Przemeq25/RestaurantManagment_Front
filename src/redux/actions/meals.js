@@ -9,7 +9,7 @@ export const getMeals = (restaurantID) =>{
     return dispatch =>{
         dispatch(request());
         mealsService.getMeals(restaurantID)
-            .then(response=>dispatch(success(response.data.content)))
+            .then(response=>dispatch(success(response.data.meals)))
             .catch(()=>dispatch(error(500)));
     }
     function request(){ return{type:mealsConstants.MEALS_REQUEST}}
