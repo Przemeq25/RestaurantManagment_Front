@@ -1,6 +1,7 @@
 import {ordersConstants} from "../types";
 import {orderService} from "../../services/ordersService";
-import {errorAlert} from "./alert";
+import {errorAlert, successAlert} from "./alert";
+import {orderStatus} from "../../helpers/_helpers";
 
 
 export const getOrders = (restaurantID,orderStatus) => {
@@ -22,4 +23,22 @@ export const changeMealStatus = (mealID,orderID,isChecked) =>{
 }
 export const changeAllMealsStatus = (orderID,isChecked)=>{
     return dispatch=>dispatch({type:ordersConstants.CHECK_ALL_MEALS,payload:{orderIndex:orderID, isFinished:isChecked}})
+}
+export const changeOrderStatus =(restaurantId,order,status = orderStatus.IN_DELIVERY)=>{
+    return dispatch =>{
+        dispatch(request());
+        orderService.changeOrderStatus(restaurantId,{...order,orderStatus:status})
+            .then(response=>{
+                dispatch(successAlert("Przeniesiono zamówienie do kolejnego etapu!"));
+                dispatch(success(response.data));
+            })
+            .catch(()=>{
+                errorAlert("Nie udało się przenieść zamówienia do kolejnego etapu!")
+            })
+    }
+    function request(){return{type:ordersConstants.REQUESTING}};
+    function success(data){return{type:ordersConstants.MOVE_ORDER_TO_NEXT_STATUS, payload:data}}
+}
+export const changeOrderPayStatus = (orderID,isChecked) =>{
+    return dispatch=>dispatch({type:ordersConstants.CHANGE_ORDER_PAY_STATUS,payload:{id:orderID,isPayed:isChecked}})
 }

@@ -21,6 +21,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {orderStatus} from "../../helpers/_helpers";
 import {getOrders, switchOrderStatus} from "../../redux/actions/orders";
 import Jumbotron from "../../components/Jumbotron";
+import AddOrder from "../../components/Admin/Orders/AddOrder";
 
 const useStyles = makeStyles(theme=>({
     root: {
@@ -53,11 +54,12 @@ const useStyles = makeStyles(theme=>({
     extendedIcon: {
         marginRight: theme.spacing(1),
     },
-        ordersContainerPadding:{
-            [theme.breakpoints.down("sm")]:{
-                paddingBottom:60
-            }
+    ordersContainerPadding:{
+        [theme.breakpoints.down('md')]:{
+            padding: theme.spacing(1)
         },
+        padding: `${theme.spacing(8)}px ${theme.spacing(16)}px`
+    },
 
 }));
 const MyBottomNavigationAction = withStyles(theme=>({
@@ -89,6 +91,7 @@ const Orders = ({match}) =>{
     const isFetching = useSelector(state=>state.orders.isFetching);
     const currentOrderStatus = useSelector(state=>state.orders.orderStatus);
     const orders = useSelector(state=>state.orders.orders);
+    const [addOrderIsOpen, setAddOrderIsOpen] = useState(false);
 
     useEffect(()=>{
         const fetchData = () =>{
@@ -100,15 +103,19 @@ const Orders = ({match}) =>{
     const handleChange = (event, newValue) => {
         dispatch(switchOrderStatus(newValue));
     };
+    const handleToggleAddOrder = () =>{
+        setAddOrderIsOpen(!addOrderIsOpen);
+    }
 
     return(
         <>
+            <Box display = "flex" justifyContent="space-between">
+                <Typography variant="h3">Zamówienia:</Typography>
+                <Search/>
+            </Box>
+            <Typography variant="subtitle2" paragraph >Przejmij kontrolę nad zamówieniami!</Typography>
             <div className={classes.ordersContainerPadding}>
-                <Box display = "flex" justifyContent="space-between">
-                    <Typography variant="h3">Zamówienia:</Typography>
-                    <Search/>
-                </Box>
-                <Typography variant="subtitle2" paragraph >Przejmij kontrolę nad zamówieniami!</Typography>
+
                 {isFetching ? (
                     <Backdrop open={isFetching} invisible>
                         <CircularProgress color="inherit" />
@@ -118,6 +125,7 @@ const Orders = ({match}) =>{
                         <OrderRow
                             key={order.id}
                             orderIndex={index}
+                            restaurantId={restaurantID}
                             {...order}
                         />
                     )
@@ -146,11 +154,12 @@ const Orders = ({match}) =>{
 
             </div>
             <Hidden smDown>
-                <Fab color="primary" size="small" variant = "extended" className={classes.fab}>
+                <Fab color="primary" size="small" variant = "extended" className={classes.fab} onClick={handleToggleAddOrder}>
                     <AddIcon className={classes.extendedIcon}/>
                 Dodaj zamówienie
                 </Fab>
             </Hidden>
+            <AddOrder addOrderIsOpen={addOrderIsOpen} handleToggleAddOrder={handleToggleAddOrder}/>
         </>
     )
 };

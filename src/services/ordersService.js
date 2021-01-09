@@ -25,8 +25,18 @@ const getOrdersForRestaurants = (restaurantId,orderStatus) =>{
         }
     })
 }
+const changeOrderStatus = (restaurantId,order)=>{
+    return axios.put(`${appUrl}/order-api/restaurants/${restaurantId}/orders/${order.id}`,
+        order,
+{
+        headers:{
+            Authorization:`bearer ${ localStorage.getItem('access_token')}`
+        }
+    })
+}
 
 export const orderService = {
     getMyOrders,
-    getOrdersForRestaurants
+    getOrdersForRestaurants,
+    changeOrderStatus
 }

@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
         whiteSpace: 'nowrap',
         backgroundColor:'#ededed',
         color:theme.palette.text.disabled,
-        boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
+        //boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
 
     },
     icon:{
@@ -107,7 +107,7 @@ const AdminDrawer = ({isDrawerOpen,closeDrawer,match}) =>{
                             {!isDrawerOpen && <Typography className={classes.iconText}>REZERWACJE</Typography>}
                         </Desktop>
                     </ListItemIcon>
-                    <ListItemText>REZERWACJE</ListItemText>
+                    <ListItemText>Rezerwacje</ListItemText>
                 </ListItem>
                 <ListItem disableGutters button component={NavLink} to={`${routes.SINGLERESTAURANTMENU}/${restaurantId}`} activeClassName="Mui-selected">
                     <ListItemIcon className={classes.icon}>

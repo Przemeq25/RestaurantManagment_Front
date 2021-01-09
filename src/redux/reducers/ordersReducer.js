@@ -3,6 +3,7 @@ import {ordersConstants} from "../types";
 
 const initialState = {
     isFetching:false,
+    isRequesting:false,
     orderStatus: orderStatus.IN_PROGRESS,
     orders:[],
 }
@@ -55,6 +56,31 @@ export const ordersReducer = (state=initialState, action) =>{
                 ...state,
                 orders: readyOrders,
             }
+        case ordersConstants.REQUESTING:
+            return {
+                ...state,
+                isRequesting: true,
+            }
+
+        case ordersConstants.MOVE_ORDER_TO_NEXT_STATUS:
+            const orderIndex = state.orders.findIndex(order=>order.id === action.payload.id)
+            const orders = [...state.orders];
+            orders.splice(orderIndex,1);
+            return {
+                ...state,
+                orders: orders,
+                isRequesting: false,
+            };
+        case ordersConstants.CHANGE_ORDER_PAY_STATUS: {
+            const orderIndex = state.orders.findIndex(order => order.id === action.payload.id);
+            const orders = [...state.orders];
+            orders[orderIndex].payed = action.payload.isPayed;
+            return {
+                ...state,
+                orders: orders,
+            };
+        }
+
         default:
             return state
     }

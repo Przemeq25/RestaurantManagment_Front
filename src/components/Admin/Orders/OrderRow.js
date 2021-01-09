@@ -19,6 +19,7 @@ import {
     TableContainer,
     Table,
     TableBody, Grow,
+    FormGroup,FormControl,FormControlLabel,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
@@ -28,11 +29,22 @@ import PaymentIcon from '@material-ui/icons/Payment';
 import PhoneIcon from '@material-ui/icons/Phone';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
-import {orderType as selectOrderType, orderTypeTranslate, paymentTypeTranslate} from "../../../helpers/_helpers";
+import {
+    orderStatus,
+    orderType as selectOrderType,
+    orderTypeTranslate,
+    paymentTypeTranslate
+} from "../../../helpers/_helpers";
 import moment from "moment";
-import {useDispatch} from "react-redux";
-import {ordersConstants} from "../../../redux/types";
-import {changeAllMealsStatus, changeMealStatus} from "../../../redux/actions/orders";
+import {useDispatch, useSelector} from "react-redux";
+import {
+    changeAllMealsStatus,
+    changeMealStatus,
+    changeOrderPayStatus,
+    changeOrderStatus
+} from "../../../redux/actions/orders";
+import {errorAlert} from "../../../redux/actions/alert";
+import ProgressButton from "../../ProgressButton";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -60,9 +72,10 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const OrderRow = ({orderIndex,date,time,orderType, paymentMethod,meals,price, comment,...order}) =>{
+const OrderRow = ({restaurantId,orderIndex,time,meals,price,...order}) =>{
     const classes = useStyles();
     const dispatch = useDispatch();
+    const isRequesting = useSelector(state=>state.orders.isRequesting);
 
     return (
         <Grow in={true} timeout={500}>
@@ -72,7 +85,7 @@ const OrderRow = ({orderIndex,date,time,orderType, paymentMethod,meals,price, co
                         expandIcon={<ExpandMoreIcon />}
                         classes={{root:classes.accordionSummary}}
                     >
-                        <Grid container spacing={1} alignItems="center">
+                        <Grid container spacing={2} alignItems="center">
                             <Grid item xs = {3} sm = {2}>
                                 <Typography variant = "h5" >{moment(time).format("DD-MM-YYYY")}</Typography>
                                 <Typography variant="subtitle2">
@@ -81,7 +94,7 @@ const OrderRow = ({orderIndex,date,time,orderType, paymentMethod,meals,price, co
 
                             </Grid>
                             <Hidden xsDown>
-                                <Grid container item sm = {6}>
+                                <Grid container item sm = {5}>
                                     <Typography className={classes.typographyHidden}>
                                         {meals.map(meal=>meal.name).join(", ")}
                                     </Typography>
@@ -89,19 +102,19 @@ const OrderRow = ({orderIndex,date,time,orderType, paymentMethod,meals,price, co
                             </Hidden>
                             <Grid item xs = {4} sm = {2}>
                                 <Chip
-                                    icon={orderType === selectOrderType.DELIVERY  ? <DirectionsCarIcon /> : orderType === selectOrderType.IN_LOCAL ? <RestaurantIcon/> : <LocalMallIcon/>}
-                                    label={orderTypeTranslate(orderType) || "Na wynos"}
+                                    icon={order.orderType === selectOrderType.DELIVERY  ? <DirectionsCarIcon /> : order.orderType === selectOrderType.IN_LOCAL ? <RestaurantIcon/> : <LocalMallIcon/>}
+                                    label={orderTypeTranslate(order.orderType) || "Na wynos"}
                                     variant="outlined"
                                     color="secondary"
                                 />
                             </Grid>
-                            <Grid container item xs = {5} sm = {2} justify="flex-end" alignItems="center">
+                            <Grid container item xs = {5} sm = {3} justify="flex-end" alignItems="center">
                                 <PaymentIcon color="primary" fontSize="small"/>
                                 <Box ml={1} mr={1}>
                                 <Typography variant="body1" style={{fontWeight:500}}> {price} zł</Typography>
                                 </Box>
                                 <Box>
-                                    <Typography variant="h5"  color="secondary">{paymentTypeTranslate(paymentMethod)}</Typography>
+                                    <Typography variant="h5"  color="secondary">{paymentTypeTranslate(order.paymentMethod)}</Typography>
                                     <Typography variant="subtitle2">{order.payed ? "Zapłacono" : "Do zapłaty"}</Typography>
 
                                 </Box>
@@ -115,13 +128,15 @@ const OrderRow = ({orderIndex,date,time,orderType, paymentMethod,meals,price, co
                                     <Table>
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell padding="checkbox">
-                                                    <Checkbox
-                                                        checked={order.isAllMealsFinished}
-                                                        onChange={e=>dispatch(changeAllMealsStatus(orderIndex,e.target.checked))}
-
-                                                    />
-                                                </TableCell>
+                                                {
+                                                    order.orderStatus === orderStatus.IN_PROGRESS &&
+                                                    <TableCell padding="checkbox">
+                                                        <Checkbox
+                                                            checked={order.isAllMealsFinished}
+                                                            onChange={e => dispatch(changeAllMealsStatus(orderIndex, e.target.checked))}
+                                                        />
+                                                    </TableCell>
+                                                }
                                                 <TableCell>ID</TableCell>
                                                 <TableCell>Nazwa</TableCell>
                                                 <TableCell>Ilosc</TableCell>
@@ -132,12 +147,15 @@ const OrderRow = ({orderIndex,date,time,orderType, paymentMethod,meals,price, co
                                         <TableBody>
                                             {meals.map((meal,id)=>(
                                                 <TableRow key = {id}>
-                                                    <TableCell padding="checkbox">
-                                                        <Checkbox
-                                                            checked={meal.isFinished}
-                                                            onChange={(e)=>dispatch(changeMealStatus(meal.id,orderIndex,e.target.checked))}
-                                                        />
-                                                    </TableCell>
+                                                    {
+                                                        order.orderStatus === orderStatus.IN_PROGRESS &&
+                                                            <TableCell padding="checkbox">
+                                                                <Checkbox
+                                                                    checked={meal.isFinished}
+                                                                    onChange={(e) => dispatch(changeMealStatus(meal.id, orderIndex, e.target.checked))}
+                                                                />
+                                                            </TableCell>
+                                                    }
                                                     <TableCell padding="checkbox" align="center">#{id}</TableCell>
                                                     <TableCell>{meal.name}</TableCell>
                                                     <TableCell>{meal.quantity}</TableCell>
@@ -151,7 +169,7 @@ const OrderRow = ({orderIndex,date,time,orderType, paymentMethod,meals,price, co
                                 </TableContainer>
                                 <Box mt={2}/>
                                 <Typography variant='h4'> Komentarz do zamówienia: </Typography>
-                                <Typography variant='subtitle2'>{comment ? comment : "Brak"} </Typography>
+                                <Typography variant='subtitle2'>{order.comment ? order.comment : "Brak"} </Typography>
                                 <Hidden mdUp>
                                     <Box mb={2}/>
                                     <Divider variant="horizontal"/>
@@ -187,9 +205,67 @@ const OrderRow = ({orderIndex,date,time,orderType, paymentMethod,meals,price, co
                     <Divider />
                     <AccordionActions classes={{root:classes.accordionActions}}>
                         <Box>
-                            <Button size="small" color="secondary" startIcon={<DoubleArrowIcon/>} variant="outlined">
-                                Gotowe
-                            </Button>
+                            { order.orderStatus === orderStatus.DONE ? (
+                                <Button
+                                    size="small"
+                                    color="secondary"
+                                    startIcon={<DoubleArrowIcon/>}
+                                    variant="outlined"
+                                >
+                                    Gotowe
+                                </Button>
+                            ) : (
+                                order.orderStatus ===  orderStatus.IN_DELIVERY ? (
+                                    <Box display = "flex" alignItems = "center">
+                                        <FormGroup row>
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={order.payed}
+                                                        onChange={(e)=>dispatch(changeOrderPayStatus(order.id,e.target.checked))}
+                                                    />
+                                                }
+                                                label="Zapłacono"
+                                            />
+                                        </FormGroup>
+                                        <ProgressButton
+                                            label="Gotowe"
+                                            size="small"
+                                            color="secondary"
+                                            startIcon={<DoubleArrowIcon/>}
+                                            variant="outlined"
+                                            loading={isRequesting}
+                                            onClick={()=>{
+                                                if(order.payed){
+                                                    dispatch(changeOrderStatus(restaurantId,order,orderStatus.DONE))
+                                                }else{
+                                                    dispatch(errorAlert("Zamówienie musi zostać opłacone!"))
+                                                }
+                                            }}
+                                        />
+                                </Box>
+                                    ):(
+                                        <Box display="flex" alignItems="center">
+                                            <Box mr={1}/>
+                                            <ProgressButton
+                                                label="Gotowe"
+                                                size="small"
+                                                color="secondary"
+                                                startIcon={<DoubleArrowIcon/>}
+                                                variant="outlined"
+                                                loading={isRequesting}
+                                                onClick={()=>{
+                                                    if(order.isAllMealsFinished){
+                                                        dispatch(changeOrderStatus(restaurantId,order,orderStatus.IN_DELIVERY))
+                                                    }else{
+                                                        dispatch(errorAlert("Wszystkie posiłki muszą być gotowe!"))
+                                                    }
+                                                }}
+                                            />
+                                        </Box>
+                                    )
+                                )
+                            }
                         </Box>
                     </AccordionActions>
                 </Accordion>
