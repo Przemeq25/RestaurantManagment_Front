@@ -182,23 +182,30 @@ const OrderRow = ({restaurantId,orderIndex,time,meals,price,...order}) =>{
                                 </Grid>
                             </Hidden>
                             <Grid container item xs = {12} md ={3} direction="column" >
-                                <Box display="flex" alignItems="center" >
-                                    <Box mr={1}>
-                                        <MapIcon color="secondary"/>
-                                    </Box>
-                                    <Box>
-                                        <Typography variant="body2">{order.forename}  {order.surname}</Typography>
-                                        <Typography variant="body2">{order.postCode} {order.city}</Typography>
-                                        <Typography variant="body2" gutterBottom>ul. {order.street} {order.houseNumber}</Typography>
-                                    </Box>
+                                {order.street ?
+                                    <>
+                                    <Box display="flex" alignItems="center">
+                                        <Box mr={1}>
+                                            <MapIcon color="secondary"/>
+                                        </Box>
+                                        <Box>
+                                            <Typography variant="body2">{order.forename} {order.surname}</Typography>
+                                            <Typography variant="body2">{order.postCode} {order.city}</Typography>
+                                            <Typography variant="body2"
+                                                        gutterBottom>ul. {order.street} {order.houseNumber}</Typography>
+                                        </Box>
 
-                                </Box>
-                                <Box display="flex" alignItems="center">
-                                    <Box mr={1}>
-                                        <PhoneIcon color="secondary"/>
                                     </Box>
-                                    <Typography variant="body2">{order.phoneNumber}</Typography>
-                                </Box>
+                                    < Box display = "flex" alignItems="center">
+                                        <Box mr={1}>
+                                            <PhoneIcon color="secondary"/>
+                                        </Box>
+                                        <Typography variant="body2">{order.phoneNumber}</Typography>
+                                    </Box>
+                                    </>
+                                    :
+                                    <Typography variant="subtitle2">Zamówienie w restauracji</Typography>
+                                }
                             </Grid>
                         </Grid>
                     </AccordionDetails>

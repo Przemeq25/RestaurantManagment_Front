@@ -184,6 +184,14 @@ export const countMinTimeToPrepare = (basket) =>{
         return "-";
     }
 }
+export const handleRenderMenuByCategory = (meals) => meals.reduce(
+    (acc, current)=> ({
+        ...acc,
+        [current['category']] :[
+            ...(acc[current['category']] || []),current]
+    })
+    ,{}
+);
 export const orderType={
     TAKE_AWAY:"TAKE_AWAY",
     IN_LOCAL:"IN_LOCAL",

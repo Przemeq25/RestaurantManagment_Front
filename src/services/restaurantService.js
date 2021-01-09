@@ -140,6 +140,14 @@ const submitOrder = (order,restaurantID) =>{
             }
         })
 }
+const submitPersonalOrder = (order,restaurantID) =>{
+    return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantID}/order-personal`,order,
+        {
+            headers:{
+                Authorization:`bearer ${ localStorage.getItem('access_token')}`
+            }
+        })
+}
 
 
 export const restaurantService ={
@@ -155,5 +163,6 @@ export const restaurantService ={
     getSingleRestaurant,
     isPaymentAvailable,
     submitOrder,
-    getSingleRestaurantForAdmin
+    getSingleRestaurantForAdmin,
+    submitPersonalOrder
 }

@@ -19,7 +19,7 @@ import AddIcon from "@material-ui/icons/Add";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import {useDispatch, useSelector} from "react-redux";
 import {orderStatus} from "../../helpers/_helpers";
-import {getOrders, switchOrderStatus} from "../../redux/actions/orders";
+import {getMenu, getOrders, switchOrderStatus} from "../../redux/actions/orders";
 import Jumbotron from "../../components/Jumbotron";
 import AddOrder from "../../components/Admin/Orders/AddOrder";
 
@@ -92,6 +92,7 @@ const Orders = ({match}) =>{
     const currentOrderStatus = useSelector(state=>state.orders.orderStatus);
     const orders = useSelector(state=>state.orders.orders);
     const [addOrderIsOpen, setAddOrderIsOpen] = useState(false);
+    const menu = useSelector(state=>state.orders.menu);
 
     useEffect(()=>{
         const fetchData = () =>{
@@ -99,6 +100,12 @@ const Orders = ({match}) =>{
         }
         fetchData();
     },[currentOrderStatus]);
+    useEffect(()=>{
+        const fetchMenu = () =>{
+            dispatch(getMenu(restaurantID));
+        }
+        !menu.length && fetchMenu()
+    },[]);
 
     const handleChange = (event, newValue) => {
         dispatch(switchOrderStatus(newValue));
@@ -148,7 +155,7 @@ const Orders = ({match}) =>{
                     <MyBottomNavigationAction label="W dostawie" value={orderStatus.IN_DELIVERY} icon={<DirectionsCarIcon />} />
                     <MyBottomNavigationAction label="Zrealizowane" value={orderStatus.DONE} icon={<CheckCircleOutlineIcon />} />
                     <Hidden mdUp>
-                        <MyBottomNavigationAction label="Dodaj zamówienie" value="addorder" icon={<AddCircleOutlineIcon />} showLabel/>
+                        <MyBottomNavigationAction label="Dodaj zamówienie" icon={<AddCircleOutlineIcon />} showLabel onClick={handleToggleAddOrder}/>
                     </Hidden>
                 </BottomNavigation>
 
@@ -159,7 +166,7 @@ const Orders = ({match}) =>{
                 Dodaj zamówienie
                 </Fab>
             </Hidden>
-            <AddOrder addOrderIsOpen={addOrderIsOpen} handleToggleAddOrder={handleToggleAddOrder}/>
+            <AddOrder addOrderIsOpen={addOrderIsOpen} handleToggleAddOrder={handleToggleAddOrder} menu = {menu} restaurantId={restaurantID}/>
         </>
     )
 };

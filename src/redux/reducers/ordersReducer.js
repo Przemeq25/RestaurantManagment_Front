@@ -1,4 +1,4 @@
-import {orderStatus} from "../../helpers/_helpers";
+import {orderStatus, orderType, paymentType} from "../../helpers/_helpers";
 import {ordersConstants} from "../types";
 
 const initialState = {
@@ -6,6 +6,14 @@ const initialState = {
     isRequesting:false,
     orderStatus: orderStatus.IN_PROGRESS,
     orders:[],
+    menu:[],
+    currentOrder:{
+        meals:[],
+        paymentMethod:paymentType.CASH,
+        orderType:orderType.IN_LOCAL,
+        totalPrice:0,
+        comment:"",
+    },
 }
 
 export const ordersReducer = (state=initialState, action) =>{
@@ -79,6 +87,74 @@ export const ordersReducer = (state=initialState, action) =>{
                 ...state,
                 orders: orders,
             };
+        }
+        case ordersConstants.GET_MENU:{
+            return {
+                ...state,
+                menu: action.payload,
+            }
+        }
+        case ordersConstants.ADD_PRODUCT_TO_ORDER:{
+            return {
+                ...state,
+                currentOrder: {...state.currentOrder,meals: [...state.currentOrder.meals, {...action.payload, price: Number(action.payload.price), quantity:1}]},
+            }
+        }
+        case ordersConstants.REMOVE_PRODUCT_FROM_ORDER:{
+            const productIndex = state.currentOrder.meals.findIndex(meal=>meal.id === action.payload);
+            const newOrder = [...state.currentOrder.meals];
+            newOrder.splice(productIndex,1)
+            return {
+                ...state,
+                currentOrder: {...state.currentOrder,meals: newOrder}
+            }
+        }
+        case ordersConstants.COUNT_TOTAL_PRICE:{
+            const totalPrice = state.currentOrder.meals.map(item=>(item.price * item.quantity)).reduce((total,productPrice)=> total += productPrice, 0);
+            return {
+                ...state,
+                currentOrder: {...state.currentOrder,totalPrice: totalPrice}
+            }
+        }
+        case ordersConstants.INCREMENT_PRODUCT_IN_ORDER:{
+            const productIndex = state.currentOrder.meals.findIndex(meal=>meal.id === action.payload);
+            const product = state.currentOrder.meals.find(item => item.id === action.payload);
+            product.quantity += 1;
+            const newOrder = [...state.currentOrder.meals];
+            newOrder.splice(productIndex,1,product)
+            return {
+                ...state,
+                currentOrder: {...state.currentOrder,meals:newOrder}
+            }
+        }
+        case ordersConstants.DECREMENT_PRODUCT_IN_ORDER:{
+            const productIndex = state.currentOrder.meals.findIndex(meal=>meal.id === action.payload);
+            const product = state.currentOrder.meals.find(item => item.id === action.payload);
+            product.quantity -= 1;
+            const newOrder = [...state.currentOrder.meals];
+            if(product.quantity === 0){
+                newOrder.splice(productIndex,1)
+            }else{
+                newOrder.splice(productIndex,1,product)
+            }
+            return {
+                ...state,
+                currentOrder: {...state.currentOrder,meals:newOrder}
+            }
+        }
+        case ordersConstants.SUBMIT_ORDER_SUCCESS:{
+            return{
+                ...state,
+                isRequesting:false,
+                //orders: [...state.orders, action.payload],
+                currentOrder: initialState.currentOrder,
+            }
+        }
+        case ordersConstants.CHANGE_ORDER_COMMENT:{
+            return {
+                ...state,
+                currentOrder: {...state.currentOrder,comment:action.payload}
+            }
         }
 
         default:

@@ -2,6 +2,10 @@ import {ordersConstants} from "../types";
 import {orderService} from "../../services/ordersService";
 import {errorAlert, successAlert} from "./alert";
 import {orderStatus} from "../../helpers/_helpers";
+import {mealsService} from "../../services/mealsService";
+import axios from "axios";
+import {appUrl} from "../../config/app.config";
+import {restaurantService} from "../../services/restaurantService";
 
 
 export const getOrders = (restaurantID,orderStatus) => {
@@ -41,4 +45,57 @@ export const changeOrderStatus =(restaurantId,order,status = orderStatus.IN_DELI
 }
 export const changeOrderPayStatus = (orderID,isChecked) =>{
     return dispatch=>dispatch({type:ordersConstants.CHANGE_ORDER_PAY_STATUS,payload:{id:orderID,isPayed:isChecked}})
+}
+export const getMenu = (restaurantId) =>{
+    return dispatch=>{
+        mealsService.getMeals(restaurantId)
+            .then(response=>dispatch({type:ordersConstants.GET_MENU, payload:response.data.meals}))
+            .catch(()=>errorAlert("Coś poszło nie tak"))
+    }
+}
+export const addProductToOrder = (product) =>{
+    return dispatch=>{
+        dispatch({type:ordersConstants.ADD_PRODUCT_TO_ORDER, payload:product})
+        dispatch(countTotalPrice());
+    }
+}
+export const removeProductFromOrder = (productId)=>{
+    return dispatch=>{
+        dispatch({type:ordersConstants.REMOVE_PRODUCT_FROM_ORDER, payload:productId})
+        dispatch(countTotalPrice());
+    }
+}
+export const countTotalPrice = () =>{
+    return dispatch=>dispatch({type:ordersConstants.COUNT_TOTAL_PRICE})
+}
+export const incrementProduct = (productId) =>{
+    return dispatch=>{
+        dispatch({type:ordersConstants.INCREMENT_PRODUCT_IN_ORDER, payload:productId})
+        dispatch(countTotalPrice());
+    }
+}
+export const decrementProduct = (productId) =>{
+    return dispatch=>{
+        dispatch({type:ordersConstants.DECREMENT_PRODUCT_IN_ORDER, payload:productId})
+        dispatch(countTotalPrice());
+    }
+}
+export const submitPersonalOrder = (order,restaurantID) =>{
+    return dispatch=>{
+        dispatch(request());
+        restaurantService.submitPersonalOrder(order,restaurantID)
+            .then(response=>{
+                dispatch(successAlert("Zamówienie skompletowane!"));
+                dispatch(success(response.data));
+            })
+            .catch(()=>{
+                errorAlert("Nie udało się skompletować zamówienia!")
+            })
+    }
+    function request(){return{type:ordersConstants.REQUESTING}};
+    function success(data){return{type:ordersConstants.SUBMIT_ORDER_SUCCESS, payload:data}}
+}
+
+export const changeOrderComment = (comment)=>{
+    return dispatch=>dispatch({type:ordersConstants.CHANGE_ORDER_COMMENT, payload:comment})
 }
