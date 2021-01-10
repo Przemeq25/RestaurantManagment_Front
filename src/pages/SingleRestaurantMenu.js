@@ -10,7 +10,7 @@ import MobileFiltersDialog from "../components/Restaurants/MobileFiltersDialog";
 import Jumbotron from "../components/Jumbotron";
 import LayersClearIcon from '@material-ui/icons/LayersClear';
 import queryString from "query-string";
-import {history} from "../helpers/_helpers";
+import {handleRenderMenuByCategory, history} from "../helpers/_helpers";
 import {routes} from "../config/routes";
 import {mealsService} from "../services/mealsService";
 
@@ -110,15 +110,6 @@ const SingleRestaurantMenu = ({restaurant,location}) =>{
             search:newQuery,
         })
     }
-
-    const handleRenderMenuByCategory = (meals) => meals.reduce(
-            (acc, current)=> ({
-                ...acc,
-                [current['category']] :[
-                ...(acc[current['category']] || []),current]
-            })
-        ,{}
-    );
     return(
         <>
            <Box mt={mdDown ? 5 : 10}/>

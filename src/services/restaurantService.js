@@ -117,6 +117,14 @@ const getAllRestaurants = ({page,name,category,city,open,rate,sort}) =>{
 const getSingleRestaurant = (restaurantID) =>{
     return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}/public`)
 }
+const getSingleRestaurantForAdmin = (restaurantID) =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}`,{
+        headers: {
+            Authorization: `bearer ${localStorage.getItem('access_token')}`
+        }
+    });
+}
+
 const isPaymentAvailable = (restaurantID) =>{
     return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}/payment`,{
         headers: {
@@ -126,6 +134,14 @@ const isPaymentAvailable = (restaurantID) =>{
 }
 const submitOrder = (order,restaurantID) =>{
     return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantID}/order`,order,
+        {
+            headers:{
+                Authorization:`bearer ${ localStorage.getItem('access_token')}`
+            }
+        })
+}
+const submitPersonalOrder = (order,restaurantID) =>{
+    return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantID}/order-personal`,order,
         {
             headers:{
                 Authorization:`bearer ${ localStorage.getItem('access_token')}`
@@ -146,5 +162,7 @@ export const restaurantService ={
     getAllRestaurants,
     getSingleRestaurant,
     isPaymentAvailable,
-    submitOrder
+    submitOrder,
+    getSingleRestaurantForAdmin,
+    submitPersonalOrder
 }

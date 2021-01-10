@@ -7,6 +7,7 @@ import {workersReducer} from "./workersReducer";
 import {basketReducer} from "./basketReducer";
 import {alertReducer} from "./alertReducer";
 import {paymentReducer} from "./paymentReducer";
+import {ordersReducer} from "./ordersReducer";
 
 
 export const rootReducer = combineReducers(
@@ -19,4 +20,5 @@ export const rootReducer = combineReducers(
                 basket:basketReducer,
                 alert:alertReducer,
                 payment:paymentReducer,
+                orders:ordersReducer,
             })

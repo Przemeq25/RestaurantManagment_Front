@@ -184,6 +184,14 @@ export const countMinTimeToPrepare = (basket) =>{
         return "-";
     }
 }
+export const handleRenderMenuByCategory = (meals) => meals.reduce(
+    (acc, current)=> ({
+        ...acc,
+        [current['category']] :[
+            ...(acc[current['category']] || []),current]
+    })
+    ,{}
+);
 export const orderType={
     TAKE_AWAY:"TAKE_AWAY",
     IN_LOCAL:"IN_LOCAL",
@@ -192,6 +200,11 @@ export const orderType={
 export const paymentType={
     ONLINE:"ONLINE",
     CASH:"CASH",
+}
+export const orderStatus={
+    IN_PROGRESS:"IN_PROGRESS",
+    IN_DELIVERY:"IN_DELIVERY",
+    DONE:"DONE",
 }
 export const orderTypeTranslate = (order) => {
     switch(order) {
@@ -217,11 +230,11 @@ export const paymentTypeTranslate = (payment)=>{
 }
 export const orderStatusTypeTranslate = (status)=>{
     switch(status) {
-        case "IN_PROGRESS":
+        case orderStatus.IN_PROGRESS:
             return 'W trakcie';
-        case 'DELIVERY':
+        case orderStatus.IN_DELIVERY:
             return "W dostawie";
-        case "DONE":
+        case orderStatus.DONE:
             return "Zakończone";
         default:
             return "W trakcie"
