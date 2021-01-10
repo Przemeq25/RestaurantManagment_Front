@@ -1,6 +1,6 @@
 import {restaurantService} from "../../services/restaurantService";
 import {restaurantConstants} from "../types";
-import {refreshLogin} from "./auth";
+import {authorization, refreshLogin} from "./auth";
 import {history, scaleImageByUrl} from "../../helpers/_helpers";
 import {routes} from "../../config/routes";
 import {errorAlert, successAlert} from "./alert";
@@ -17,6 +17,7 @@ export const addRestaurant = (restaurant,refreshToken)=>{
                                 .then(() => {
                                     dispatch(successAlert(`${response.data.name} - pomyślnie dodano do Twojej listy!`))
                                     dispatch(success(response.data))
+                                    authorization(dispatch)
                                 }).catch(() => dispatch(error(500)))
                         }, 20000)
 

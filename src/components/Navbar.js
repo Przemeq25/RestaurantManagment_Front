@@ -119,10 +119,8 @@ const Navbar = () =>{
     };
 
     const handleOpenBasket = (e) =>{
-        setTimeout(()=>{
-            setBasketOpen(prev=>!prev)
-        },500)
-        handleCloseMenu(e)
+        setBasketOpen(prev=>!prev)
+        handleCloseMenu(e);
     };
 
 

@@ -33,17 +33,10 @@ const UserAccount = () =>{
     const theme = useTheme();
     const mdDown = useMediaQuery(theme.breakpoints.down('md'));
     const classes = useStyles();
-    const dispatch = useDispatch();
     const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
     const userData = useSelector(state=>state.auth.userData);
     const isLoading = useSelector(state=>state.auth.isLoading);
     const [updatePersonalData,setUpdatePersonalData] = useState(false);
-
-    useEffect(()=>{
-        isLoggedIn && authorization(dispatch);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-
-    },[isLoggedIn])
 
     const handleToggleUpdatePersonalData = () =>{
         setUpdatePersonalData(!updatePersonalData);

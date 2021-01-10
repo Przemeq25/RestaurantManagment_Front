@@ -2,6 +2,7 @@ import {authConstants, mealsConstants, restaurantConstants, workersConstants} fr
 import {userService} from "../../services/userService";
 import {history} from "../../helpers/_helpers";
 import {routes} from "../../config/routes";
+import moment from 'moment';
 
 export const login = (username, password)=>{
     return dispatch =>{
@@ -10,6 +11,8 @@ export const login = (username, password)=>{
             .then(response =>{
                 localStorage.setItem('access_token',response.data.access_token);
                 localStorage.setItem('refresh_token',response.data.refresh_token);
+                localStorage.setItem('expires_in',moment().add(response.data.expires_in, 'seconds').format("YYYY-MM-DD HH:mm"));
+                localStorage.setItem('refresh_expires_in',moment().add(response.data.expires_in*2, 'seconds').format("YYYY-MM-DD HH:mm"));
                 dispatch(success(response.data));
                 history.location.from ? (
                     history.push(history.location.from)
@@ -38,10 +41,10 @@ export const refreshLogin = (refreshToken,dispatch) => new Promise((resolve, rej
             .then(response => {
                 localStorage.setItem('access_token', response.data.access_token);
                 localStorage.setItem('refresh_token', response.data.refresh_token);
+                localStorage.setItem('expires_in',moment().add(response.data.expires_in, 'seconds').format("YYYY-MM-DD HH:mm"));
+                localStorage.setItem('refresh_expires_in',moment().add(response.data.expires_in*2, 'seconds').format("YYYY-MM-DD HH:mm"));
                 dispatch(success(response.data))
-                    authorization(dispatch)
-                        .then(()=>resolve())
-                        .catch(()=>reject())
+                resolve();
 
             })
             .catch(errorMessage => {
@@ -67,15 +70,40 @@ export const logout = () =>{
         dispatch({type:workersConstants.RESET});
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
+        localStorage.removeItem('expires_in');
+        localStorage.removeItem('refresh_expires_in');
         history.push(routes.LOGIN)
     }
 }
-export const checkIsLoggedIn =()=>{
-    return dispatch =>{
-        localStorage.getItem('access_token') &&  dispatch(isLoggedIn( {access_token: localStorage.getItem('access_token'), refresh_token: localStorage.getItem('refresh_token')}))
-    };
+export const checkIsLoggedIn =(dispatch)=> new Promise((resolve,reject)=> {
+        const accessToken = localStorage.getItem('access_token');
+        const refreshToken = localStorage.getItem('refresh_token');
+        const expires = localStorage.getItem('expires_in');
+        const refresh_expires = localStorage.getItem('refresh_expires_in');
+
+        if (accessToken && refreshToken && expires && refresh_expires) {
+            if (moment(expires).isAfter(moment())) {
+                dispatch(isLoggedIn({
+                    access_token: localStorage.getItem('access_token'),
+                    refresh_token: localStorage.getItem('refresh_token')
+                }))
+                resolve();
+            } else if (moment(refresh_expires).isAfter(moment())) {
+                refreshLogin(refreshToken, dispatch).then(()=>resolve()).catch(()=>reject())
+            } else {
+                dispatch(error());
+                dispatch(logout());
+                reject();
+            }
+
+        } else {
+            dispatch(error());
+            dispatch(logout());
+            reject();
+        }
     function isLoggedIn(authData){return {type:authConstants.LOGIN_SUCCESS, payload:authData}};
-}
+    function error() {return{type:authConstants.LOGIN_ERROR, error: 401}}
+});
 export const authorization = (dispatch) => new Promise((resolve, reject) =>{
         dispatch(request());
         userService.getUserData()

@@ -53,12 +53,6 @@ const DeliveryAndPayment = () =>{
 
 
     useEffect(()=>{
-        isLoggedIn && authorization(dispatch);
-        //isLoggedIn && restaurantService.isPaymentAvailable(basket.basket[0].restaurantId).then(res=>console.log(res)).catch(err=>console.log(err))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[isLoggedIn])
-
-    useEffect(()=>{
         dispatch(getPersonalDataToPayment(userData));
         dispatch(getOrdersToPayment(basket.basket));
     },[userData])
