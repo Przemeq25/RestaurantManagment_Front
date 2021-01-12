@@ -72,6 +72,7 @@ export const editRestaurant = (restaurantData, restaurantID) =>{
             .then(res=> {
                 restaurantService.editRestaurant(Object.assign(restaurantData, {image: scaleImageByUrl(res.data.secure_url)}), restaurantID)
                     .then(response => {
+                        dispatch(successAlert(`Uaktualniono dane restauracji!`))
                         dispatch(success(response.data))
                     })
                     .catch((errorMessage)=>{
@@ -108,17 +109,45 @@ export const getRestaurantsForAdmin =()=>{
         dispatch(request());
         restaurantService.getRestaurantsForAdmin()
             .then(response => dispatch(success(response.data.content)))
-            .catch(() => dispatch(error(500)))
+            .catch((errorMessage)=> {
+                if (errorMessage.response && errorMessage.response.status === 500) {
+                    dispatch(error(500))
+                } else if (errorMessage.response && errorMessage.response.status === 400 || errorMessage.response.status === 404) {
+                    dispatch(error(404))
+                }
+            })
+    }
+    function request(){return {type:restaurantConstants.RESTAURANT_REQUEST}};
+    function success(restaurants){return {type:restaurantConstants.GET_RESTAURANTS_FOR_ADMIN_SUCCESS, payload:restaurants}}
+    function error(error){return {type:restaurantConstants.GET_RESTAURANTS_FOR_ADMIN_ERROR, payload:error}}
+}
+export const getRestaurantForEmploee = (restaurantId)=> {
+    return dispatch =>{
+        dispatch(request());
+        restaurantService.getSingleRestaurant(restaurantId)
+            .then(response => dispatch(success([response.data])))
+            .catch((errorMessage)=> {
+                if (errorMessage.response && errorMessage.response.status === 500) {
+                    dispatch(error(500))
+                } else if (errorMessage.response && (errorMessage.response.status === 400 || errorMessage.response.status === 404)) {
+                    dispatch(error(404))
+                }
+            })
     }
     function request(){return {type:restaurantConstants.RESTAURANT_REQUEST}};
     function success(restaurants){return {type:restaurantConstants.GET_RESTAURANTS_FOR_ADMIN_SUCCESS, payload:restaurants}}
     function error(error){return {type:restaurantConstants.GET_RESTAURANTS_FOR_ADMIN_ERROR, payload:error}}
 }
 
-export const selectRestaurant = (restaurant) =>{
+export const selectRestaurant = (restaurant,role) =>{
     return dispatch =>{
         dispatch(select(restaurant));
-        history.push(`${routes.RESTAURANT_DASHBOARD}/${restaurant.id}`)
+        if(role === "OWNER"){
+            history.push(`${routes.RESTAURANT_DASHBOARD}/${restaurant.id}`)
+        }else{
+            history.push(`${routes.RESTAURANT_MENU}/${restaurant.id}`)
+        }
+
     }
     function select(restaurant){return{type:restaurantConstants.SELECT_RESTAURANT, payload:restaurant}}
 }
@@ -134,10 +163,28 @@ export const getSingleRestaurantForAdmin = (restaurantId) =>{
         dispatch(request());
         restaurantService.getSingleRestaurantForAdmin(restaurantId)
             .then(response=>dispatch(success(response.data)))
-            .catch(()=>dispatch(error(500)))
+            .catch((errorMessage)=> {
+                if (errorMessage.response && errorMessage.response.status === 500) {
+                    dispatch(error(500))
+                } else if (errorMessage.response && errorMessage.response.status === 400 || errorMessage.response.status === 404) {
+                    dispatch(error(404))
+                }
+            })
     }
     function request(){return {type:restaurantConstants.RESTAURANT_REQUEST}};
     function success(restaurant){return {type:restaurantConstants.GET_SINGLE_RESTAURANT_FOR_ADMIN_SUCCESS, payload:restaurant}}
     function error(error){return {type:restaurantConstants.GET_SINGLE_RESTAURANT_FOR_ADMIN_ERROR, payload:error}}
+}
+
+export const getOpeningHours = (restaurantId) =>{
+    return dispatch =>{
+        restaurantService.getRestaurantOpeningHours(restaurantId)
+            .then(response=>dispatch(success(response.data)))
+            .catch(()=>errorAlert("Brak danych o godzinach otwarcia restauracji"));
+    }
+    function success(data){return{type:restaurantConstants.GET_OPENING_HOURS, payload:{worksTime:data, id:restaurantId}}}
+};
+export const setUserRole = (role,restaurantId)=>{
+    return dispatch =>dispatch({type:restaurantConstants.SET_USER_ROLE, payload:{role,restaurantId}})
 }
 

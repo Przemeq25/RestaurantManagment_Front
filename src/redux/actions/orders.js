@@ -3,8 +3,6 @@ import {orderService} from "../../services/ordersService";
 import {errorAlert, successAlert} from "./alert";
 import {orderStatus} from "../../helpers/_helpers";
 import {mealsService} from "../../services/mealsService";
-import axios from "axios";
-import {appUrl} from "../../config/app.config";
 import {restaurantService} from "../../services/restaurantService";
 
 
@@ -13,10 +11,20 @@ export const getOrders = (restaurantID,orderStatus) => {
         dispatch(request());
         orderService.getOrdersForRestaurants(restaurantID,orderStatus)
             .then(response=>dispatch(success(response.data.content)))
-            .catch(()=>dispatch(errorAlert("Coś poszło nie tak")))
+            .catch((errorMessage)=> {
+                if (errorMessage.response && errorMessage.response.status === 500) {
+                    dispatch(error(500))
+                } else if (errorMessage.response && errorMessage.response.status === 400 || errorMessage.response.status === 404) {
+                    dispatch(error(404))
+                }else{
+                    dispatch(errorAlert("Nie udało się pobrać zamówień! Spróbuj odświeżyć stronę"))
+                }
+            })
+
     }
     function request(){return{type:ordersConstants.GET_ORDERS_REQUEST}}
     function success(data){return{type:ordersConstants.GET_ORDERS_SUCCESS, payload:data}}
+    function error(error){return{type:ordersConstants.GET_ORDERS_ERROR, payload:error}}
 }
 
 export const switchOrderStatus = (orderStatus) =>{
@@ -49,9 +57,19 @@ export const changeOrderPayStatus = (orderID,isChecked) =>{
 export const getMenu = (restaurantId) =>{
     return dispatch=>{
         mealsService.getMeals(restaurantId)
-            .then(response=>dispatch({type:ordersConstants.GET_MENU, payload:response.data.meals}))
-            .catch(()=>errorAlert("Coś poszło nie tak"))
+            .then(response=>dispatch(success(response.data.meals)))
+            .catch((errorMessage)=> {
+                if (errorMessage.response && errorMessage.response.status === 500) {
+                    dispatch(error(500))
+                } else if (errorMessage.response && errorMessage.response.status === 400 || errorMessage.response.status === 404) {
+                    dispatch(error(404))
+                }else{
+                    dispatch(errorAlert("Wystąpił błąd podczas wyświetlania menu! Spróbuj odświeżyć stronę"))
+                }
+            })
     }
+    function success(data){return{type:ordersConstants.GET_MENU_SUCCESS, payload:data}}
+    function error(error){return{type:ordersConstants.GET_MENU_ERROR, payload:error}}
 }
 export const addProductToOrder = (product) =>{
     return dispatch=>{

@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import AuthContainer from "../../components/AuthContainer";
+import AuthContainer from "../../components/Auth/AuthContainer";
 import {Box,Typography, Button,Backdrop,CircularProgress} from "@material-ui/core";
 import {history} from "../../helpers/_helpers";
 import {routes} from "../../config/routes";

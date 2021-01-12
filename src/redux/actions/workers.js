@@ -7,7 +7,13 @@ export const getWorkers = (restaurantID)=>{
         dispatch(request());
         restaurantService.getWorkers(restaurantID)
             .then(response=>dispatch(success(response.data.content)))
-            .catch(()=>dispatch(error(500)));
+            .catch((errorMessage)=> {
+                if (errorMessage.response && errorMessage.response.status === 500) {
+                    dispatch(error(500))
+                } else if (errorMessage.response && errorMessage.response.status === 400 || errorMessage.response.status === 404) {
+                    dispatch(error(404))
+                }
+            })
     };
     function request () {return{ type:workersConstants.WORKERS_REQUEST}}
     function success(workers) { return{ type:workersConstants.GET_WORKERS_SUCCESS, payload:workers}}

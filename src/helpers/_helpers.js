@@ -70,6 +70,13 @@ export const worksTimeDaysTranslate = (day) =>{
 
     }
 }
+export const ownerPermision = (role) =>{
+    if(role === "OWNER"){
+        return true
+    }else{
+        return false
+    }
+}
 export const restaurantInitialValues = {
     name: '',
     category: [],

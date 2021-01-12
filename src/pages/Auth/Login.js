@@ -1,5 +1,5 @@
 import React from "react";
-import AuthContainer from "../../components/AuthContainer";
+import AuthContainer from "../../components/Auth/AuthContainer";
 import {Box, Button, TextField, Typography} from "@material-ui/core";
 import ProgressButton from "../../components/ProgressButton";
 import {Formik} from "formik";

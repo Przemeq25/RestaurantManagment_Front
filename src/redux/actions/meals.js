@@ -10,7 +10,13 @@ export const getMeals = (restaurantID) =>{
         dispatch(request());
         mealsService.getMeals(restaurantID)
             .then(response=>dispatch(success(response.data.meals)))
-            .catch(()=>dispatch(error(500)));
+            .catch((errorMessage)=> {
+                if (errorMessage.response && errorMessage.response.status === 500) {
+                    dispatch(error(500))
+                } else if (errorMessage.response && errorMessage.response.status === 400 || errorMessage.response.status === 404) {
+                    dispatch(error(404))
+                }
+            })
     }
     function request(){ return{type:mealsConstants.MEALS_REQUEST}}
     function success(meals){ return {type:mealsConstants.GET_MEALS_SUCCESS, payload:meals}}
@@ -48,7 +54,6 @@ export const addMeal = (meal,restaurantID)=>{
     };
     function request(){ return{type:mealsConstants.ADD_MEAL_REQUEST}}
     function success(meal){ return {type:mealsConstants.ADD_MEAL_SUCCESS, payload:meal}}
-    function error(error) { return {type:mealsConstants.ADD_MEAL_ERROR, payload:error}}
 };
 
 export const openDrawer = () =>{
@@ -65,7 +70,7 @@ export const openDrawerToEditMeal = (meal) =>{
 export const editMeal =(meal,restaurantID)=>{
     return dispatch=>{
         dispatch(request());
-        if(meal.image['type'].split('/')[0] === 'image'){
+        if(meal.image.hasOwnProperty("type") && meal.image['type'].split('/')[0] === 'image'){
             restaurantService.addPicture(meal.image)
                 .then(res=> {
                     mealsService.editMeal(Object.assign(meal, {image:res.data.secure_url}), restaurantID, meal.id)
@@ -90,7 +95,6 @@ export const editMeal =(meal,restaurantID)=>{
     };
     function request(){ return{type:mealsConstants.EDIT_MEAL_REQUEST}}
     function success(meal){ return {type:mealsConstants.EDIT_MEAL_SUCCESS, payload:meal}}
-    function error(error) { return {type:mealsConstants.EDIT_MEAL_ERROR, payload:error}}
 }
 
 export const deleteMeal = (mealID,restaurantID,name)=>{
@@ -106,6 +110,5 @@ export const deleteMeal = (mealID,restaurantID,name)=>{
     };
     function request(){ return{type:mealsConstants.DELETE_MEAL_REQUEST}}
     function success(meal){ return {type:mealsConstants.DELETE_MEAL_SUCCESS, payload:meal}}
-    function error(error) { return {type:mealsConstants.DELETE_MEAL_ERROR, payload:error}}
 }
 

@@ -14,6 +14,7 @@ const initialState = {
         totalPrice:0,
         comment:"",
     },
+    error:null,
 }
 
 export const ordersReducer = (state=initialState, action) =>{
@@ -34,6 +35,15 @@ export const ordersReducer = (state=initialState, action) =>{
                 isFetching: false,
                 orders: ordersWithCheckedValue
             }
+
+        case ordersConstants.GET_ORDERS_ERROR:{
+            return {
+                ...state,
+                isFetching: false,
+                error: action.payload
+            }
+        }
+
         case ordersConstants.SWITCH_ORDER_STATUS:
             return {
                 ...state,
@@ -41,6 +51,7 @@ export const ordersReducer = (state=initialState, action) =>{
                 orders:[],
                 orderStatus: action.payload
             }
+
         case ordersConstants.CHECK_MEAL:
             const indexOfCheckedMeal = state.orders[action.payload.orderIndex].meals.findIndex(meal=>meal.id === action.payload.id);
             const newOrders = [...state.orders];
@@ -55,6 +66,7 @@ export const ordersReducer = (state=initialState, action) =>{
                 ...state,
                 orders: newOrders,
             }
+
         case ordersConstants.CHECK_ALL_MEALS:
             const newArrayOfMeals = state.orders[action.payload.orderIndex].meals.map(meals => ({...meals,isFinished: action.payload.isFinished}))
             const readyOrders = [...state.orders];
@@ -64,6 +76,7 @@ export const ordersReducer = (state=initialState, action) =>{
                 ...state,
                 orders: readyOrders,
             }
+
         case ordersConstants.REQUESTING:
             return {
                 ...state,
@@ -79,6 +92,7 @@ export const ordersReducer = (state=initialState, action) =>{
                 orders: orders,
                 isRequesting: false,
             };
+
         case ordersConstants.CHANGE_ORDER_PAY_STATUS: {
             const orderIndex = state.orders.findIndex(order => order.id === action.payload.id);
             const orders = [...state.orders];
@@ -88,12 +102,19 @@ export const ordersReducer = (state=initialState, action) =>{
                 orders: orders,
             };
         }
-        case ordersConstants.GET_MENU:{
+        case ordersConstants.GET_MENU_SUCCESS:{
             return {
                 ...state,
                 menu: action.payload,
             }
         }
+        case ordersConstants.GET_MENU_ERROR:{
+            return {
+                ...state,
+                error: action.payload,
+            }
+        }
+
         case ordersConstants.ADD_PRODUCT_TO_ORDER:{
             return {
                 ...state,

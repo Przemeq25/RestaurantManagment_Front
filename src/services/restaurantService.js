@@ -148,6 +148,9 @@ const submitPersonalOrder = (order,restaurantID) =>{
             }
         })
 }
+const getRestaurantOpeningHours = (restaurantId) =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantId}/time/public`)
+}
 
 
 export const restaurantService ={
@@ -164,5 +167,6 @@ export const restaurantService ={
     isPaymentAvailable,
     submitOrder,
     getSingleRestaurantForAdmin,
-    submitPersonalOrder
+    submitPersonalOrder,
+    getRestaurantOpeningHours
 }

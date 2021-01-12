@@ -31,13 +31,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     openAddRestaurantStepper,
     closeAddRestaurantStepper,
-    getRestaurantsForAdmin, selectRestaurant, unselectRestaurant
+    getRestaurantsForAdmin, selectRestaurant, unselectRestaurant, getOpeningHours, getRestaurantForEmploee, setUserRole
 } from "../../redux/actions/restaurant";
 import PhoneIcon from '@material-ui/icons/Phone';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import App from "../../App";
 import AppLogo from "../../components/AppLogo";
-import Page500 from "../Page500";
+import AdminPanel from "../../components/Admin/AdminPanel/AdminPanel";
 
 const useStyles = makeStyles(theme=>({
     fab: {
@@ -82,15 +81,20 @@ const useStyles = makeStyles(theme=>({
     }
 }));
 
-const AdminDashboard = () =>{
+const AdminDashboard = ({match}) =>{
     const classes = useStyles();
     const dispatch = useDispatch();
     const isDialogOpen = useSelector(state=>state.restaurant.isStepperOpen);
     const isLoading = useSelector(state=>state.auth.isLoading);
     const isRequesting = useSelector(state=>state.restaurant.isRequesting);
     const userType = useSelector(state=>state.auth.userType);
-    const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
     const restaurants = useSelector(state=>state.restaurant.restaurants);
+
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
 
     useEffect(()=>{
         userType && userType.length <= 0 && dispatch(openAddRestaurantStepper());
@@ -98,9 +102,14 @@ const AdminDashboard = () =>{
     },[userType]);
 
     useEffect(()=>{
-        isLoggedIn && restaurants.length <=0 && dispatch(getRestaurantsForAdmin());
+        //dispatch(getRestaurantsForAdmin());
+        //const workersRestaurants = userType.filter(type => type.role === "WORKER");
+        for(let i = 0; i< userType.length; i++){
+            dispatch(getRestaurantForEmploee(userType[i].id));
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[isLoggedIn])
+    },[])
+
     useEffect(()=>{
         dispatch(unselectRestaurant())
     },[])
@@ -110,7 +119,7 @@ const AdminDashboard = () =>{
     }
 
     return(
-        <>
+        <AdminPanel match={match}>
         <Typography variant="h3">Twoje restauracje:</Typography>
         <Typography variant="subtitle2" paragraph >Kliknij w kartę i zarządzaj wybraną restauracją!</Typography>
             {(isLoading || isRequesting) && !isDialogOpen ? (
@@ -120,12 +129,16 @@ const AdminDashboard = () =>{
             ):(
                 <>
                     <AddRestaurantStepper isDialogOpen={isDialogOpen} setDialogOpen={handleToggleDialog} firstRegister={Boolean(userType && userType.length <= 0)}/>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={2} alignItems="flex-start">
                         {restaurants.length ? restaurants.map(restaurant=>(
                             <Grow in = {Boolean(restaurants.length > 0)} key={restaurant.id}>
                             <Grid container item xs={12} sm = {6} md = {6} lg = {4} xl = {3} key={restaurant.id}>
                                 <Card className={classes.card}>
-                                    <CardActionArea onClick={()=>dispatch(selectRestaurant(restaurant))}>
+                                    <CardActionArea onClick={()=>{
+                                        const userRole = userType.find(role=>restaurant.id === role.id).role;
+                                        dispatch(selectRestaurant(restaurant,userRole));
+                                        dispatch(setUserRole(userRole,restaurant.id))
+                                    }}>
                                         <Chip
                                             label={ userType && getAdminType(userType,restaurant.id) }
                                             color="primary"
@@ -207,13 +220,20 @@ const AdminDashboard = () =>{
                                         </CardContent>
                                     </CardActionArea>
                                     <CardActions>
-                                        <Accordion elevation={0} classes={{root:classes.accordion}}>
-                                            <AccordionSummary classes={{root:classes.accordionSummary}}>
+                                        <Accordion elevation={0} classes={{root:classes.accordion}} expanded={expanded === restaurant.id} onChange={handleChange(restaurant.id)}>
+                                            <AccordionSummary classes={{root:classes.accordionSummary}}
+                                                          aria-controls={restaurant.id}
+                                                          id={restaurant.id}>
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
                                                     size="small"
                                                     startIcon={<CalendarTodayIcon/>}
+                                                    onClick={()=>{
+                                                        if(!restaurant.worksTime){
+                                                            dispatch(getOpeningHours(restaurant.id))
+                                                        }
+                                                    }}
                                                 >
                                                     Godziny otwarcia
                                                 </Button>
@@ -222,17 +242,20 @@ const AdminDashboard = () =>{
                                                 <Box display = 'flex' justifyContent = "center" width="100%">
                                                     <Table size="small">
                                                         <TableBody>
-                                                            {/*{restaurant.worksTime.map((row) => (*/}
-                                                            {/*    <TableRow key={row.day}>*/}
-                                                            {/*        <TableCell>*/}
-                                                            {/*            {worksTimeDaysTranslate(row.day)}*/}
-                                                            {/*        </TableCell>*/}
-                                                            {/*        <TableCell align="right">{row.from ? toLocalTime(row.from) : "Zamknięte"}</TableCell>*/}
-                                                            {/*        <TableCell align="right">{row.to ? toLocalTime(row.to) : "Zamknięte"}</TableCell>*/}
-                                                            {/*    </TableRow>*/}
-                                                            {/*))}*/}
+                                                            {(restaurant.worksTime &&  restaurant.worksTime) ? restaurant.worksTime.map((row) => (
+                                                                <TableRow key={row.day}>
+                                                                    <TableCell>
+                                                                        {worksTimeDaysTranslate(row.day)}
+                                                                    </TableCell>
+                                                                    <TableCell align="right">{row.from ? toLocalTime(row.from) : "Zamknięte"}</TableCell>
+                                                                    <TableCell align="right">{row.to ? toLocalTime(row.to) : "Zamknięte"}</TableCell>
+                                                                </TableRow>
+                                                            )):null}
                                                         </TableBody>
                                                     </Table>
+                                                    {!restaurant.worksTime &&
+                                                        <CircularProgress color="secondary"/>
+                                                    }
                                                 </Box>
                                             </AccordionDetails>
                                         </Accordion>
@@ -250,7 +273,7 @@ const AdminDashboard = () =>{
                 <AddIcon className={classes.extendedIcon}/>
                 Dodaj restaurację
             </Fab>
-        </>
+        </AdminPanel>
     );
 
 }

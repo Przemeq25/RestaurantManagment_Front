@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {routes} from "../config/routes";
+import {routes} from "../../config/routes";
 import {Redirect} from 'react-router-dom';
 import * as PropTypes from "prop-types";
 

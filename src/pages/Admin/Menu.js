@@ -1,12 +1,12 @@
 import React, {useEffect} from "react";
-import {Fab, Typography, Box, CircularProgress, Backdrop} from "@material-ui/core";
+import {Fab, Typography, Box, CircularProgress, Backdrop, List} from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import {makeStyles} from "@material-ui/core/styles";
 import AddMenu from "../../components/Admin/Menu/AddMenu";
 import MenuRowCard from "../../components/Admin/Menu/MenuRowCard";
 import {useDispatch, useSelector} from "react-redux";
 import {addMeal, closeDrawer, deleteMeal, editMeal, getMeals, openDrawer} from "../../redux/actions/meals";
-import {menuInitialValues} from "../../helpers/_helpers";
+import {menuInitialValues, ownerPermision} from "../../helpers/_helpers";
 import Jumbotron from "../../components/Jumbotron";
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 
@@ -37,6 +37,8 @@ const Menu = ({match}) =>{
     const isEditRequesting = useSelector(state=>state.meals.isEditRequesting);
     const isAddRequesting = useSelector(state=>state.meals.isAddRequesting);
     const editedMeal = useSelector(state=>state.meals.editedMeal);
+    const role = useSelector(state=>state.restaurant.role);
+
     useEffect(()=>{
         dispatch(getMeals(match.params.restaurantId))
     },[])
@@ -59,17 +61,17 @@ const Menu = ({match}) =>{
     }
     return (
         <>
-            <AddMenu
-                menuIsOpen = {menuIsOpen}
-                handleCloseDrawer={handleCloseDrawer}
-                handleSubmitForm={editedMeal ? handleEditMeal : handleAddMeal}
-                handleDeleteMeal={handleDeleteMeal}
-                isEditRequesting={isEditRequesting}
-                isAddRequesting={isAddRequesting}
-                menuInitialValues={editedMeal ? editedMeal : menuInitialValues}
-                isEditing={Boolean(editedMeal)}
-                isDeleteRequesting={isDeleteRequesting}
-            />
+                <AddMenu
+                    menuIsOpen = {menuIsOpen}
+                    handleCloseDrawer={handleCloseDrawer}
+                    handleSubmitForm={editedMeal ? handleEditMeal : handleAddMeal}
+                    handleDeleteMeal={handleDeleteMeal}
+                    isEditRequesting={isEditRequesting}
+                    isAddRequesting={isAddRequesting}
+                    menuInitialValues={editedMeal ? editedMeal : menuInitialValues}
+                    isEditing={Boolean(editedMeal)}
+                    isDeleteRequesting={isDeleteRequesting}
+                />
             <Typography variant="h3">Menu:</Typography>
             <Typography variant="subtitle2" paragraph >Zarządzaj menu swojej restauracji!</Typography>
             <Box className = {classes.menuStyle}>
@@ -90,10 +92,14 @@ const Menu = ({match}) =>{
                     )
                 }
             </Box>
-            <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleOpenDrawer} variant="extended" size="small">
-                <AddIcon/>
-                Dodaj posiłek
-            </Fab>
+            {ownerPermision(role) &&
+                <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleOpenDrawer} variant="extended"
+                     size="small">
+                    <AddIcon/>
+                    Dodaj posiłek
+                </Fab>
+            }
+
         </>
     )
 }

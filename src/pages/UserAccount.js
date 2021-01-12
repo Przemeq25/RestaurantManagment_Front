@@ -7,7 +7,7 @@ import PersonalDataForm from "../components/PersonalDataForm";
 import {useDispatch, useSelector} from "react-redux";
 import CircularProgress from "../components/CircularProgress";
 import {routes} from "../config/routes";
-import DelayedRedirect from "../components/DelayedRedirect";
+import DelayedRedirect from "../components/Auth/DelayedRedirect";
 import {authorization} from "../redux/actions/auth";
 
 const useStyles = makeStyles(theme=>({

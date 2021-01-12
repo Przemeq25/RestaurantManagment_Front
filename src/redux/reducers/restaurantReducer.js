@@ -8,7 +8,7 @@ const initialState = {
     restaurants:[],
     error:null,
     selectedRestaurant:null,
-
+    role:null,
 };
 
 export const restaurantReducer = (state = initialState, action)=>{
@@ -46,7 +46,7 @@ export const restaurantReducer = (state = initialState, action)=>{
             return {
                 ...state,
                 isRequesting:false,
-                restaurants: action.payload,
+                restaurants: state.restaurants.concat(action.payload),
             }
         case restaurantConstants.GET_RESTAURANTS_FOR_ADMIN_ERROR:
             return {
@@ -57,7 +57,8 @@ export const restaurantReducer = (state = initialState, action)=>{
         case restaurantConstants.SELECT_RESTAURANT:
             return {
                 ...state,
-                selectedRestaurant: action.payload
+                selectedRestaurant: action.payload,
+                restaurants: [],
             }
         case restaurantConstants.UNSELECT_RESTAURANT:
             return {
@@ -67,6 +68,7 @@ export const restaurantReducer = (state = initialState, action)=>{
         case restaurantConstants.GET_SINGLE_RESTAURANT_FOR_ADMIN_SUCCESS:
             return {
                 ...state,
+                restaurants: action.payload,
                 selectedRestaurant: action.payload,
                 isRequesting: false,
             }
@@ -113,6 +115,27 @@ export const restaurantReducer = (state = initialState, action)=>{
                 ...state,
                 isRequesting: false,
                 error: action.payload
+            }
+        case restaurantConstants.GET_OPENING_HOURS: {
+            const restaurantIndex = state.restaurants.findIndex(restaurant=>restaurant.id === action.payload.id);
+            const newRestaurants = [...state.restaurants];
+            newRestaurants.splice(restaurantIndex,1,{...newRestaurants[restaurantIndex],worksTime: action.payload.worksTime});
+            return {
+                ...state,
+                restaurants: newRestaurants,
+            }
+        }
+        case restaurantConstants.SET_USER_ROLE:
+            if(action.payload.role === "WORKER" || action.payload.role === "OWNER"){
+                return {
+                    ...state,
+                    role:action.payload.role,
+                }
+            }else{
+                return {
+                    ...state,
+                    role:null,
+                }
             }
         case restaurantConstants.RESET:
             return initialState;

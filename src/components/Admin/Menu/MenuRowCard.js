@@ -1,11 +1,12 @@
 import React, {useState} from "react";
 import {makeStyles, useTheme} from "@material-ui/core/styles";
-import {Card, CardMedia, CardContent, Typography,Chip,Box,Grow,IconButton,Grid} from "@material-ui/core";
+import {Card, CardMedia, CardContent, Typography, Chip, Box, Grow, IconButton, Grid, List} from "@material-ui/core";
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import EditIcon from '@material-ui/icons/Edit';
 import AppLogo from "../../AppLogo";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {openDrawerToEditMeal} from "../../../redux/actions/meals";
+import {ownerPermision} from "../../../helpers/_helpers";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -100,14 +101,25 @@ const useStyles = makeStyles(theme => ({
 const MenuRowCard = ({id,name,image,ingredients,timeToDo,price,category}) =>{
     const classes = useStyles();
     const dispatch = useDispatch();
+    const role = useSelector(state=>state.restaurant.role)
     return(
         <Grow in={true} timeout={500}>
             <Card className={classes.root}>
-                <Box className={classes.editingButtons}>
-                    <IconButton size="small" onClick={()=>dispatch(openDrawerToEditMeal({id,name,image,ingredients,timeToDo,price,category}))}>
-                        <EditIcon fontSize="small" color="secondary"/>
-                    </IconButton>
-                </Box>
+                {ownerPermision(role) &&
+                    <Box className={classes.editingButtons}>
+                        <IconButton size="small" onClick={() => dispatch(openDrawerToEditMeal({
+                            id,
+                            name,
+                            image,
+                            ingredients,
+                            timeToDo,
+                            price,
+                            category
+                        }))}>
+                            <EditIcon fontSize="small" color="secondary"/>
+                        </IconButton>
+                    </Box>
+                }
                 <Chip
                     variant="default"
                     color="secondary"

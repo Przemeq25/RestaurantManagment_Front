@@ -16,6 +16,7 @@ const getMyOrders = () =>{
 const getOrdersForRestaurants = (restaurantId,orderStatus) =>{
     return axios.get(`${appUrl}/order-api/restaurants/${restaurantId}/orders`,{
         params:{
+            archived: orderStatus === "DONE" ? true : "",
             sort:'time,asc',
             orderStatus:orderStatus,
         },
