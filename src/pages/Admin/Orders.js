@@ -99,6 +99,13 @@ const Orders = ({match}) =>{
             dispatch(getOrders(restaurantID,currentOrderStatus))
         }
         fetchData();
+        const interval = setInterval(()=>{
+            if(currentOrderStatus !== orderStatus.DONE){
+                fetchData()
+            }
+        },120000);
+
+        return ()=>clearInterval(interval);
     },[currentOrderStatus]);
     useEffect(()=>{
         const fetchMenu = () =>{
