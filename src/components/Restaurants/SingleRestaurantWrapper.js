@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {fade, makeStyles} from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Navbar from "../Navbar";
-import {Box, Button, Container, ButtonGroup, Typography, Dialog, DialogTitle, DialogContent,Paper,Divider,TextField,Slide} from "@material-ui/core";
+import {Box, Button, Container, ButtonGroup, Typography,Slide} from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating/Rating";
 import {NavLink} from "react-router-dom";
 import {routes} from "../../config/routes";
@@ -104,7 +104,7 @@ const SingleRestaurantWrapper = ({children,match}) =>{
                 setIsLoading(false);
                 console.log(err)
             })
-    },[]);
+    },[match.params.restaurantId]);
 
     const {name,rate,category,image,id} = restaurant;
     return(

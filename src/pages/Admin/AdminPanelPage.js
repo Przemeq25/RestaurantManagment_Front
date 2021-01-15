@@ -12,7 +12,7 @@ const AdminPanelPage = ({children,match}) => {
 
     useEffect(()=>{
         !selectedRestaurant && match.params && match.params.restaurantId && dispatch(getSingleRestaurantForAdmin(match.params.restaurantId))
-    },[])
+    },[match.params, dispatch,selectedRestaurant])
 
     useEffect(()=>{
         const selectUserRole = () =>{
@@ -23,7 +23,7 @@ const AdminPanelPage = ({children,match}) => {
 
         }
         match.params.restaurantId && userType && selectUserRole();
-    },[])
+    },[match.params.restaurantId,dispatch,userType])
         return (
             <>
                  <AdminPanel match={match}>

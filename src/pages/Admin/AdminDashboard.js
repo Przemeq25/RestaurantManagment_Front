@@ -31,7 +31,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     openAddRestaurantStepper,
     closeAddRestaurantStepper,
-    getRestaurantsForAdmin, selectRestaurant, unselectRestaurant, getOpeningHours, getRestaurantForEmploee, setUserRole
+    selectRestaurant, unselectRestaurant, getOpeningHours, getRestaurantForEmploee, setUserRole
 } from "../../redux/actions/restaurant";
 import PhoneIcon from '@material-ui/icons/Phone';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
@@ -99,7 +99,7 @@ const AdminDashboard = ({match}) =>{
     useEffect(()=>{
         userType && userType.length <= 0 && dispatch(openAddRestaurantStepper());
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[userType]);
+    },[userType,dispatch]);
 
     useEffect(()=>{
         if(!restaurants.length){
@@ -109,11 +109,11 @@ const AdminDashboard = ({match}) =>{
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
+    },[dispatch])
 
     useEffect(()=>{
         dispatch(unselectRestaurant())
-    },[])
+    },[dispatch])
 
     const handleToggleDialog=()=>{
         isDialogOpen ? dispatch(closeAddRestaurantStepper()): dispatch(openAddRestaurantStepper()) ;

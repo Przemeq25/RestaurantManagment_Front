@@ -22,6 +22,7 @@ import {orderService} from "../services/ordersService";
 import {errorAlert} from "../redux/actions/alert";
 import Jumbotron from "../components/Jumbotron";
 import LayersClearIcon from '@material-ui/icons/LayersClear';
+import {ordersConstants} from "../redux/types";
 
 const useStyle = makeStyles(theme=>({
     pageBackground:{
@@ -59,7 +60,7 @@ const MyOrders = ({match}) =>{
                     setMyOrders(response.data.content)
                     setIsLoading(false);
                 })
-                .catch((err)=>{
+                .catch(()=>{
                     dispatch(errorAlert("Wystąpił błąd"))
                     setIsLoading(false);
                 })
@@ -67,12 +68,14 @@ const MyOrders = ({match}) =>{
         if(match.params.refresh){
             orderService.refreshOrders(match.params.refresh)
                 .then(()=>fetchData())
-                .catch(()=>dispatch(errorAlert("Wystąpił błąd! Odśwież stronę!")))
+                .catch(()=>{
+                    dispatch({type:ordersConstants.GET_ORDERS_ERROR, payload:404})
+                })
         }else{
             isLoggedIn && fetchData();
         }
 
-    },[isLoggedIn]);
+    },[isLoggedIn,dispatch,match.params.refresh]);
 
     return(
         <Box className={classes.pageBackground}>

@@ -93,7 +93,7 @@ const Edit = ({match}) =>{
          }
          currentRestaurantData && Object.assign(data,currentRestaurantData,{category: getCuisineTypeValue(currentRestaurantData.category)});
          setCurrentData(data);
-    },[currentRestaurantData])
+    },[currentRestaurantData,dispatch,match.params.restaurantId])
 
 
     const handleToggleCollapse = () =>{

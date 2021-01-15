@@ -8,7 +8,7 @@ import {
     Box,
     Accordion,
     AccordionSummary,
-    AccordionDetails, CircularProgress, Card
+    AccordionDetails, CircularProgress
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {Formik} from "formik";

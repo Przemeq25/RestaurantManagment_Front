@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {Fab, Typography, Box, CircularProgress, Backdrop, List} from "@material-ui/core";
+import {Fab, Typography, Box, CircularProgress, Backdrop} from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import {makeStyles} from "@material-ui/core/styles";
 import AddMenu from "../../components/Admin/Menu/AddMenu";
@@ -40,8 +40,8 @@ const Menu = ({match}) =>{
     const role = useSelector(state=>state.restaurant.role);
 
     useEffect(()=>{
-        dispatch(getMeals(match.params.restaurantId))
-    },[])
+        !mealsArray.length && dispatch(getMeals(match.params.restaurantId))
+    },[dispatch, match.params.restaurantId,mealsArray.length])
 
     const handleCloseDrawer = () =>{
         dispatch(closeDrawer());

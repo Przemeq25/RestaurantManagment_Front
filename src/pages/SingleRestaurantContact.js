@@ -31,7 +31,7 @@ const SingleRestaurantContact = ({match,restaurant}) =>{
                 .catch(()=>setOpeningHours([]));
         }
         getOpeningHours();
-    },[])
+    },[match.params.restaurantId])
     return (
         <>
             <Box className={classes.contactBox}>

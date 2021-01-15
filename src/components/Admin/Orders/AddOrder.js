@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {
     Box,
-    Drawer, fade, IconButton, Paper, TextField,
+    Drawer, fade, IconButton, TextField,
     Typography,
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";

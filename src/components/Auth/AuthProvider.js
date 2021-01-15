@@ -34,7 +34,7 @@ const AuthProvider = ({children}) =>{
         }
         checkAuth();
         return () => setIsLoading(true);
-    },[]);
+    },[dispatch,userType.length]);
 
 
     if((authError || restaurantError || mealError || workersError || ordersError) === 500){

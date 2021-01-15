@@ -1,6 +1,4 @@
 import {restaurantConstants} from '../types';
-import {selectRestaurant} from "../actions/restaurant";
-
 
 const initialState = {
     isRequesting:false,

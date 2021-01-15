@@ -1,12 +1,9 @@
-import React, {useState} from "react";
+import React from "react";
 import {
     AppBar,
-    Button, Dialog,
-    Divider,
+    Dialog,
     IconButton,
-    List,
-    ListItem,
-    ListItemText, Slide,
+    Slide,
     Toolbar,
     Typography,
     Box
@@ -14,7 +11,7 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
-const useStyles = makeStyles((theme)=>({
+const useStyles = makeStyles(()=>({
     toolbar:{
         display:'flex',
         justifyContent:'space-between',

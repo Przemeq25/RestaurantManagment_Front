@@ -38,7 +38,7 @@ const Workers = ({match}) =>{
 
     useEffect(()=>{
         !workers.length && dispatch(getWorkers(match.params.restaurantId))
-    },[]);
+    },[dispatch,match.params.restaurantId,workers.length]);
 
     return(
         <>

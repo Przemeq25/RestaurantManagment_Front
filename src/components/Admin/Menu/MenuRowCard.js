@@ -1,6 +1,6 @@
-import React, {useState} from "react";
-import {makeStyles, useTheme} from "@material-ui/core/styles";
-import {Card, CardMedia, CardContent, Typography, Chip, Box, Grow, IconButton, Grid, List} from "@material-ui/core";
+import React from "react";
+import {makeStyles} from "@material-ui/core/styles";
+import {Card, CardMedia, CardContent, Typography, Chip, Box, Grow, IconButton, Grid} from "@material-ui/core";
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import EditIcon from '@material-ui/icons/Edit';
 import AppLogo from "../../AppLogo";
