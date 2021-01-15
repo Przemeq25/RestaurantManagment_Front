@@ -8,33 +8,55 @@ import {errorAlert, successAlert} from "./alert";
 export const addRestaurant = (restaurant,refreshToken)=>{
     return dispatch =>{
         dispatch(request());
-        restaurantService.addPicture(restaurant.image)
-            .then(res=> {
-                restaurantService.addRestaurant(Object.assign(restaurant,{image:scaleImageByUrl(res.data.secure_url)}))
-                    .then(response => {
-                        setTimeout(() => {
-                            refreshLogin(refreshToken, dispatch)
-                                .then(() => {
-                                    dispatch(successAlert(`${response.data.name} - pomyślnie dodano do Twojej listy!`))
-                                    dispatch(success(response.data))
-                                    authorization(dispatch)
-                                }).catch(() => dispatch(error(500)))
-                        }, 20000)
+        if(restaurant.image) {
+            restaurantService.addPicture(restaurant.image)
+                .then(res => {
+                    restaurantService.addRestaurant(Object.assign(restaurant, {image: scaleImageByUrl(res.data.secure_url)}))
+                        .then(response => {
+                            setTimeout(() => {
+                                refreshLogin(refreshToken, dispatch)
+                                    .then(() => {
+                                        dispatch(successAlert(`${response.data.name} - pomyślnie dodano do Twojej listy!`))
+                                        dispatch(success(response.data))
+                                        authorization(dispatch)
+                                    }).catch(() => dispatch(error(500)))
+                            }, 20000)
 
-                    })
-                    .catch((errorMessage)=>{
-                        if(errorMessage.response && errorMessage.response.status === 500) {
-                            dispatch(error(500))
-                        }else{
-                            dispatch(errorAlert("Wystąpił błąd podczas dodawania restauracji, spróbuj ponownie!"))
-                        }
-                    })
-            })
-            .catch(() => {
-                dispatch(errorAlert("Wystąpił błąd podczas dodawania restauracji, spróbuj ponownie!"))
-            })
+                        })
+                        .catch((errorMessage) => {
+                            if (errorMessage.response && errorMessage.response.status === 500) {
+                                dispatch(error(500))
+                            } else {
+                                dispatch(errorAlert("Wystąpił błąd podczas dodawania restauracji, spróbuj ponownie!"))
+                            }
+                        })
+                })
+                .catch(() => {
+                    dispatch(error(400));
+                    dispatch(errorAlert("Wystąpił błąd podczas dodawania zdjęcia restauracji, spróbuj ponownie!"))
+                })
+        }else{
+            restaurantService.addRestaurant(restaurant)
+                .then(res => {
+                    setTimeout(() => {
+                        refreshLogin(refreshToken, dispatch)
+                            .then(() => {
+                                dispatch(successAlert(`${res.data.name} - pomyślnie dodano do Twojej listy!`))
+                                dispatch(success(res.data))
+                                authorization(dispatch)
+                            }).catch(() => dispatch(error(500)))
+                    }, 20000)
+
+                })
+                .catch((errorMessage) => {
+                    if (errorMessage.response && errorMessage.response.status === 500) {
+                        dispatch(error(500))
+                    } else {
+                        dispatch(errorAlert("Wystąpił błąd podczas dodawania restauracji, spróbuj ponownie!"))
+                    }
+                })
+        }
     }
-
     function request(){return {type:restaurantConstants.RESTAURANT_REQUEST}};
     function success(restaurant){return {type:restaurantConstants.ADD_RESTAURANT_SUCCESS, payload:restaurant}}
     function error(error){return {type:restaurantConstants.ADD_RESTAURANT_ERROR, payload:error}}
@@ -68,24 +90,40 @@ export const deleteRestaurant = (restaurantID)=>{
 export const editRestaurant = (restaurantData, restaurantID) =>{
     return dispatch =>{
         dispatch(request());
-        restaurantService.addPicture(restaurantData.image)
-            .then(res=> {
-                restaurantService.editRestaurant(Object.assign(restaurantData, {image: scaleImageByUrl(res.data.secure_url)}), restaurantID)
-                    .then(response => {
-                        dispatch(successAlert(`Uaktualniono dane restauracji!`))
-                        dispatch(success(response.data))
-                    })
-                    .catch((errorMessage)=>{
-                        if(errorMessage.response && errorMessage.response.status === 500) {
-                            dispatch(error(500))
-                        }else{
-                            dispatch(errorAlert("Wystąpił błąd podczas edytowania restauracji, spróbuj ponownie!"))
-                        }
-                    })
-            })
-            .catch(() => {
-                dispatch(errorAlert("Wystąpił błąd podczas dodawania restauracji, spróbuj ponownie!"))
-            })
+        if(restaurantData.image.hasOwnProperty("type") && restaurantData.image['type'].split('/')[0] === 'image') {
+            restaurantService.addPicture(restaurantData.image)
+                .then(res => {
+                    restaurantService.editRestaurant(Object.assign(restaurantData, {image: scaleImageByUrl(res.data.secure_url)}), restaurantID)
+                        .then(response => {
+                            dispatch(successAlert(`Uaktualniono dane restauracji!`))
+                            dispatch(success(response.data))
+                        })
+                        .catch((errorMessage) => {
+                            if (errorMessage.response && errorMessage.response.status === 500) {
+                                dispatch(error(500))
+                            } else {
+                                dispatch(errorAlert("Wystąpił błąd podczas edytowania restauracji, spróbuj ponownie!"))
+                            }
+                        })
+                })
+                .catch(() => {
+                    dispatch(error(400));
+                    dispatch(errorAlert("Wystąpił błąd podczas dodawania restauracji, spróbuj ponownie!"))
+                })
+        }else{
+            restaurantService.editRestaurant(restaurantData, restaurantID)
+                .then(response => {
+                    dispatch(successAlert(`Uaktualniono dane restauracji!`))
+                    dispatch(success(response.data))
+                })
+                .catch((errorMessage) => {
+                    if (errorMessage.response && errorMessage.response.status === 500) {
+                        dispatch(error(500))
+                    } else {
+                        dispatch(errorAlert("Wystąpił błąd podczas edytowania restauracji, spróbuj ponownie!"))
+                    }
+                })
+        }
     }
 
     function request(){return {type:restaurantConstants.RESTAURANT_REQUEST}};
@@ -184,6 +222,16 @@ export const getOpeningHours = (restaurantId) =>{
     }
     function success(data){return{type:restaurantConstants.GET_OPENING_HOURS, payload:{worksTime:data, id:restaurantId}}}
 };
+
+export const getOpeningHoursForSelected = (restaurantId) =>{
+    return dispatch =>{
+        restaurantService.getRestaurantOpeningHours(restaurantId)
+            .then(response=>dispatch(success(response.data)))
+            .catch(()=> dispatch(errorAlert("Brak danych o godzinach otwarcia restauracji")));
+    }
+    function success(data){return{type:restaurantConstants.GET_OPENING_HOURS_FOR_SELECTED, payload:data}}
+};
+
 export const setUserRole = (role,restaurantId)=>{
     return dispatch =>dispatch({type:restaurantConstants.SET_USER_ROLE, payload:{role,restaurantId}})
 }

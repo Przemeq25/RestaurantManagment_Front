@@ -15,6 +15,7 @@ const AuthProvider = ({children}) =>{
     const restaurantError = useSelector(state=>state.restaurant.error);
     const mealError = useSelector(state=>state.meals.error);
     const workersError = useSelector(state=>state.workers.error);
+    const userType = useSelector(state=>state.auth.userType);
     const ordersError = useSelector(state=>state.orders.error);
     const [isLoading,setIsLoading] = useState(true);
 
@@ -22,9 +23,12 @@ const AuthProvider = ({children}) =>{
         const checkAuth = () =>{
             checkIsLoggedIn(dispatch)
                 .then(()=>{
-                   authorization(dispatch)
-                        .then(()=>setIsLoading(false))
-                        .catch(()=>setIsLoading(false))
+                    userType.length ?
+                        setIsLoading(false)
+                      :
+                        authorization(dispatch)
+                            .then(()=>setIsLoading(false))
+                            .catch(()=>setIsLoading(false))
                 })
                 .catch(()=>setIsLoading(false));
         }

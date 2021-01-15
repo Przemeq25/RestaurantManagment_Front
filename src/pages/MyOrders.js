@@ -41,7 +41,7 @@ const useStyle = makeStyles(theme=>({
     },
 }));
 
-const MyOrders = () =>{
+const MyOrders = ({match}) =>{
     const theme = useTheme();
     const mdDown = useMediaQuery(theme.breakpoints.down('md'));
     const classes = useStyle();
@@ -51,6 +51,7 @@ const MyOrders = () =>{
     const [myOrders,setMyOrders] = useState([]);
 
     useEffect(()=>{
+
         const fetchData = () =>{
             setIsLoading(true);
             orderService.getMyOrders()
@@ -63,7 +64,13 @@ const MyOrders = () =>{
                     setIsLoading(false);
                 })
         }
-        isLoggedIn && fetchData();
+        if(match.params.refresh){
+            orderService.refreshOrders(match.params.refresh)
+                .then(()=>fetchData())
+                .catch(()=>dispatch(errorAlert("Wystąpił błąd! Odśwież stronę!")))
+        }else{
+            isLoggedIn && fetchData();
+        }
 
     },[isLoggedIn]);
 

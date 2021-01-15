@@ -16,25 +16,25 @@ import Edit from "./pages/Admin/Edit";
 import RegisterConfirmation from "./pages/Auth/RegisterConfirmation";
 import Restaurants from "./pages/Restaurants";
 import SingleRestaurantMenu from "./pages/SingleRestaurantMenu";
-import SingleRestaurantReservation from "./pages/SingleRestaurantReservation";
 import SingleRestaurantContact from "./pages/SingleRestaurantContact";
 import ShoppingBasket from "./pages/ShoppingBasket";
 import SingleRestaurantWrapper from "./components/Restaurants/SingleRestaurantWrapper";
 import {getBasket} from "./redux/actions/basket";
 import DeliveryAndPayment from "./pages/DeliveryAndPayment";
 import UserAccount from "./pages/UserAccount";
-import TablesAndReservation from "./pages/Admin/TablesAndReservation";
 import Alert from "./components/Alert";
 import Page404 from "./pages/Page404";
 import MyOrders from "./pages/MyOrders";
 import AuthProvider from "./components/Auth/AuthProvider";
 import OwnerRoute from "./components/Auth/OwnerRoute";
 import {Redirect} from 'react-router-dom';
+import {checkIsLoggedIn} from "./redux/actions/auth";
 
 
 const App =()=>{
     const dispatch = useDispatch();
     useEffect(()=>{
+        checkIsLoggedIn(dispatch)
         dispatch(getBasket());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
@@ -54,12 +54,6 @@ const App =()=>{
                         </SingleRestaurantWrapper>
                     )}
                     />
-                    <Route path={`${routes.SINGLERESTAURANTRESERVATION}/:restaurantId`} exact render={(props)=>(
-                        <SingleRestaurantWrapper {...props}>
-                            <SingleRestaurantReservation {...props} />
-                        </SingleRestaurantWrapper>
-                    )}
-                    />
                     <Route path={`${routes.SINGLERESTAURANTCONTACT}/:restaurantId`} exact render={(props)=>(
                         <SingleRestaurantWrapper {...props}>
                             <SingleRestaurantContact {...props} />
@@ -71,7 +65,7 @@ const App =()=>{
                     <AuthProvider>
                         <Route path={routes.DELIVERYANDPAYMENT} component = {DeliveryAndPayment}/>
                         <Route exact path={routes.PROFILE} component = {UserAccount}/>
-                        <Route exact path={routes.MY_ORDERS} component = {MyOrders}/>
+                        <Route exact path={`${routes.MY_ORDERS}/:refresh?`} component = {MyOrders}/>
                         <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
                                 <AdminDashboard {...props} />
                             )}
@@ -92,12 +86,6 @@ const App =()=>{
                             <Route path={`${routes.RESTAURANT_ORDERS}/:restaurantId`} exact render={(props)=>(
                                 <AdminPanelPage {...props}>
                                     <Orders {...props}/>
-                                </AdminPanelPage>
-                            )}
-                            />
-                            <Route path={`${routes.RESTAURANT_RESERVATION}/:restaurantId`} exact render={(props)=>(
-                                <AdminPanelPage {...props}>
-                                    <TablesAndReservation {...props}/>
                                 </AdminPanelPage>
                             )}
                             />

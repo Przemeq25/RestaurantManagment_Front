@@ -127,6 +127,54 @@ export const restaurantInitialValues = {
         },
     ]
 };
+export const restaurantEditInitialValues = {
+    name: '',
+    category: [],
+    description:'',
+    image:'',
+    street:'',
+    city:'',
+    postCode:'',
+    phoneNumber:'',
+    houseNumber:'',
+    worksTime:[
+        {
+            day:'MONDAY',
+            from:'07:00',
+            to:'20:00',
+        },
+        {
+            day:'TUESDAY',
+            from:'07:00',
+            to:'20:00',
+        },
+        {
+            day:'WEDNESDAY',
+            from:'07:00',
+            to:'20:00',
+        },
+        {
+            day:'THURSDAY',
+            from:'07:00',
+            to:'20:00',
+        },
+        {
+            day:'FRIDAY',
+            from:'07:00',
+            to:'20:00',
+        },
+        {
+            day:'SATURDAY',
+            from:'07:00',
+            to:'20:00',
+        },
+        {
+            day:'SUNDAY',
+            from:'07:00',
+            to:'20:00',
+        },
+    ]
+};
 export const paymentOnlineInitialValues = {
     posId: '',
     md5: '',

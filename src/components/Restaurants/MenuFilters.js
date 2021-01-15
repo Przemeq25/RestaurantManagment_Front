@@ -109,7 +109,7 @@ const MenuFilters = ({handleChangeFilters,query,categories}) =>{
             >
                 <MenuItem value="" className={classes.menuItem}>Wszystkie</MenuItem>
                 {categories.map(category=>(
-                    <MenuItem value={category} className={classes.menuItem}>{category}</MenuItem>
+                    <MenuItem value={category} className={classes.menuItem} key={category}>{category}</MenuItem>
                 ))}
 
             </Select>

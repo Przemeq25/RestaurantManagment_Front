@@ -1,4 +1,5 @@
 import {restaurantConstants} from '../types';
+import {selectRestaurant} from "../actions/restaurant";
 
 
 const initialState = {
@@ -123,6 +124,12 @@ export const restaurantReducer = (state = initialState, action)=>{
             return {
                 ...state,
                 restaurants: newRestaurants,
+            }
+        }
+        case restaurantConstants.GET_OPENING_HOURS_FOR_SELECTED:{
+            return {
+                ...state,
+                selectedRestaurant: {...state.selectedRestaurant, worksTime:action.payload}
             }
         }
         case restaurantConstants.SET_USER_ROLE:

@@ -14,7 +14,6 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import OrderRow from "../../components/Admin/Orders/OrderRow";
-import Search from "../../components/Search";
 import AddIcon from "@material-ui/icons/Add";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import {useDispatch, useSelector} from "react-redux";
@@ -106,7 +105,8 @@ const Orders = ({match}) =>{
         },120000);
 
         return ()=>clearInterval(interval);
-    },[currentOrderStatus]);
+    },[currentOrderStatus,restaurantID,dispatch]);
+
     useEffect(()=>{
         const fetchMenu = () =>{
             dispatch(getMenu(restaurantID));
@@ -125,7 +125,6 @@ const Orders = ({match}) =>{
         <>
             <Box display = "flex" justifyContent="space-between">
                 <Typography variant="h3">Zamówienia:</Typography>
-                <Search/>
             </Box>
             <Typography variant="subtitle2" paragraph >Przejmij kontrolę nad zamówieniami!</Typography>
             <div className={classes.ordersContainerPadding}>

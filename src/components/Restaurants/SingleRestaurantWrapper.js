@@ -10,6 +10,7 @@ import {getCuisineTypeValue, isValidUrl} from "../../helpers/_helpers";
 import {restaurantService} from "../../services/restaurantService";
 import Avatar from "@material-ui/core/Avatar";
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import OpinionDialog from "./OpinionsDialog";
 
 
 const useStyles = makeStyles((theme)=>({
@@ -62,14 +63,6 @@ const useStyles = makeStyles((theme)=>({
             alignItems :"center" ,
         },
     },
-    paperStyle:{
-        padding:theme.spacing(2),
-        borderRadius:theme.spacing(2),
-        [theme.breakpoints.down('xs')]: {
-            padding:theme.spacing(1),
-        },
-        marginBottom:theme.spacing(3),
-    },
     cardMedia: {
         display: 'flex',
         position:'relative',
@@ -84,14 +77,6 @@ const useStyles = makeStyles((theme)=>({
             height: 120,
         },
         borderRadius: theme.spacing(2),
-    },
-    select: {
-        border: `1px solid ${fade(theme.palette.common.black, 0.10)}`,
-        borderRadius: theme.spacing(2),
-        padding: '4px 8px 0px',
-    },
-    selectInput: {
-        fontSize: '0.8rem',
     },
     avatar:{
         minHeight: "100%",
@@ -119,7 +104,8 @@ const SingleRestaurantWrapper = ({children,match}) =>{
                 setIsLoading(false);
                 console.log(err)
             })
-    },[])
+    },[]);
+
     const {name,rate,category,image,id} = restaurant;
     return(
 
@@ -136,14 +122,13 @@ const SingleRestaurantWrapper = ({children,match}) =>{
                         <AppLogo size={12} color="secondary"/>
                     }
                     <Box className={classes.ratingBox} onClick={handleToggleOpinionsDialog}>
-                        <Rating readOnly value={rate ? Number(rate) : 0} size="small" emptyIcon={<StarBorderIcon color="secondary" fontSize="small"/>}/>
+                        <Rating readOnly value={rate ? Number(rate) : 0} size="small" precision={0.5} emptyIcon={<StarBorderIcon color="secondary" fontSize="small"/>}/>
                     </Box>
                 </Box>
 
                 <Box mt={4}>
                     <ButtonGroup variant="text" color="primary" >
                         <Button component={NavLink} to={`${routes.SINGLERESTAURANTMENU}/${id}`} activeClassName={classes.activeButton} >Menu</Button>
-                        <Button  component={NavLink} to={`${routes.SINGLERESTAURANTRESERVATION}/${id}`} activeClassName={classes.activeButton} >Rezerwacje</Button>
                         <Button component={NavLink} to={`${routes.SINGLERESTAURANTCONTACT}/${id}`} activeClassName={classes.activeButton}>Kontakt</Button>
                     </ButtonGroup>
                 </Box>
@@ -152,40 +137,7 @@ const SingleRestaurantWrapper = ({children,match}) =>{
                 <Container>
                     {React.cloneElement(children, {restaurant,isLoading})}
                 </Container>
-            <Dialog
-                fullWidth
-                open={isOpinionsDialogOpen}
-                onClose={handleToggleOpinionsDialog}
-                scroll='body'
-            >
-                <DialogTitle>Opinie</DialogTitle>
-                <DialogContent >
-                    <Paper variant='outlined' className={classes.paperStyle}>
-                        <Typography variant="h4" paragraph> Oceń restaurację! </Typography>
-                        <Divider/>
-                        <Box mt={2} mb={2}>
-                            <Rating name="rating"/>
-                        </Box>
-                        <TextField
-                            multiline
-                            placeholder="Komentarz"
-                            classes={{root:classes.select}}
-                            fullWidth
-                            rows="3"
-                            InputProps={{disableUnderline: true,classes:{input:classes.selectInput }}}
-                            size="small"
-                        />
-                        <Box display='flex' justifyContent="flex-end" mt={2}>
-                            <Button variant = "contained" color="secondary">Wyślij</Button>
-                        </Box>
-                    </Paper>
-                    <Box display = 'flex' justifyContent = "center">
-                        <Typography variant="h4" color="secondary" paragraph> Brak opini na temat tej restauracji!</Typography>
-                    </Box>
-
-                </DialogContent>
-
-            </Dialog>
+            <OpinionDialog restaurantId={match.params.restaurantId} handleToggleOpinionsDialog={handleToggleOpinionsDialog} isOpinionsDialogOpen={isOpinionsDialogOpen}/>
         </Box>
     )
 }

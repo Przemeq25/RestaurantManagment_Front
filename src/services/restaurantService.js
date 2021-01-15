@@ -160,10 +160,17 @@ const getRestaurantOpeningHours = (restaurantId) =>{
     return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantId}/time/public`)
 }
 const getMenuCatogory = (restaurantId) =>{
-    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantId}/meals/category/public`,{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantId}/meals/category/public`)
+}
+const getRestaurantOpinions = (restaurantId) =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantId}/opinions/public`)
+}
+const submitOpinionOfRestaurant = (restaurantId,opinion) =>{
+    return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantId}/opinions`,opinion,{
         headers:{
             Authorization:`bearer ${ localStorage.getItem('access_token')}`
-        }})
+        }
+    })
 }
 
 
@@ -184,5 +191,7 @@ export const restaurantService ={
     getRestaurantOpeningHours,
     addPaymentOnline,
     deletePayment,
-    getMenuCatogory
+    getMenuCatogory,
+    getRestaurantOpinions,
+    submitOpinionOfRestaurant
 }

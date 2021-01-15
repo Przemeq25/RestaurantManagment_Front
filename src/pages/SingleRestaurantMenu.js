@@ -137,7 +137,7 @@ const SingleRestaurantMenu = ({restaurant,location,match}) =>{
                    <Slide in={true} timeout={500} direction="left">
                        <Paper className={classes.filtersPaperStyle} variant="outlined">
                            <Box className={classes.filtersBoxStyle}>
-                               <Search width={'100%'} handleBlur={(e)=> handleWriteMeal(e.target.value) }/>
+                               <Search width={'100%'} handleBlur={(e)=> handleWriteMeal(e.target.value)}/>
                                <Box display="flex"  width="100%" justifyContent="flex-end" flex="2" ml={1}>
                                    <Hidden lgUp>
                                        <Box mr={1}>
@@ -185,7 +185,6 @@ const SingleRestaurantMenu = ({restaurant,location,match}) =>{
             >
                 <MenuFilters
                     categories={menuCategory}
-                    handleChangeFilters={handleChangeFilters}
                     handleChangeFilters={handleChangeFilters}
                     query={query}
                 />

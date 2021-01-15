@@ -11,6 +11,7 @@ export const routes ={
     DELIVERYANDPAYMENT:'/delivery/payment',
     PROFILE:"/profile",
     MY_ORDERS:"/my_orders",
+    MY_ORDERS_REFRESH:'/my_orders/refresh',
     ADMIN_PANEL:'/admin',
     RESTAURANT_DASHBOARD: `/admin/dashboard`,
     RESTAURANT_MENU:"/admin/menu",

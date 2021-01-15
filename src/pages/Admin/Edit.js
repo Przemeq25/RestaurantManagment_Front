@@ -18,7 +18,11 @@ import {
     Grow, TextField
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {getCuisineTypeValue, paymentOnlineInitialValues, restaurantInitialValues} from "../../helpers/_helpers";
+import {
+    getCuisineTypeValue,
+    paymentOnlineInitialValues,
+    restaurantEditInitialValues,
+} from "../../helpers/_helpers";
 import {paymentOnlineValidationSchema, restaurantValidationSchema} from "../../helpers/_validation";
 import {Formik} from "formik";
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -30,7 +34,13 @@ import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
 import AppLogo from "../../components/AppLogo";
 import {useDispatch, useSelector} from "react-redux";
-import {addPaymentOnline, deletePaymentOnline, deleteRestaurant, editRestaurant} from "../../redux/actions/restaurant";
+import {
+    addPaymentOnline,
+    deletePaymentOnline,
+    deleteRestaurant,
+    editRestaurant,
+    getOpeningHoursForSelected
+} from "../../redux/actions/restaurant";
 import ProgressButton from "../../components/ProgressButton";
 
 const useStyles = makeStyles((theme)=>({
@@ -68,7 +78,7 @@ const useStyles = makeStyles((theme)=>({
 const Edit = ({match}) =>{
     const classes = useStyles();
     const [isCollapseOpen, setCollapseOpen] = useState(false);
-    const [currentData,setCurrentData] = useState(restaurantInitialValues);
+    const [currentData,setCurrentData] = useState(restaurantEditInitialValues);
     const dispatch = useDispatch();
     const currentRestaurantData = useSelector(state=>state.restaurant.selectedRestaurant);
     const isDeleting = useSelector(state=>state.restaurant.isDeleteRequesting);
@@ -76,7 +86,10 @@ const Edit = ({match}) =>{
     const isPaymentRequesting = useSelector(state=>state.restaurant.isPaymentRequesting);
 
     useEffect(()=>{
-         const data = Object.assign({},restaurantInitialValues)
+         const data = Object.assign({},restaurantEditInitialValues)
+         if(currentRestaurantData && !currentRestaurantData.worksTime){
+             dispatch(getOpeningHoursForSelected(match.params.restaurantId));
+         }
          currentRestaurantData && Object.assign(data,currentRestaurantData,{category: getCuisineTypeValue(currentRestaurantData.category)});
          setCurrentData(data);
     },[currentRestaurantData])
@@ -126,7 +139,7 @@ const Edit = ({match}) =>{
                                             />
                                             <Divider/>
                                             <CardContent>
-                                                <RestaurantData/>
+                                                <RestaurantData edit/>
                                             </CardContent>
                                         </Card>
                                     </Grid>
