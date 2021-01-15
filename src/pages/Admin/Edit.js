@@ -32,6 +32,7 @@ import RestaurantData from "../../components/Admin/AddRestaurant/RestaurantData"
 import RestaurantOpeningHours from "../../components/Admin/AddRestaurant/RestaurantOpeningHours";
 import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
+import InfoIcon from '@material-ui/icons/Info';
 import AppLogo from "../../components/AppLogo";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -252,6 +253,12 @@ const Edit = ({match}) =>{
                                                                 <Button variant="contained" color="secondary" size="small">
                                                                     { currentRestaurantData.paymentOnline ? "Usuń płatność online" : "Dodaj płatność online"}
                                                                 </Button>
+                                                                <IconButton onClick={e=>{
+                                                                    e.stopPropagation()
+                                                                    window.open('https://developers.payu.com/pl/overview.html#sandbox','_blank');
+                                                                }} size="small">
+                                                                    <InfoIcon />
+                                                                </IconButton>
                                                             </Box>
                                                         </AccordionSummary>
                                                         <AccordionDetails>
