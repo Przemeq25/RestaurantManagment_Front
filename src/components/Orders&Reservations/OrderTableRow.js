@@ -1,12 +1,36 @@
 import React, {useState} from 'react';
-import {TableRow,TableCell,IconButton,Collapse,Box,Typography,Table,TableHead,TableBody,Divider,Chip,Grid} from "@material-ui/core";
+import {
+    TableRow,
+    TableCell,
+    IconButton,
+    Collapse,
+    Box,
+    Typography,
+    Table,
+    TableHead,
+    TableBody,
+    Divider,
+    Chip,
+    Grid,
+    Link,
+    Button
+} from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import PhoneIcon from '@material-ui/icons/Phone';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import moment from 'moment';
-import {orderStatusTypeTranslate, paymentTypeTranslate, orderTypeTranslate, isValidUrl} from "../../helpers/_helpers";
+import {
+    orderStatusTypeTranslate,
+    paymentTypeTranslate,
+    orderTypeTranslate,
+    isValidUrl,
+    paymentType
+} from "../../helpers/_helpers";
 import AppLogo from "../AppLogo";
 import {makeStyles} from "@material-ui/core/styles";
+import {routes} from "../../config/routes";
+import {orderService} from "../../services/ordersService";
 
 const useStyles = makeStyles(theme=>({
     typographyHidden:{
@@ -30,6 +54,11 @@ const OrderTableRow = ({row}) =>{
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row">
+                    <Typography variant="button">
+                        <Link href= {`${routes.SINGLERESTAURANTMENU}/${row.restaurantId}`} onClick={(e)=>e.stopPropagation()}>
+                            {row.restaurantName ? row.restaurantName : ""}
+                        </Link>
+                    </Typography>
                     <Typography variant="body2">
                         {moment(row.time).format("DD-MM-YYYY")}
                     </Typography>
@@ -94,7 +123,18 @@ const OrderTableRow = ({row}) =>{
                                             Płatność:
                                         </Typography>
                                         <Typography variant="body2" display="inline" paragraph style={{marginRight:16}}>{paymentTypeTranslate(row.paymentMethod)}</Typography>
-                                        <Chip label={row.payed ? "Zapłacono" : "Do zapłaty!"} color= "secondary"/>
+                                        <Chip
+                                            label={row.payed ? "Zapłacono" : "Do zapłaty!"}
+                                            color= "secondary"
+                                            onDelete={()=>{
+                                                (row.paymentMethod === paymentType.ONLINE && !row.payed) &&
+                                                    orderService.payOnline(row.restaurantId,row.id)
+                                                        .then((response)=>{
+                                                            window.open(response.data.payUUrl, '_blank');
+                                                        })
+                                            }}
+                                            deleteIcon={<Button startIcon={<ArrowForwardIcon/>}>PayU!</Button>}
+                                        />
                                         <Box mb={2}/>
 
                                         <Typography variant="h5" gutterBottom>

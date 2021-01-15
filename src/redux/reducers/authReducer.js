@@ -7,7 +7,7 @@ const initialState = {
     refreshToken:null,
     isLoading: false,
     error: null,
-    userType:null,
+    userType:[],
     userData:{},
 };
 export const authReducer = (state = initialState, action) =>{

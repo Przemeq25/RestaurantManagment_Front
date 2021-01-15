@@ -127,6 +127,13 @@ export const restaurantInitialValues = {
         },
     ]
 };
+export const paymentOnlineInitialValues = {
+    posId: '',
+    md5: '',
+    clientId: '',
+    clientSecret: ''
+}
+
 export const menuInitialValues = {
     image:'',
     name:'',
@@ -166,7 +173,7 @@ export const renderBastekProducts = (basket) =>{
 
     basket.forEach(function (a) {
         if (!this[a.restaurantId]) {
-            this[a.restaurantId] = { restaurantId: a.restaurantId, restaurantName: a.restaurantName,  products: [] };
+            this[a.restaurantId] = { restaurantId: a.restaurantId, restaurantName: a.restaurantName, paymentOnline: a.restaurantPaymentOnline, products: [] };
             result.push(this[a.restaurantId]);
         }
         this[a.restaurantId].products.push(a);
@@ -229,7 +236,7 @@ export const paymentTypeTranslate = (payment)=>{
     switch(payment) {
         case paymentType.CASH:
             return 'Gotówka';
-        case paymentType.CASH:
+        case paymentType.ONLINE:
             return 'Płatność online';
         default:
             return "Gotówka"

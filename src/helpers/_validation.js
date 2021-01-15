@@ -63,6 +63,16 @@ export const restaurantValidationSchema = Yup.object().shape({
         .required('Pole wymagane'),
 
 });
+export const paymentOnlineValidationSchema = Yup.object().shape({
+    posId: Yup.string()
+        .required('Pole wymagane'),
+    md5: Yup.string()
+        .required('Pole wymagane'),
+    clientId: Yup.string()
+        .required('Pole wymagane'),
+    clientSecret: Yup.string()
+        .required('Pole wymagane'),
+});
 
 export const menuValidationSchema = Yup.object().shape({
     name: Yup.string()

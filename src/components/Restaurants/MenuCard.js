@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme)=>({
         minWidth:'100%'
     }
 }));
-const MenuCard = ({name,id,ingredients,price,timeToDo,restaurantName, restaurantId,image}) =>{
+const MenuCard = ({name,id,ingredients,price,timeToDo,restaurantName, restaurantId,image,payment}) =>{
     const classes = useStyles();
     const theme = useTheme();
     const xsDown = useMediaQuery(theme.breakpoints.down('xs'));
@@ -81,6 +81,7 @@ const MenuCard = ({name,id,ingredients,price,timeToDo,restaurantName, restaurant
         unitPrice: price,
         restaurantName: restaurantName,
         restaurantId: restaurantId,
+        restaurantPaymentOnline:payment,
         timeToDo:timeToDo
     };
     return (

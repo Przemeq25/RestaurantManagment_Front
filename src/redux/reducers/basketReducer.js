@@ -41,7 +41,7 @@ export const basketReducer = (state=initialState, action)=>{
 
 
         case basketConstants.DELETE_PRODUCT:
-            const foundProductIndex = state.basket.findIndex(product => product.id === action.payload.id);
+            const foundProductIndex = state.basket.findIndex(product => product.id === action.payload);
             const newBasket = [...state.basket];
             newBasket.splice(foundProductIndex, 1)
             return {
@@ -83,6 +83,8 @@ export const basketReducer = (state=initialState, action)=>{
             else{
                 return {...state}
             }
+        case basketConstants.RESET:
+            return initialState;
 
         default:
             return state;

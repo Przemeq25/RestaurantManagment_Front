@@ -164,10 +164,11 @@ export const ordersReducer = (state=initialState, action) =>{
             }
         }
         case ordersConstants.SUBMIT_ORDER_SUCCESS:{
+            const mealsInNewOrder = state.currentOrder.meals.map(meal=> ({...meal, isFinished:false}));
             return{
                 ...state,
                 isRequesting:false,
-                //orders: [...state.orders, action.payload],
+                orders: [...state.orders, {...state.currentOrder, id:action.payload.orderId, price:state.currentOrder.totalPrice, isAllMealsFinished:false, meals:mealsInNewOrder, orderStatus:orderStatus.IN_PROGRESS}],
                 currentOrder: initialState.currentOrder,
             }
         }

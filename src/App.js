@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import "./App.css";
-import Home from "./pages/HomePage";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import {Switch,Route,Router} from "react-router-dom";
 import AdminPanelPage from "./pages/Admin/AdminPanelPage";
@@ -29,7 +28,8 @@ import Alert from "./components/Alert";
 import Page404 from "./pages/Page404";
 import MyOrders from "./pages/MyOrders";
 import AuthProvider from "./components/Auth/AuthProvider";
-import OwnerProvider from "./components/Auth/OwnerRoute";
+import OwnerRoute from "./components/Auth/OwnerRoute";
+import {Redirect} from 'react-router-dom';
 
 
 const App =()=>{
@@ -43,11 +43,11 @@ const App =()=>{
         <Alert hideDuration={4000}/>
             <Router history = {history}>
                 <Switch>
-                    <Route exact path={routes.HOMEPAGE} component={Home}/>
+                    <Redirect exact from='/' to = {routes.RESTAURANTS}/>
+                    <Route path={routes.RESTAURANTS} component = {Restaurants}/>
                     <Route exact path={routes.LOGIN} component={Login}/>
                     <Route exact path={routes.REGISTER} component={Register}/>
                     <Route exact path={routes.CONFIRM} component = {RegisterConfirmation}/>
-                    <Route exact path={routes.RESTAURANTS} component = {Restaurants}/>
                     <Route path={`${routes.SINGLERESTAURANTMENU}/:restaurantId`} exact render={(props)=>(
                         <SingleRestaurantWrapper {...props}>
                             <SingleRestaurantMenu {...props} />
@@ -77,11 +77,11 @@ const App =()=>{
                             )}
                             />
 
-                            <OwnerProvider path={`${routes.RESTAURANT_DASHBOARD}/:restaurantId`} exact>
+                            <OwnerRoute path={`${routes.RESTAURANT_DASHBOARD}/:restaurantId`} exact>
                                 <AdminPanelPage>
                                     <RestaurantDashboard />
                                 </AdminPanelPage>
-                            </OwnerProvider>
+                            </OwnerRoute>
 
                             <Route path={`${routes.RESTAURANT_MENU}/:restaurantId`} exact render={(props)=>(
                                 <AdminPanelPage {...props}>
@@ -101,16 +101,16 @@ const App =()=>{
                                 </AdminPanelPage>
                             )}
                             />
-                            <OwnerProvider path={`${routes.RESTAURANT_WORKERS}/:restaurantId`} exact>
+                            <OwnerRoute path={`${routes.RESTAURANT_WORKERS}/:restaurantId`} exact>
                                 <AdminPanelPage>
                                     <Workers/>
                                 </AdminPanelPage>
-                            </OwnerProvider>
-                            <OwnerProvider path={`${routes.RESTAURANT_EDIT}/:restaurantId`} exact >
+                            </OwnerRoute>
+                            <OwnerRoute path={`${routes.RESTAURANT_EDIT}/:restaurantId`} exact >
                                 <AdminPanelPage>
                                     <Edit/>
                                 </AdminPanelPage>
-                            </OwnerProvider>
+                            </OwnerRoute>
                     </AuthProvider>
                     <Route component={Page404}/>
                 </Switch>

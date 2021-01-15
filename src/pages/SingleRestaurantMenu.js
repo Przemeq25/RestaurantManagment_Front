@@ -154,7 +154,7 @@ const SingleRestaurantMenu = ({restaurant,location}) =>{
                                                <Typography variant="h4">{category[0] !== "null" ? category[0] : "Inne" }</Typography>
                                            </Paper>
                                            {category[1].map(meal=>(
-                                               <MenuCard {...meal} restaurantName={restaurant.name} restaurantId={restaurant.id} key={meal.id}/>
+                                               <MenuCard {...meal} restaurantName={restaurant.name} restaurantId={restaurant.id} key={meal.id} payment={restaurant.paymentOnline}/>
                                            ))}
                                            </Box>
                                        ))
