@@ -1,8 +1,9 @@
-import React from "react";
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import React, {useEffect, useState} from "react";
 import {Box, Divider, Hidden, Table, TableBody, TableCell, TableRow, Typography} from "@material-ui/core";
 import PhoneIcon from '@material-ui/icons/Phone';
 import {makeStyles} from "@material-ui/core/styles";
+import {restaurantService} from "../services/restaurantService";
+import {toLocalTime, worksTimeDaysTranslate} from "../helpers/_helpers";
 
 const useStyles = makeStyles(theme=>({
     contactBox:{
@@ -10,25 +11,27 @@ const useStyles = makeStyles(theme=>({
         alignItems:"center",
         justifyContent:'space-around',
         paddingBottom:theme.spacing(6),
+        marginTop:theme.spacing(4),
         [theme.breakpoints.down('xs')]:{
             flexDirection:'column',
         }
+
     }
 }))
 
-const containerStyle = {
-    width: '100%',
-    height: '400px',
-};
 
-const center = {
-    lat: -3.745,
-    lng: -38.523
-};
-
-
-const SingleRestaurantContact = () =>{
+const SingleRestaurantContact = ({match,restaurant}) =>{
     const classes = useStyles();
+    const [openingHours, setOpeningHours] = useState([]);
+
+    useEffect(()=>{
+        const getOpeningHours = () =>{
+            restaurantService.getRestaurantOpeningHours(match.params.restaurantId)
+                .then(response=>setOpeningHours(response.data))
+                .catch(()=>setOpeningHours([]));
+        }
+        getOpeningHours();
+    },[])
     return (
         <>
             <Box className={classes.contactBox}>
@@ -36,34 +39,15 @@ const SingleRestaurantContact = () =>{
                     <Typography variant="h4" paragraph>Godziny otwarcia:</Typography>
                     <Table size="small">
                         <TableBody>
-                                <TableRow>
+                            {openingHours.length ? openingHours.map((row) => (
+                                <TableRow key={row.day}>
                                     <TableCell>
-                                        Poniedziałek
+                                        {worksTimeDaysTranslate(row.day)}
                                     </TableCell>
-                                    <TableCell align="right">8:00</TableCell>
-                                    <TableCell align="right">12:00</TableCell>
+                                    <TableCell align="right">{row.from ? toLocalTime(row.from) : "Zamknięte"}</TableCell>
+                                    <TableCell align="right">{row.to ? toLocalTime(row.to) : "Zamknięte"}</TableCell>
                                 </TableRow>
-                                <TableRow>
-                                    <TableCell>
-                                        Wtorek
-                                    </TableCell>
-                                    <TableCell align="right">8:00</TableCell>
-                                    <TableCell align="right">12:00</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell>
-                                        Środa
-                                    </TableCell>
-                                    <TableCell align="right">8:00</TableCell>
-                                    <TableCell align="right">12:00</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell>
-                                        Czwartek
-                                    </TableCell>
-                                    <TableCell align="right">8:00</TableCell>
-                                    <TableCell align="right">12:00</TableCell>
-                                </TableRow>
+                            )):null}
                         </TableBody>
                     </Table>
                 </Box>
@@ -76,29 +60,31 @@ const SingleRestaurantContact = () =>{
                        variant="h5"
                         gutterBottom
                     >
-                       Tarnów
+                       {restaurant.name}
                     </Typography>
                     <Typography
                        variant="h5"
                         gutterBottom
                     >
-                        32-700
+                        {restaurant.postCode}
                     </Typography>
                     <Typography
                       variant="h5"
                       paragraph
                     >
-                        Mickiewicza 16
+                        {restaurant.street} {restaurant.houseNumber}
                     </Typography>
-                    <Box display="flex" alignItems="center">
-                        <PhoneIcon/>
-                        <Box mr={1}/>
-                        <Typography
-                            variant="h5"
-                        >
-                            789 574 232
-                        </Typography>
-                    </Box>
+                    {restaurant.phoneNumber && (
+                        <Box display="flex" alignItems="center">
+                            <PhoneIcon/>
+                            <Box mr={1}/>
+                            <Typography
+                                variant="h5"
+                            >
+                                {restaurant.phoneNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}
+                            </Typography>
+                        </Box>
+                    )}
                 </Box>
 
             </Box>

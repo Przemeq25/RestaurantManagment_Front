@@ -13,6 +13,7 @@ import queryString from "query-string";
 import {handleRenderMenuByCategory, history} from "../helpers/_helpers";
 import {routes} from "../config/routes";
 import {mealsService} from "../services/mealsService";
+import {restaurantService} from "../services/restaurantService";
 
 const useStyles = makeStyles((theme)=>({
     filtersBoxStyle:{
@@ -37,13 +38,13 @@ const useStyles = makeStyles((theme)=>({
         backgroundColor:theme.palette.secondary.dark,
     }
 }));
-const SingleRestaurantMenu = ({restaurant,location}) =>{
+const SingleRestaurantMenu = ({restaurant,location,match}) =>{
     const classes = useStyles();
     const theme = useTheme();
     const mdDown = useMediaQuery(theme.breakpoints.down('md'))
     const [meals,setMeals] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-
+    const [menuCategory,setMenuCategory] = useState([]);
     const [isToggleFiltersDialogOpen, setToggleFiltersDialogOpen] = useState(false);
     const [query,setQuery] = useState({})
 
@@ -65,6 +66,15 @@ const SingleRestaurantMenu = ({restaurant,location}) =>{
                     setIsLoading(false);
                 })
     },[restaurant,location.search])
+
+    useEffect(()=>{
+        const getCategories = () =>{
+            restaurantService.getMenuCatogory(match.params.restaurantId)
+                .then((response)=>setMenuCategory(response.data.category))
+                .catch(()=>setMenuCategory([]))
+        }
+        getCategories();
+    },[]);
 
 
     const handleToggleFiltersDialog = () =>{
@@ -118,7 +128,7 @@ const SingleRestaurantMenu = ({restaurant,location}) =>{
                    <Hidden mdDown>
                        <Slide in={true} timeout={500} direction="right">
                            <Box style={{position:'sticky' ,top: 30}}>
-                               <MenuFilters handleChangeFilters={handleChangeFilters} query={query}/>
+                               <MenuFilters handleChangeFilters={handleChangeFilters} query={query} categories={menuCategory}/>
                            </Box>
                        </Slide>
                    </Hidden>
@@ -174,6 +184,7 @@ const SingleRestaurantMenu = ({restaurant,location}) =>{
                 handleToggleFiltersDialog={handleToggleFiltersDialog}
             >
                 <MenuFilters
+                    categories={menuCategory}
                     handleChangeFilters={handleChangeFilters}
                     handleChangeFilters={handleChangeFilters}
                     query={query}

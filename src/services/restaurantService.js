@@ -159,6 +159,12 @@ const submitPersonalOrder = (order,restaurantID) =>{
 const getRestaurantOpeningHours = (restaurantId) =>{
     return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantId}/time/public`)
 }
+const getMenuCatogory = (restaurantId) =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantId}/meals/category/public`,{
+        headers:{
+            Authorization:`bearer ${ localStorage.getItem('access_token')}`
+        }})
+}
 
 
 export const restaurantService ={
@@ -177,5 +183,6 @@ export const restaurantService ={
     submitPersonalOrder,
     getRestaurantOpeningHours,
     addPaymentOnline,
-    deletePayment
+    deletePayment,
+    getMenuCatogory
 }

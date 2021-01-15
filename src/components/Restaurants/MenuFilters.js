@@ -7,7 +7,6 @@ import {
     TextField,
     Typography
 } from "@material-ui/core";
-import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
 import {makeStyles} from "@material-ui/core/styles";
 import {onlyNumbers} from "../../helpers/_validation";
 

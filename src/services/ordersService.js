@@ -36,7 +36,7 @@ const changeOrderStatus = (restaurantId,order)=>{
 }
 const payOnline =(restaurantId, orderId) =>{
     return axios.post(`${appUrl}/order-api/restaurants/${restaurantId}/orders/${orderId}/pay`,
-        '',
+        {},
         {
             headers:{
                 Authorization:`bearer ${ localStorage.getItem('access_token')}`

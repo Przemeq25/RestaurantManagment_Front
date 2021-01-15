@@ -46,10 +46,12 @@ export const submitOrder = (order) =>{
                     restaurantService.submitOrder(orders[i],orders[i].restaurantId)
                         .then((response)=> {
                             if (orders[i].paymentMethod === paymentType.ONLINE) {
-                                orderService.payOnline(orders[i].restaurantId,response.data.orderId)
-                                    .then((response)=>{
-                                        window.open(response.data.payUUrl, '_blank');
-                                    })
+                                setTimeout(()=>{
+                                    orderService.payOnline(orders[i].restaurantId,response.data.orderId)
+                                        .then((response)=>{
+                                            window.open(response.data.payUUrl, '_blank');
+                                        })
+                                },2000)
                             }
                         })
                         .then(()=>dispatch({type:paymentConstants.DELETE_SUCCESS_ORDER, payload:orders[i].restaurantId}))

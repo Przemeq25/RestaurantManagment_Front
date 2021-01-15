@@ -101,10 +101,10 @@ const OrderTableRow = ({row}) =>{
                                         <TableRow key={meal.id}>
                                             <TableCell component="th" scope="row">
                                                 {isValidUrl(meal.image) ? (
-                                                        <img src={meal.image} alt="image" style={{width:60,height:60}}/>
-                                                    ) : (
-                                                        <AppLogo size={10}/>
-                                                    )
+                                                    <img src={meal.image} alt="image" style={{width:60,height:60}}/>
+                                                ) : (
+                                                    <AppLogo size={10}/>
+                                                )
                                                 }
                                             </TableCell>
                                             <TableCell>{meal.name}</TableCell>
@@ -124,16 +124,16 @@ const OrderTableRow = ({row}) =>{
                                         </Typography>
                                         <Typography variant="body2" display="inline" paragraph style={{marginRight:16}}>{paymentTypeTranslate(row.paymentMethod)}</Typography>
                                         <Chip
-                                            label={row.payed ? "Zapłacono" : "Do zapłaty!"}
+                                            label={row.payed ? "Zapłacono" : row.paymentMethod === paymentType.ONLINE ? "Zapłać teraz!" : "Do zapłaty!"}
                                             color= "secondary"
-                                            onDelete={()=>{
-                                                (row.paymentMethod === paymentType.ONLINE && !row.payed) &&
+                                            clickable = {row.paymentMethod === paymentType.ONLINE && !row.payed}
+                                            onClick={()=>{
+                                                if(row.paymentMethod === paymentType.ONLINE && !row.payed) {
                                                     orderService.payOnline(row.restaurantId,row.id)
                                                         .then((response)=>{
                                                             window.open(response.data.payUUrl, '_blank');
                                                         })
-                                            }}
-                                            deleteIcon={<Button startIcon={<ArrowForwardIcon/>}>PayU!</Button>}
+                                                }}}
                                         />
                                         <Box mb={2}/>
 
