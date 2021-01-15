@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import {
     Accordion,
@@ -19,7 +19,7 @@ import {
     TableContainer,
     Table,
     TableBody, Grow,
-    FormGroup,FormControl,FormControlLabel,
+    FormGroup,FormControlLabel,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
@@ -32,7 +32,7 @@ import LocalMallIcon from '@material-ui/icons/LocalMall';
 import {
     orderStatus,
     orderType as selectOrderType,
-    orderTypeTranslate,
+    orderTypeTranslate, paymentType,
     paymentTypeTranslate
 } from "../../../helpers/_helpers";
 import moment from "moment";
@@ -228,6 +228,7 @@ const OrderRow = ({restaurantId,orderIndex,time,meals,price,...order}) =>{
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
+                                                        disabled={order.paymentMethod === paymentType.ONLINE}
                                                         checked={order.payed}
                                                         onChange={(e)=>dispatch(changeOrderPayStatus(order.id,e.target.checked))}
                                                     />
