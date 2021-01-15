@@ -1,9 +1,8 @@
-import React from "react";
+import React,{useState, useRef} from "react";
 import {
     AppBar,
     Toolbar,
     Box,
-    IconButton,
     Paper,
     MenuList,
     MenuItem,
@@ -13,19 +12,24 @@ import {
     ListItemIcon,
     Typography,
     useTheme,
-    Divider
+    Divider,
+    Button,
+    Badge,
+    Container,
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import AppLogo from "./AppLogo";
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import {NavLink} from "react-router-dom";
 import {routes} from "../config/routes";
-import AssignmentIcon from '@material-ui/icons/Assignment';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import {useSelector,useDispatch} from "react-redux";
 import {history} from "../helpers/_helpers";
 import {logout} from '../redux/actions/auth';
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
+import AppBarShoppingBasketItem from "./Restaurants/ShoppingBasket/AppBarShoppingBasketItem";
+import useMediaQuery from "@material-ui/core/useMediaQuery/useMediaQuery";
 
 const useStyles = makeStyles(theme=>({
     toolbarStyle:{
@@ -34,163 +38,316 @@ const useStyles = makeStyles(theme=>({
         justifyContent:'space-between',
     },
     paperRoot:{
-        backgroundColor:theme.palette.secondary.main,
-        color:theme.palette.secondary.contrastText,
-    },
-    menuIcon:{
-        color : "inherit",
-        minWidth:'35px'
+        boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
+        borderBottomLeftRadius:theme.spacing(2),
+        borderBottomRightRadius:theme.spacing(2),
+        overflow:'hidden',
+
     },
     selectedItem:{
         color:theme.palette.primary.main,
 
     },
     menuItem:{
-        padding: '12px 16px',
+        padding: '20px 20px',
         [theme.breakpoints.down('md')]:{
             padding: '12px 12px',
         }
-
+    },
+    menuIcon:{
+        color : "inherit",
+        minWidth:'35px'
     },
     authButton:{
-        backgroundColor:theme.palette.primary.main,
+        backgroundColor:theme.palette.secondary.main,
         justifyContent:'center',
         padding: '10px 16px',
         [theme.breakpoints.down('md')]:{
-            padding: '12px 8px',
+            padding: '5px 8px',
         },
-
+        minHeight:30,
     },
     growStyle:{
         transformOrigin: " right top",
         transform: 'translate(10px,9px)'
+    },
+    menuButton: {
+        "&:focus, &:active":{
+            outline:'none',
+        },
+        '&:hover':{
+            color: theme.palette.primary.main,
+            backgroundColor:'transparent',
+        },
+        transition:'color 200ms ease-in'
+    },
+    menuButtonText:{
+        fontWeight:600,
+        fontSize:'0.6rem',
+    },
+    navbarText:{
+        fontWeight: 600,
+        cursor:'pointer',
     }
 }));
 
 const Navbar = () =>{
     const classes = useStyles();
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-    const anchorRef = React.useRef(null);
+    const [isMenuOpen, setMenuOpen] = useState(false);
+    const [isBasketOpen, setBasketOpen] = useState(false);
+    const anchorRef = useRef(null);
+    const shoppingBasketRef = useRef(null);
     const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
     const dispatch = useDispatch();
+    const mdUp = useMediaQuery(theme.breakpoints.up('md'));
+    const basketLength = useSelector(state=> state.basket.numberOfProducts);
+    const basket = useSelector(state=>state.basket.basket);
+    const basketTotalPrice = useSelector(state=>state.basket.totalPrice);
 
 
-    const handleToggle = () => {
-        setOpen((prevOpen) => !prevOpen);
+    const handleToggleMenu = (e) => {
+        setMenuOpen((prevOpen) => !prevOpen);
+        handleCloseBasket(e)
     };
 
-    const handleClose = (event) => {
+    const handleCloseMenu = (event) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
         }
-
-        setOpen(false);
+        setMenuOpen(false);
     };
+
+    const handleOpenBasket = (e) =>{
+        setBasketOpen(prev=>!prev)
+        handleCloseMenu(e);
+    };
+
+
+    const handleCloseBasket = (event) =>{
+        if (shoppingBasketRef.current && shoppingBasketRef.current.contains(event.target)) {
+            return;
+        }
+        setBasketOpen(false);
+    }
     return(
-        <AppBar position="static" color="secondary" elevation={2}>
-            <Toolbar className={classes.toolbarStyle}>
-                <AppLogo/>
-                <Box>
-                    <IconButton
-                        color="inherit"
-                    >
-                        <ShoppingBasketIcon />
-                    </IconButton>
-                    <IconButton
-                        color="inherit"
-                        ref={anchorRef}
-                        aria-haspopup="true"
-                        onClick={handleToggle}
-                    >
-                        <AccountCircle />
-                    </IconButton>
-                    <Popper
-                        open={open}
-                        anchorEl={anchorRef.current}
-                        placement="bottom-end"
-                        transition
-                        disablePortal
-                    >
-                        {({ TransitionProps }) => (
-                            <Grow
-                                {...TransitionProps}
-                                style={{ transformOrigin: " right top", transform: window.innerWidth >= theme.breakpoints.width('md') ? 'translate(10px,9px)' : 'translate(16px,5px)' }}
-                            >
-                                <Paper square elevation={2} classes={{root: classes.paperRoot}} >
-                                    <ClickAwayListener onClickAway={handleClose}>
-                                        <MenuList autoFocusItem={open} disablePadding>
-                                            <MenuItem
-                                                onClick={handleClose}
-                                                component={NavLink}
-                                                to={routes.PROFILE}
-                                                activeClassName={classes.selectedItem}
-                                                className={classes.menuItem}
-                                            >
-                                                <ListItemIcon className={classes.menuIcon}>
-                                                <AccountCircle fontSize="small" />
-                                            </ListItemIcon>
-                                                <Typography variant="h5" color = "inherit">Twoje konto</Typography>
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={handleClose}
-                                                component={NavLink}
-                                                to={routes.CLIENT_ORDERS}
-                                                activeClassName={classes.selectedItem}
-                                                className={classes.menuItem}
-                                            >
-                                                <ListItemIcon className={classes.menuIcon}>
-                                                    <AssignmentIcon fontSize="small" />
-                                                </ListItemIcon>
-                                                <Typography variant="h5" color = "inherit">Zamówienia</Typography>
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={handleClose}
-                                                component={NavLink}
-                                                to={routes.ADMIN_PANEL}
-                                                activeClassName={classes.selectedItem}
-                                                className={classes.menuItem}
-                                            >
-                                                <ListItemIcon className={classes.menuIcon}>
-                                                    <RestaurantIcon fontSize="small" />
-                                                </ListItemIcon>
-                                                <Typography variant="h5" color = "inherit">Panel zarządzania</Typography>
-                                            </MenuItem>
-                                            <Divider/>
-                                            {
-                                                isLoggedIn ? (
-                                                    <MenuItem
-                                                        onClick={(e)=>{
-                                                            handleClose(e);
-                                                            dispatch(logout());
-                                                        }}
-                                                        className={classes.authButton}
-                                                    >
-                                                        <Typography variant="h5" color = "inherit">Wyloguj się</Typography>
-                                                    </MenuItem>
+
+        <AppBar position="relative" color="secondary" elevation={2} >
+            <Container>
+                <Toolbar className={classes.toolbarStyle} disableGutters>
+                    <AppLogo push size={12}/>
+                    <Box>
+                        <Button
+                            onClick={()=>history.push(routes.RESTAURANTS)}
+                            color="inherit"
+                            disableRipple
+                            className={classes.menuButton}
+                        >
+                            <Box display="flex" alignItems ='center' flexDirection = "column">
+                                <RestaurantIcon color="inherit"/>
+                                <Typography color="inherit" className={classes.menuButtonText}>Restauracje</Typography>
+                            </Box>
+                        </Button>
+                        <Button
+                            ref={shoppingBasketRef}
+                            onMouseEnter={(e)=>mdUp ? handleOpenBasket(e)  : function () {
+                                return undefined
+                            } }
+                            onMouseLeave={handleCloseBasket}
+                            onClick={()=>history.push(routes.SHOPPINGBASKET)}
+                            color="inherit"
+                            disableRipple
+                            className={classes.menuButton}
+                        >
+                            <Box display="flex" alignItems ='center' flexDirection = "column">
+                                <Badge
+                                    color="primary"
+                                    badgeContent={basketLength}
+                                >
+                                    <ShoppingCartOutlinedIcon color="inherit"/>
+                                </Badge>
+                                <Typography color="inherit" className={classes.menuButtonText}>Koszyk</Typography>
+                            </Box>
+                        </Button>
+                        <Popper
+                            onMouseLeave={handleCloseBasket}
+                            open={isBasketOpen}
+                            anchorEl={shoppingBasketRef.current}
+                            placement="bottom-end"
+                            transition
+                            disablePortal
+                            style={{zIndex:100}}
+                        >
+                            {({ TransitionProps }) => (
+                                <Grow
+                                    {...TransitionProps}
+                                    style={{ zIndex:100, transformOrigin: " right top", transform: window.innerWidth >= theme.breakpoints.width('md') ? 'translate(10px,9px)' : 'translate(16px,5px)' }}
+                                >
+                                    <Paper square elevation={2} classes={{root: classes.paperRoot}} >
+                                        <ClickAwayListener onClickAway={handleCloseBasket}>
+                                        <Box p={2} zIndex="100">
+                                            {basket.length ? (
+                                                <>
+                                                    <Box display="flex" alignItems ="center" justifyContent="space-between" pb={2}>
+                                                        <Typography variant = "h4"> Twój koszyk </Typography>
+                                                        <Box>
+                                                            <Typography variant= "subtitle2"> Wartość koszyka: </Typography>
+                                                            <Typography variant= "h4"> {basketTotalPrice.toFixed(2)} zł </Typography>
+                                                        </Box>
+
+                                                        </Box>
+                                                        <Divider/>
+                                                        <Box display="flex" flexDirection="column">
+                                                            {basket.map(product=>(
+                                                                <AppBarShoppingBasketItem {...product} key={product.id}/>
+                                                                ))}
+                                                        </Box>
+                                                            <Box mt={1}/>
+                                                            <Divider/>
+                                                            <Box display="flex" alignItems ="center" justifyContent="space-between" pt={2}>
+                                                            <Button
+                                                                variant="text"
+                                                                onClick={()=>history.push(routes.SHOPPINGBASKET)}
+                                                            >
+                                                                Pokaż koszyk
+                                                            </Button>
+                                                            <Button
+                                                                variant="contained"
+                                                                color="secondary"
+                                                                onClick={()=>history.push(routes.DELIVERYANDPAYMENT)}
+                                                            >
+                                                                Do kasy
+                                                            </Button>
+                                                    </Box>
+                                                </>
                                                 ):(
-                                                    <MenuItem
-                                                        onClick={(e)=>{
-                                                            handleClose(e);
-                                                            history.push(routes.LOGIN)
-                                                        }}
-                                                        className={classes.authButton}
-                                                    >
+                                                    <Box display ='flex' alignItems = 'center' flexDirection ="column" p={6} zIndex="100">
+                                                        <Typography
+                                                            variant="h4"
+                                                            color="primary"
+                                                            gutterBottom
+                                                        >
+                                                            Twój koszyk jest pusty
+                                                        </Typography>
+                                                        <Typography
+                                                            variant="subtitle2"
+                                                            color="primary"
+                                                            paragraph
+                                                        >
+                                                            Szukasz restauracji?
+                                                        </Typography>
+                                                        <Button
+                                                            variant="outlined"
+                                                            color="primary"
+                                                            onClick={()=>history.push(routes.RESTAURANTS)}
+                                                        >
+                                                            Przejdź do restauracji
+                                                        </Button>
+                                                    </Box>
+                                               )
+                                           }
+                                        </Box>
+                                        </ClickAwayListener>
+                                    </Paper>
+                                </Grow>
+                            )}
+                        </Popper>
+                        <Button ref={anchorRef}  onClick={handleToggleMenu} color="inherit" disableRipple className={classes.menuButton}>
+                                <Box display="flex" alignItems ='center' flexDirection = "column">
+                                    <PersonOutlineIcon color="inherit"/>
+                                    <Typography color="inherit" className={classes.menuButtonText}>Twoje konto</Typography>
+                                </Box>
+                        </Button>
 
-                                                        <Typography variant="h5" color = "inherit">Zaloguj się</Typography>
-                                                    </MenuItem>
-                                                )
-                                            }
+                        <Popper
+                            onMouseLeave={handleCloseMenu}
+                            open={isMenuOpen}
+                            anchorEl={anchorRef.current}
+                            placement="bottom-end"
+                            transition
+                            disablePortal
+                            style={{zIndex:100}}
+                        >
+                            {({ TransitionProps }) => (
+                                <Grow
+                                    {...TransitionProps}
+                                    style={{ transformOrigin: " right top", transform: window.innerWidth >= theme.breakpoints.width('md') ? 'translate(10px,9px)' : 'translate(16px,5px)' }}
+                                >
+                                    <Paper square elevation={2} classes={{root: classes.paperRoot}} >
+                                        <ClickAwayListener onClickAway={handleCloseMenu}>
+                                            <MenuList autoFocusItem={isMenuOpen} disablePadding>
+                                                <MenuItem
+                                                    onClick={handleCloseMenu}
+                                                    component={NavLink}
+                                                    to={routes.PROFILE}
+                                                    activeClassName={classes.selectedItem}
+                                                    className={classes.menuItem}
+                                                >
+                                                    <ListItemIcon className={classes.menuIcon}>
+                                                    <PersonOutlineIcon fontSize="small" />
+                                                </ListItemIcon>
+                                                    <Typography variant="h5" color = "inherit">Twoje konto</Typography>
+                                                </MenuItem>
+                                                <MenuItem
+                                                    onClick={handleCloseMenu}
+                                                    component={NavLink}
+                                                    to={routes.MY_ORDERS}
+                                                    activeClassName={classes.selectedItem}
+                                                    className={classes.menuItem}
+                                                >
+                                                    <ListItemIcon className={classes.menuIcon}>
+                                                        <AssignmentOutlinedIcon fontSize="small" />
+                                                    </ListItemIcon>
+                                                    <Typography variant="h5" color = "inherit">Zamówienia</Typography>
+                                                </MenuItem>
+                                                <MenuItem
+                                                    onClick={handleCloseMenu}
+                                                    component={NavLink}
+                                                    to={routes.ADMIN_PANEL}
+                                                    activeClassName={classes.selectedItem}
+                                                    className={classes.menuItem}
+                                                >
+                                                    <ListItemIcon className={classes.menuIcon}>
+                                                        <RestaurantIcon fontSize="small" />
+                                                    </ListItemIcon>
+                                                    <Typography variant="h5" color = "inherit">Panel zarządzania</Typography>
+                                                </MenuItem>
+                                                <Divider/>
+                                                {
+                                                    isLoggedIn ? (
+                                                        <MenuItem
+                                                            onClick={(e)=>{
+                                                                handleCloseMenu(e);
+                                                                dispatch(logout());
+                                                            }}
+                                                            className={classes.authButton}
+                                                        >
+                                                            <Typography variant="h5" color = "inherit">Wyloguj się</Typography>
+                                                        </MenuItem>
+                                                    ):(
+                                                        <MenuItem
+                                                            onClick={(e)=>{
+                                                                handleCloseMenu(e);
+                                                                history.push(routes.LOGIN)
+                                                            }}
+                                                            className={classes.authButton}
+                                                        >
 
-                                        </MenuList>
-                                    </ClickAwayListener>
-                                </Paper>
-                            </Grow>
-                        )}
-                    </Popper>
+                                                            <Typography variant="h5" color = "inherit">Zaloguj się</Typography>
+                                                        </MenuItem>
+                                                    )
+                                                }
 
-                </Box>
-            </Toolbar>
+                                            </MenuList>
+                                        </ClickAwayListener>
+                                    </Paper>
+                                </Grow>
+                            )}
+                        </Popper>
+
+                    </Box>
+                </Toolbar>
+            </Container>
         </AppBar>
     )
 }

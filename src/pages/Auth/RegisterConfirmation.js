@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import AuthContainer from "../../components/AuthContainer";
+import AuthContainer from "../../components/Auth/AuthContainer";
 import {Box,Typography, Button,Backdrop,CircularProgress} from "@material-ui/core";
 import {history} from "../../helpers/_helpers";
 import {routes} from "../../config/routes";
@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {activateAccount} from "../../redux/actions/register";
 import {makeStyles} from "@material-ui/core/styles";
 import queryString from 'query-string'
+import Page500 from "../Page500";
 
 
 const useStyles = makeStyles((theme)=>({
@@ -20,7 +21,9 @@ const RegisterConfirmation = ({location}) =>{
     const classes = useStyles();
     const dispatch = useDispatch();
     const isRequesting = useSelector(state=>state.register.isRequesting);
-    const confirmationSuccess = useSelector(state=>state.register.confirmationSuccess)
+    const error = useSelector(state=>state.register.error);
+    const confirmationSuccess = useSelector(state=>state.register.confirmationSuccess);
+
     useEffect(()=>{
         const query = queryString.parse(location.search);
         query.login && query.key ? (
@@ -29,6 +32,10 @@ const RegisterConfirmation = ({location}) =>{
             history.push(routes.LOGIN))
 
     },[])
+
+    if(error === 500){
+        return <Page500/>
+    }
 
     return(
         <>

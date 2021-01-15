@@ -1,5 +1,5 @@
 import React from "react";
-import AuthContainer from "../../components/AuthContainer";
+import AuthContainer from "../../components/Auth/AuthContainer";
 import {Box, Button, TextField, Typography} from "@material-ui/core";
 import ProgressButton from "../../components/ProgressButton";
 import {Formik} from "formik";
@@ -7,12 +7,18 @@ import {history} from "../../helpers/_helpers";
 import {register} from "../../redux/actions/register";
 import {useDispatch, useSelector} from "react-redux";
 import {routes} from "../../config/routes";
+import Page500 from "../Page500";
 
 const Register =()=>{
     const error = useSelector(state => state.register.error);
     const isLoading = useSelector(state =>state.register.isRequesting);
     const registerSuccess = useSelector(state=>state.register.registerSuccess);
     const dispatch = useDispatch();
+
+    if(error === 500){
+        return <Page500/>
+    }
+
     return(
         <AuthContainer title = {registerSuccess ? "Potwierdzenie" : "Zarejestruj się"} error="">
             {registerSuccess ? (

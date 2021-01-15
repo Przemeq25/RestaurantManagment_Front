@@ -1,177 +1,168 @@
 import React, {useState} from "react";
-import {makeStyles} from "@material-ui/core/styles";
-import {Card, CardMedia, CardContent, Typography, Hidden,Chip,Box,TextField,IconButton} from "@material-ui/core";
+import {makeStyles, useTheme} from "@material-ui/core/styles";
+import {Card, CardMedia, CardContent, Typography, Chip, Box, Grow, IconButton, Grid, List} from "@material-ui/core";
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import DescriptionIcon from '@material-ui/icons/Description';
-import LocalAtmIcon from '@material-ui/icons/LocalAtm';
-import DoneIcon from '@material-ui/icons/Done';
-import CloseIcon from '@material-ui/icons/Close';
+import AppLogo from "../../AppLogo";
+import {useDispatch, useSelector} from "react-redux";
+import {openDrawerToEditMeal} from "../../../redux/actions/meals";
+import {ownerPermision} from "../../../helpers/_helpers";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
         position:'relative',
-        marginBottom:theme.spacing(1)
-    },
-    details: {
-        display: 'flex',
-        flexDirection: 'column',
+        maxWidth:'1500px',
         width:'100%',
+        marginBottom:theme.spacing(1),
+        boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
+        borderRadius:theme.spacing(2),
+        "&:hover": {
+            boxShadow: "-1px 10px 29px 0px rgba(0,0,0,0.4)"
+        },
+        height:200,
+        paddingRight:theme.spacing(6),
+        [theme.breakpoints.down('xs')]: {
+            height: 120,
+            paddingRight:theme.spacing(0),
+        },
     },
     cover: {
-
         [theme.breakpoints.down('sm')]: {
-            minHeight: 150,
+            width: 120,
+            height: 120,
         },
         [theme.breakpoints.up('sm')]: {
             width:200,
+            height: 200,
         },
-    },
-    controls: {
-        display: 'flex',
-        alignItems: 'center',
-        paddingLeft: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
     },
     editingButtons:{
         position:'absolute',
         top: 10,
         right: 10,
         [theme.breakpoints.down('xs')]: {
-            top: 155,
-            right: 5,
+            top:5,
+            right:5,
         },
     },
     editingInput:{
         width: 200,
+    },
+    content:{
+        display:'flex',
+        maxWidth:'calc(100vw - 370px)',
+        [theme.breakpoints.down('sm')]: {
+            maxWidth:'calc(100vw - 220px)',
+            padding:theme.spacing(1),
+        },
+        [theme.breakpoints.down('xs')]: {
+            maxWidth:'calc(100vw - 180px)',
+            padding:theme.spacing(1),
+        },
+    },
+    chip:{
+        position:'absolute',
+        top:10,
+        left:10,
+        border:`1px solid ${theme.palette.primary.main}`,
+        [theme.breakpoints.down('xs')]: {
+            top:5,
+            left:5,
+        },
+    },
+    fontBold:{
+        fontWeight:600
+    },
+    descriptionBox: {
+        display: "-webkit-box",
+        boxOrient: "vertical",
+        lineClamp: 4,
+        wordBreak: "break-all",
+        overflow: "hidden",
+        [theme.breakpoints.down('xs')]: {
+            lineClamp: 2,
+        },
+    },
+    cardMedia:{
+        display: 'flex',
+        backgroundColor:'#ededed',
+        height: '100%',
+        alignItems:'center',
+        justifyContent:'center',
+        width: 200,
+        [theme.breakpoints.down('xs')]: {
+            maxWidth: 120,
+            height: 120,
+        },
     }
 }));
 
-const MenuRowCard = () =>{
+const MenuRowCard = ({id,name,image,ingredients,timeToDo,price,category}) =>{
     const classes = useStyles();
-    const [isEdited,setIsEdited] = useState(false);
+    const dispatch = useDispatch();
+    const role = useSelector(state=>state.restaurant.role)
     return(
-        <Card className={classes.root}>
-            <Box className={classes.editingButtons}>
-                {
-                    isEdited ? (
-                        <>
-                            <IconButton onClick ={()=>setIsEdited(!isEdited)} >
-                                <DoneIcon/>
-                            </IconButton>
-                            <IconButton>
-                                <CloseIcon/>
-                            </IconButton>
-                        </>
-                    ):(
-                        <>
-                            <IconButton onClick ={()=>setIsEdited(!isEdited)} >
-                                <EditIcon/>
-                            </IconButton>
-                            <IconButton>
-                                <DeleteIcon/>
-                            </IconButton>
-                        </>
-                    )
-                }
-            </Box>
-            <Hidden xsDown>
-                <CardMedia
-                    className={classes.cover}
-                    image="https://res.cloudinary.com/przemeq25/image/upload/v1593706499/frytki_dnooac.jpg"
-                />
-            </Hidden>
-            <div className={classes.details}>
-                <Hidden smUp>
-                    <CardMedia
-                        className={classes.cover}
-                        image="https://res.cloudinary.com/przemeq25/image/upload/v1593706499/frytki_dnooac.jpg"
-                    />
-                </Hidden>
-                <CardContent className={classes.content}>
-                    {
-                        isEdited ? (
-                            <TextField value="Live From Space"/>
-                        ) : (
-                            <Typography component="h6" variant="h5">
-                                Live From Space
-                            </Typography>
-                        )
-                    }
-                    <Box display="flex" mt={1} mb={1}>
-                        <Box mr = {1}>
-                            {isEdited ? (
-                                    <TextField
-                                        placeholder = "Czas wykonania"
-                                        color="secondary"
-                                        InputProps={{
-                                            startAdornment:
-                                                <Box mr={1} mb={1}>
-                                                    <AccessTimeIcon fontSize="small" color ="secondary"/>
-                                                </Box>,
-                                            endAdornment:
-                                                <Typography variant = "subtitle1" color="secondary">min</Typography>
-                                        }}
-                                        size="small"
-                                        className={classes.editingInput}
-                                    />
-                                ) : (
-                                    <Chip variant="outlined" color="secondary" size="small" icon={<AccessTimeIcon/>}
-                                          label="35min"/>
-                                )
-                            }
-                        </Box>
+        <Grow in={true} timeout={500}>
+            <Card className={classes.root}>
+                {ownerPermision(role) &&
+                    <Box className={classes.editingButtons}>
+                        <IconButton size="small" onClick={() => dispatch(openDrawerToEditMeal({
+                            id,
+                            name,
+                            image,
+                            ingredients,
+                            timeToDo,
+                            price,
+                            category
+                        }))}>
+                            <EditIcon fontSize="small" color="secondary"/>
+                        </IconButton>
                     </Box>
-                    {
-                        isEdited ? (
-                            <TextField value="Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyślepoligraficznym. Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym."
-                                       fullWidth
-                                       InputProps={{
-                                           startAdornment:
-                                               <Box mr={1} mb={1}>
-                                                    <DescriptionIcon fontSize="small" color ="secondary"/>
-                                               </Box>
-                                       }}
-                                       inputProps={{style:{fontSize:12, color:'#6C6C6C'}}}
-                                       color='secondary'
-                                       size="small"
-                            />
-                        ) : (
-                            <Typography variant="subtitle2" paragraph>
-                                Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle
-                                poligraficznym. Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w
-                                przemyśle poligraficznym.
+                }
+                <Chip
+                    variant="default"
+                    color="secondary"
+                    size="small"
+                    icon={<AccessTimeIcon/>}
+                    label={`${timeToDo} min`}
+                    className = {classes.chip}
+                />
+                {image ? (
+                        <CardMedia
+                            className={classes.cover}
+                            image={image}
+                        />
+                    ):(
+                        <Box className = {classes.cardMedia}>
+                            <AppLogo size={12}/>
+                        </Box>
+                    )}
+                <CardContent className={classes.content}>
+                    <Grid container wrap="nowrap" direction="column" spacing={1} >
+                        <Grid item zeroMinWidth>
+                            <Typography component="h2" variant="h5" noWrap gutterBottom className={classes.fontBold}>
+                                {name}
                             </Typography>
-                        )
-                    }
-                    {
-                        isEdited ? (
-                            <TextField
-                                value="35"
-                                placeholder="Cena"
-                                InputProps={{
-                                    startAdornment:
-                                        <Box mr={1}>
-                                            <LocalAtmIcon fontSize="small" color ="secondary"/>
-                                        </Box>,
-                                    endAdornment:
-                                        <Typography variant = "subtitle1" color="secondary">zł</Typography>
-                                }}
-                                color="secondary"
-                                className={classes.editingInput}
-                            />
-                        ) : (
-                            <Typography component="h6" variant="h5" color="secondary">
-                                35 zł
+                        </Grid>
+                        <Grid item xs>
+                           <Box
+                               classes={{root:classes.descriptionBox}}
+                           >
+                               <Typography variant = "subtitle2">
+                                   {ingredients}
+                               </Typography>
+                           </Box>
+                        </Grid>
+                        <Grid item>
+                            <Typography component="h6" variant="h4" color="secondary" className={classes.fontBold}>
+                                {price} zł
                             </Typography>
-                            )
-                    }
+                        </Grid>
+                    </Grid>
                 </CardContent>
-            </div>
-
-        </Card>
+            </Card>
+        </Grow>
     );
 }
 export default MenuRowCard;

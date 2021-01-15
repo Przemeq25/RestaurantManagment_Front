@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
 import {Typography, Box, Paper,Container } from '@material-ui/core';
 import {makeStyles,useTheme} from "@material-ui/core/styles";
-import authImage from '../images/cheeseburger-34314_1280.png';
+import authImage from '../../images/cheeseburger-34314_1280.png';
 import Hidden from "@material-ui/core/Hidden";
-import AppLogo from "./AppLogo";
+import AppLogo from "../AppLogo";
 import {useDispatch, useSelector} from "react-redux";
-import {history} from "../helpers/_helpers";
-import {routes} from "../config/routes";
-import {authConstants, registerConstants} from "../redux/types";
+import {history} from "../../helpers/_helpers";
+import {routes} from "../../config/routes";
+import {authConstants, registerConstants} from "../../redux/types";
 
 const useStyles = makeStyles(theme=>({
     authBackground:{
@@ -39,7 +39,7 @@ const AuthContainer = ({title, children}) =>{
     const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
 
     useEffect(()=>{
-        isLoggedIn && history.push(routes.HOMEPAGE)
+        isLoggedIn && !history.location.from && history.push(routes.HOMEPAGE)
         !isLoggedIn && dispatch({type:authConstants.RETURN_INITIAL_STATE})
         !isLoggedIn && dispatch({type:registerConstants.RETURN_INITIAL_STATE})
     },[isLoggedIn])

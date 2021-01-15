@@ -1,5 +1,5 @@
 import React from "react";
-import AuthContainer from "../../components/AuthContainer";
+import AuthContainer from "../../components/Auth/AuthContainer";
 import {Box, Button, TextField, Typography} from "@material-ui/core";
 import ProgressButton from "../../components/ProgressButton";
 import {Formik} from "formik";
@@ -7,12 +7,17 @@ import {useDispatch,useSelector} from "react-redux";
 import {login} from "../../redux/actions/auth";
 import {history} from "../../helpers/_helpers";
 import {routes} from "../../config/routes";
+import Page500 from "../Page500";
 
 
 const Login =()=>{
     const dispatch = useDispatch();
     const error = useSelector(state => state.auth.error);
     const isLoading = useSelector(state =>state.auth.isLoading);
+
+    if(error === 500){
+        return <Page500/>
+    }
 
     return(
         <AuthContainer title = "Zaloguj się" >
@@ -61,7 +66,7 @@ const Login =()=>{
                                 name="login"
                             />
                             <TextField
-                                label = "Password"
+                                label = "Hasło"
                                 margin="dense"
                                 fullWidth
                                 error = { errors.password && touched.password ? true : false }

@@ -7,14 +7,14 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from "@material-ui/core/MenuItem";
-import {AccountCircle} from "@material-ui/icons";
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import AdminDrawer from "./AdminDrawer";
 import AppLogo from "../../AppLogo";
 import {useDispatch, useSelector} from "react-redux";
-import {ClickAwayListener, Grow, Hidden, ListItemIcon, MenuList, Paper, Popper} from "@material-ui/core";
+import {Box,Button, ClickAwayListener, Grow, Hidden, ListItemIcon, MenuList, Paper, Popper} from "@material-ui/core";
 import {NavLink} from "react-router-dom";
 import {routes} from "../../../config/routes";
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import {logout} from "../../../redux/actions/auth";
 import {history} from "../../../helpers/_helpers";
@@ -39,7 +39,14 @@ const useStyles = makeStyles((theme) => ({
         "&:focus, &:active":{
             outline:'none',
         },
-        marginRight:theme.spacing(2)
+        '&:hover':{
+            color: theme.palette.secondary.main,
+        },
+        transition:'color 200ms ease-in'
+    },
+    menuButtonText:{
+        fontWeight:600,
+        fontSize:'0.6rem',
     },
     inline:{
         display: 'flex',
@@ -63,15 +70,16 @@ const useStyles = makeStyles((theme) => ({
     },
     toolbar:theme.mixins.toolbar,
     paperRoot:{
-        backgroundColor:theme.palette.primary.main,
-        color:theme.palette.primary.contrastText,
+        boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
+        borderBottomLeftRadius:theme.spacing(2),
+        borderBottomRightRadius:theme.spacing(2),
+        overflow:'hidden'
     },
     menuItem:{
-        padding: '12px 16px',
+        padding: '20px 20px',
         [theme.breakpoints.down('md')]:{
             padding: '12px 12px',
         }
-
     },
     menuIcon:{
         color : "inherit",
@@ -82,19 +90,19 @@ const useStyles = makeStyles((theme) => ({
         justifyContent:'center',
         padding: '10px 16px',
         [theme.breakpoints.down('md')]:{
-            padding: '12px 8px',
+            padding: '5px 8px',
         },
+        minHeight:30,
 
     },
 }));
 
-const AdminPanel = (props) => {
+const AdminPanel = ({children,match}) => {
     const classes = useStyles();
     const [isDrawerOpen,setDrawerOpen] = useState(false);
     const [isMenuOpen, setMenuOpen] = React.useState(false);
     const anchorRef = useRef(null);
     const theme = useTheme();
-    const selectedRestaurant = useSelector(state=>state.restaurant.selectedRestaurant);
     const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
     const dispatch = useDispatch();
 
@@ -112,16 +120,20 @@ const AdminPanel = (props) => {
     };
 
     const switchTitlePage = (title)=>{
-        //const splitedTitle = title.split("/")[2] ? props.location.pathname.split("/")[2]: "admin";
-        switch(title){
+        const splitedTitle = title.split("/")[2] ? title.split("/")[2]: "admin";
+        switch(splitedTitle){
+            case "admin":
+                return "Admin panel";
             case 'dashboard':
-                return 'Strona startowa';
+                return 'Strona główna';
             case 'menu':
                 return 'Menu';
             case 'orders':
                 return 'Zamówienia';
             case 'workers':
                 return 'Pracownicy';
+            case 'reservations':
+                return 'Rezerwacje';
             default:
                 return 'Strona startowa';
         }
@@ -134,7 +146,7 @@ const AdminPanel = (props) => {
                 <Toolbar className={classes.spaceBetween}>
                     <div className={classes.inline}>
                         {
-                            selectedRestaurant &&
+                            match.path !== routes.ADMIN_PANEL &&
                                 <IconButton
                                     color="inherit"
                                     aria-label="open drawer"
@@ -146,20 +158,19 @@ const AdminPanel = (props) => {
                                 </IconButton>
                         }
                         <Typography variant="h6" noWrap>
-                            {switchTitlePage(props.location)}
+                            {switchTitlePage(match.path)}
                         </Typography>
                     </div>
                     <Hidden xsDown>
-                        <AppLogo color="secondary" push/>
+                        <AppLogo color="secondary" push size={12}/>
                     </Hidden>
                     <div>
-                        <IconButton
-                            onClick={handleMenuToggle}
-                            color="inherit"
-                            ref={anchorRef}
-                        >
-                            <AccountCircle />
-                        </IconButton>
+                        <Button ref={anchorRef}  onClick={handleMenuToggle} color="inherit" disableRipple className={classes.menuButton}>
+                            <Box display="flex" alignItems ='center' flexDirection = "column">
+                                <PersonOutlineIcon color="inherit"/>
+                                <Typography color="inherit" className={classes.menuButtonText}>Twoje konto</Typography>
+                            </Box>
+                        </Button>
                         <Popper
                             open={isMenuOpen}
                             anchorEl={anchorRef.current}
@@ -170,7 +181,7 @@ const AdminPanel = (props) => {
                             {({ TransitionProps }) => (
                                 <Grow
                                     {...TransitionProps}
-                                    style={{ transformOrigin: " right top", transform: window.innerWidth >= theme.breakpoints.width('md') ? 'translate(10px,9px)' : 'translate(16px,5px)' }}
+                                    style={{ transformOrigin: " right top", transform: window.innerWidth >= theme.breakpoints.width('md') ? 'translate(10px,7px)' : 'translate(16px,0px)' }}
                                 >
                                     <Paper square elevation={2} classes={{root: classes.paperRoot}} >
                                         <ClickAwayListener onClickAway={handleClose}>
@@ -183,19 +194,19 @@ const AdminPanel = (props) => {
                                                     className={classes.menuItem}
                                                 >
                                                     <ListItemIcon className={classes.menuIcon}>
-                                                        <AccountCircle fontSize="small" />
+                                                        <PersonOutlineIcon fontSize="small" />
                                                     </ListItemIcon>
                                                     <Typography variant="h5" color = "inherit">Twoje konto</Typography>
                                                 </MenuItem>
                                                 <MenuItem
                                                     onClick={handleClose}
                                                     component={NavLink}
-                                                    to={routes.CLIENT_ORDERS}
+                                                    to={routes.MY_ORDERS}
                                                     activeClassName={classes.selectedItem}
                                                     className={classes.menuItem}
                                                 >
                                                     <ListItemIcon className={classes.menuIcon}>
-                                                        <AssignmentIcon fontSize="small" />
+                                                        <AssignmentOutlinedIcon fontSize="small" />
                                                     </ListItemIcon>
                                                     <Typography variant="h5" color = "inherit">Zamówienia</Typography>
                                                 </MenuItem>
@@ -220,7 +231,7 @@ const AdminPanel = (props) => {
                                                                 handleClose(e);
                                                                 dispatch(logout());
                                                             }}
-                                                            className={classes.authButton}
+                                                            classes={{root:classes.authButton}}
                                                         >
                                                             <Typography variant="h5" color = "inherit">Wyloguj się</Typography>
                                                         </MenuItem>
@@ -246,10 +257,10 @@ const AdminPanel = (props) => {
                     </div>
                 </Toolbar>
             </AppBar>
-            {selectedRestaurant && <AdminDrawer isDrawerOpen={isDrawerOpen} closeDrawer={handleDrawerToggle}/>}
+            {match.path !== routes.ADMIN_PANEL && <AdminDrawer isDrawerOpen={isDrawerOpen} closeDrawer={handleDrawerToggle} match={match}/>}
             <main className={classes.content}>
                 <Toolbar />
-               {props.children}
+               {children}
             </main>
         </div>
     );

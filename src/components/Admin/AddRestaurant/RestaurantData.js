@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
 
 }));
 
-const RestaurantData = ({withPhoto})=>{
+const RestaurantData = ({withPhoto, edit})=>{
     const classes = useStyles();
     const {values, handleChange,errors,handleBlur,touched,setFieldValue } = useFormikContext();
 
@@ -58,6 +58,8 @@ const RestaurantData = ({withPhoto})=>{
                         />
                     )}
                 />
+            {!edit &&
+            <>
                 <TextField
                     label="NIP"
                     fullWidth
@@ -65,14 +67,14 @@ const RestaurantData = ({withPhoto})=>{
                     onChange={handleChange}
                     value={values.nip}
                     name="nip"
-                    onInput={(e)=>onlyNumbers(e)}
-                    error = { errors.nip && touched.nip ? true : false }
-                    helperText={touched.nip  && errors.nip}
+                    onInput={(e) => onlyNumbers(e)}
+                    error={errors.nip && touched.nip ? true : false}
+                    helperText={touched.nip && errors.nip}
                     onBlur={handleBlur}
-                    inputProps={{maxLength:10}}
+                    inputProps={{maxLength: 10}}
 
                 />
-                <TextField
+                < TextField
                     label="REGON"
                     fullWidth
                     margin="dense"
@@ -81,11 +83,12 @@ const RestaurantData = ({withPhoto})=>{
                     name="regon"
                     onInput={(e)=>onlyNumbers(e)}
                     inputProps={{maxLength:9}}
-                    error = { errors.regon && touched.regon ? true : false }
+                    error = {errors.regon && touched.regon ? true : false}
                     helperText={touched.regon  && errors.regon}
                     onBlur={handleBlur}
-
                 />
+            </>
+            }
                 <TextField
                     label="Opis"
                     fullWidth

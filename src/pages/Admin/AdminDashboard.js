@@ -21,19 +21,22 @@ import {
     TableBody,
     TableRow,
     TableCell,
+    Grow
 } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
-import appLogo, {getAdminType} from '../../helpers/_helpers';
+import {getAdminType, toLocalTime, worksTimeDaysTranslate} from '../../helpers/_helpers';
 import AddRestaurantStepper from "../../components/Admin/AddRestaurant/AddRestaurantStepper";
 import {useDispatch, useSelector} from "react-redux";
 import {
     openAddRestaurantStepper,
     closeAddRestaurantStepper,
-    getRestaurantsForAdmin, selectRestaurant, unselectRestaurant
+    getRestaurantsForAdmin, selectRestaurant, unselectRestaurant, getOpeningHours, getRestaurantForEmploee, setUserRole
 } from "../../redux/actions/restaurant";
 import PhoneIcon from '@material-ui/icons/Phone';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import AppLogo from "../../components/AppLogo";
+import AdminPanel from "../../components/Admin/AdminPanel/AdminPanel";
 
 const useStyles = makeStyles(theme=>({
     fab: {
@@ -60,7 +63,9 @@ const useStyles = makeStyles(theme=>({
         "&:hover": {
             boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)"
         },
-        borderRadius:theme.spacing(2)
+        borderRadius:theme.spacing(2),
+        maxWidth:450,
+        width: '100%',
     },
     cardChip:{
         position:'absolute',
@@ -76,15 +81,20 @@ const useStyles = makeStyles(theme=>({
     }
 }));
 
-const AdminDashboard = () =>{
+const AdminDashboard = ({match}) =>{
     const classes = useStyles();
     const dispatch = useDispatch();
     const isDialogOpen = useSelector(state=>state.restaurant.isStepperOpen);
     const isLoading = useSelector(state=>state.auth.isLoading);
     const isRequesting = useSelector(state=>state.restaurant.isRequesting);
     const userType = useSelector(state=>state.auth.userType);
-    const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
     const restaurants = useSelector(state=>state.restaurant.restaurants);
+
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
 
     useEffect(()=>{
         userType && userType.length <= 0 && dispatch(openAddRestaurantStepper());
@@ -92,9 +102,15 @@ const AdminDashboard = () =>{
     },[userType]);
 
     useEffect(()=>{
-        isLoggedIn && restaurants.length <=0 && dispatch(getRestaurantsForAdmin());
+        if(!restaurants.length){
+            for(let i = 0; i< userType.length; i++){
+                dispatch(getRestaurantForEmploee(userType[i].id));
+            }
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[isLoggedIn])
+    },[])
+
     useEffect(()=>{
         dispatch(unselectRestaurant())
     },[])
@@ -104,32 +120,43 @@ const AdminDashboard = () =>{
     }
 
     return(
-        <>
+        <AdminPanel match={match}>
         <Typography variant="h3">Twoje restauracje:</Typography>
         <Typography variant="subtitle2" paragraph >Kliknij w kartę i zarządzaj wybraną restauracją!</Typography>
             {(isLoading || isRequesting) && !isDialogOpen ? (
-                <Backdrop className={classes.backdrop} open={isLoading || isRequesting} invisible>
+                <Backdrop open={isLoading || isRequesting} invisible>
                     <CircularProgress color="inherit" />
                 </Backdrop>
             ):(
                 <>
                     <AddRestaurantStepper isDialogOpen={isDialogOpen} setDialogOpen={handleToggleDialog} firstRegister={Boolean(userType && userType.length <= 0)}/>
-                    <Grid container spacing={4}>
+                    <Grid container spacing={2} alignItems="flex-start">
                         {restaurants.length ? restaurants.map(restaurant=>(
-                            <Grid item xs={12} md = {6} lg = {4} xl = {3} key={restaurant.id}>
+                            <Grow in = {Boolean(restaurants.length > 0)} key={restaurant.id}>
+                            <Grid container item xs={12} sm = {6} md = {6} lg = {4} xl = {3} key={restaurant.id}>
                                 <Card className={classes.card}>
-                                    <CardActionArea onClick={()=>dispatch(selectRestaurant(restaurant))}>
+                                    <CardActionArea onClick={()=>{
+                                        const userRole = userType.find(role=>restaurant.id === role.id).role;
+                                        dispatch(selectRestaurant(restaurant,userRole));
+                                        dispatch(setUserRole(userRole,restaurant.id))
+                                    }}>
                                         <Chip
                                             label={ userType && getAdminType(userType,restaurant.id) }
                                             color="primary"
                                             className={classes.cardChip}
                                         />
-                                        <CardMedia
-                                            component="img"
-                                            alt="Contemplative Reptile"
-                                            height="200"
-                                            image={appLogo}
-                                        />
+                                        {restaurant.image ?
+                                            <CardMedia
+                                                component="img"
+                                                alt="Logo"
+                                                height="200"
+                                                image={restaurant.image}
+                                            />
+                                            :
+                                            <Box height="200px" width="100%" display="flex" alignItems="center" justifyContent="center">
+                                                <AppLogo color="secondary"/>
+                                            </Box>
+                                        }
                                         <CardContent>
 
                                             <Typography
@@ -194,13 +221,20 @@ const AdminDashboard = () =>{
                                         </CardContent>
                                     </CardActionArea>
                                     <CardActions>
-                                        <Accordion elevation={0} classes={{root:classes.accordion}}>
-                                            <AccordionSummary classes={{root:classes.accordionSummary}}>
+                                        <Accordion elevation={0} classes={{root:classes.accordion}} expanded={expanded === restaurant.id} onChange={handleChange(restaurant.id)}>
+                                            <AccordionSummary classes={{root:classes.accordionSummary}}
+                                                          aria-controls={restaurant.id}
+                                                          id={restaurant.id}>
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
                                                     size="small"
                                                     startIcon={<CalendarTodayIcon/>}
+                                                    onClick={()=>{
+                                                        if(!restaurant.worksTime){
+                                                            dispatch(getOpeningHours(restaurant.id))
+                                                        }
+                                                    }}
                                                 >
                                                     Godziny otwarcia
                                                 </Button>
@@ -209,34 +243,38 @@ const AdminDashboard = () =>{
                                                 <Box display = 'flex' justifyContent = "center" width="100%">
                                                     <Table size="small">
                                                         <TableBody>
-                                                            {restaurant.worksTime.map((row) => (
+                                                            {(restaurant.worksTime &&  restaurant.worksTime) ? restaurant.worksTime.map((row) => (
                                                                 <TableRow key={row.day}>
                                                                     <TableCell>
-                                                                        {row.day}
+                                                                        {worksTimeDaysTranslate(row.day)}
                                                                     </TableCell>
-                                                                    <TableCell align="right">{row.from}</TableCell>
-                                                                    <TableCell align="right">{row.to}</TableCell>
+                                                                    <TableCell align="right">{row.from ? toLocalTime(row.from) : "Zamknięte"}</TableCell>
+                                                                    <TableCell align="right">{row.to ? toLocalTime(row.to) : "Zamknięte"}</TableCell>
                                                                 </TableRow>
-                                                            ))}
+                                                            )):null}
                                                         </TableBody>
                                                     </Table>
+                                                    {!restaurant.worksTime &&
+                                                        <CircularProgress color="secondary"/>
+                                                    }
                                                 </Box>
                                             </AccordionDetails>
                                         </Accordion>
                                     </CardActions>
                                 </Card>
                             </Grid>
+                            </Grow>
                         )): null}
 
 
                     </Grid>
                 </>
             )}
-            <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleToggleDialog} variant = "extended">
+            <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleToggleDialog} variant = "extended" size="small">
                 <AddIcon className={classes.extendedIcon}/>
                 Dodaj restaurację
             </Fab>
-        </>
+        </AdminPanel>
     );
 
 }
