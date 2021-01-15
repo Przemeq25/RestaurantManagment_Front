@@ -14,7 +14,7 @@ export const getOrders = (restaurantID,orderStatus) => {
             .catch((errorMessage)=> {
                 if (errorMessage.response && errorMessage.response.status === 500) {
                     dispatch(error(500))
-                } else if (errorMessage.response && errorMessage.response.status === 400 || errorMessage.response.status === 404) {
+                } else if (errorMessage.response &&  (errorMessage.response.status === 400 || errorMessage.response.status === 404)) {
                     dispatch(error(404))
                 }else{
                     dispatch(errorAlert("Nie udało się pobrać zamówień! Spróbuj odświeżyć stronę"))
@@ -61,7 +61,7 @@ export const getMenu = (restaurantId) =>{
             .catch((errorMessage)=> {
                 if (errorMessage.response && errorMessage.response.status === 500) {
                     dispatch(error(500))
-                } else if (errorMessage.response && errorMessage.response.status === 400 || errorMessage.response.status === 404) {
+                } else if (errorMessage.response &&  (errorMessage.response.status === 400 || errorMessage.response.status === 404)) {
                     dispatch(error(404))
                 }else{
                     dispatch(errorAlert("Wystąpił błąd podczas wyświetlania menu! Spróbuj odświeżyć stronę"))

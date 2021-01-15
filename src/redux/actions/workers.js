@@ -10,7 +10,7 @@ export const getWorkers = (restaurantID)=>{
             .catch((errorMessage)=> {
                 if (errorMessage.response && errorMessage.response.status === 500) {
                     dispatch(error(500))
-                } else if (errorMessage.response && errorMessage.response.status === 400 || errorMessage.response.status === 404) {
+                } else if (errorMessage.response && (errorMessage.response.status === 400 || errorMessage.response.status === 404)) {
                     dispatch(error(404))
                 }
             })

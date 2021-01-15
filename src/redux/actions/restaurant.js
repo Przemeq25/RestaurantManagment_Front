@@ -67,9 +67,16 @@ export const deleteRestaurant = (restaurantID)=>{
         dispatch(request());
         restaurantService.deleteRestaurant(restaurantID)
             .then(()=> {
-                dispatch(successAlert(`Pomyślnie usunięto restaurację!`))
-                dispatch(success());
-                history.push(routes.ADMIN_PANEL);
+                setTimeout(() => {
+                    refreshLogin(localStorage.getItem('refresh_token'), dispatch)
+                        .then(() => {
+                            dispatch(successAlert(`Pomyślnie usunięto restaurację!`))
+                            dispatch(success());
+                            history.push(routes.HOMEPAGE);
+                            authorization(dispatch)
+                        }).catch(() => dispatch(error(500)))
+                }, 10000)
+
             })
             .catch((errorMessage)=>{
                 if(errorMessage.response && errorMessage.response.status === 500) {
