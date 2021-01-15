@@ -102,11 +102,12 @@ const AdminDashboard = ({match}) =>{
     },[userType]);
 
     useEffect(()=>{
-        //dispatch(getRestaurantsForAdmin());
-        //const workersRestaurants = userType.filter(type => type.role === "WORKER");
-        for(let i = 0; i< userType.length; i++){
-            dispatch(getRestaurantForEmploee(userType[i].id));
+        if(!restaurants.length){
+            for(let i = 0; i< userType.length; i++){
+                dispatch(getRestaurantForEmploee(userType[i].id));
+            }
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 

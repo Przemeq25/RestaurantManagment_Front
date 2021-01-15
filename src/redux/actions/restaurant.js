@@ -112,7 +112,7 @@ export const getRestaurantsForAdmin =()=>{
             .catch((errorMessage)=> {
                 if (errorMessage.response && errorMessage.response.status === 500) {
                     dispatch(error(500))
-                } else if (errorMessage.response && errorMessage.response.status === 400 || errorMessage.response.status === 404) {
+                } else if (errorMessage.response && (errorMessage.response.status === 400 || errorMessage.response.status === 404)) {
                     dispatch(error(404))
                 }
             })
@@ -125,7 +125,7 @@ export const getRestaurantForEmploee = (restaurantId)=> {
     return dispatch =>{
         dispatch(request());
         restaurantService.getSingleRestaurant(restaurantId)
-            .then(response => dispatch(success([response.data])))
+            .then(response => dispatch(success(response.data)))
             .catch((errorMessage)=> {
                 if (errorMessage.response && errorMessage.response.status === 500) {
                     dispatch(error(500))
@@ -166,7 +166,7 @@ export const getSingleRestaurantForAdmin = (restaurantId) =>{
             .catch((errorMessage)=> {
                 if (errorMessage.response && errorMessage.response.status === 500) {
                     dispatch(error(500))
-                } else if (errorMessage.response && errorMessage.response.status === 400 || errorMessage.response.status === 404) {
+                } else if (errorMessage.response && (errorMessage.response.status === 400 || errorMessage.response.status === 404)) {
                     dispatch(error(404))
                 }
             })
@@ -180,7 +180,7 @@ export const getOpeningHours = (restaurantId) =>{
     return dispatch =>{
         restaurantService.getRestaurantOpeningHours(restaurantId)
             .then(response=>dispatch(success(response.data)))
-            .catch(()=>errorAlert("Brak danych o godzinach otwarcia restauracji"));
+            .catch(()=> dispatch(errorAlert("Brak danych o godzinach otwarcia restauracji")));
     }
     function success(data){return{type:restaurantConstants.GET_OPENING_HOURS, payload:{worksTime:data, id:restaurantId}}}
 };
@@ -188,3 +188,42 @@ export const setUserRole = (role,restaurantId)=>{
     return dispatch =>dispatch({type:restaurantConstants.SET_USER_ROLE, payload:{role,restaurantId}})
 }
 
+export const addPaymentOnline = (paymentData,restaurantId)=>{
+    return dispatch =>{
+        dispatch(request());
+        restaurantService.addPaymentOnline(paymentData,restaurantId)
+            .then(response=>{
+                dispatch(success(response.data))
+                dispatch(successAlert("Dodano płatności online do restauracji!"));
+            })
+            .catch((errorMessage)=>{
+                if(errorMessage.response && errorMessage.response.status === 409){
+                    dispatch(errorAlert("Takie klucze konfiguracyjna są już zajęte"))
+                    dispatch(error())
+                }else{
+                    dispatch(errorAlert("Nie udało się dodać płatności! Spróbuj ponownie"))
+                    dispatch(error())
+                }
+
+            })
+    }
+    function request(){return {type:restaurantConstants.PAYMENT_REQUESTING}};
+    function success(payment){return {type:restaurantConstants.ADD_PAYMENT_SUCCESS, payload:payment}}
+    function error(){return {type:restaurantConstants.ADD_PAYMENT_ERROR}}
+}
+
+export const deletePaymentOnline = (restaurantId)=>{
+    return dispatch =>{
+        dispatch(request())
+        restaurantService.deletePayment(restaurantId)
+            .then(()=>{
+                dispatch(success())
+                dispatch(successAlert("Usunięto płatności online do restauracji!"));
+            })
+            .catch(()=>{
+                dispatch(errorAlert("Nie udało się usunąć płatności! Spróbuj ponownie"))
+            })
+    }
+    function request(){return {type:restaurantConstants.PAYMENT_REQUESTING}};
+    function success(){return {type:restaurantConstants.DELETE_PAYMENT}}
+}

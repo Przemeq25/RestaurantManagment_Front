@@ -26,7 +26,7 @@ const DeliveryAndPaymentWrapper = ({paymentOnline,restaurantId}) =>{
     const payment = useSelector(state=>{
         const orderIndex = state.payment.order.findIndex(order=>order.restaurantId === restaurantId);
         if(orderIndex !== -1){
-            return state.payment.order[orderIndex].paymentType
+            return state.payment.order[orderIndex].paymentMethod
         }
     })
 
@@ -37,7 +37,7 @@ const DeliveryAndPaymentWrapper = ({paymentOnline,restaurantId}) =>{
         dispatch(changeOrderDetail('orderType',value,restaurantId))
     }
     const handleChangePayment = (value) =>{
-        dispatch(changeOrderDetail('paymentType',value,restaurantId))
+        dispatch(changeOrderDetail('paymentMethod',value,restaurantId))
     }
     return(
         <>
@@ -87,7 +87,7 @@ const DeliveryAndPaymentWrapper = ({paymentOnline,restaurantId}) =>{
                             <ListItemText primary="Płatność przy odbiorze" />
                         </ListItem>
                         {paymentOnline && (
-                            <ListItem dense button onClick={()=>handleChangePayment(paymentType.CASH)}>
+                            <ListItem dense button onClick={()=>handleChangePayment(paymentType.ONLINE)}>
                                 <ListItemIcon>
                                     <Radio
                                         edge="start"

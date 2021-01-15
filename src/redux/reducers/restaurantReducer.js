@@ -9,6 +9,7 @@ const initialState = {
     error:null,
     selectedRestaurant:null,
     role:null,
+    isPaymentRequesting:false,
 };
 
 export const restaurantReducer = (state = initialState, action)=>{
@@ -46,7 +47,7 @@ export const restaurantReducer = (state = initialState, action)=>{
             return {
                 ...state,
                 isRequesting:false,
-                restaurants: state.restaurants.concat(action.payload),
+                restaurants: [...state.restaurants,action.payload],
             }
         case restaurantConstants.GET_RESTAURANTS_FOR_ADMIN_ERROR:
             return {
@@ -68,7 +69,6 @@ export const restaurantReducer = (state = initialState, action)=>{
         case restaurantConstants.GET_SINGLE_RESTAURANT_FOR_ADMIN_SUCCESS:
             return {
                 ...state,
-                restaurants: action.payload,
                 selectedRestaurant: action.payload,
                 isRequesting: false,
             }
@@ -136,6 +136,28 @@ export const restaurantReducer = (state = initialState, action)=>{
                     ...state,
                     role:null,
                 }
+            }
+        case restaurantConstants.PAYMENT_REQUESTING:
+            return {
+                ...state,
+                isPaymentRequesting:true
+            }
+        case restaurantConstants.ADD_PAYMENT_SUCCESS:
+            return {
+                ...state,
+                selectedRestaurant: {...state.selectedRestaurant, paymentOnline:true},
+                isPaymentRequesting: false,
+            }
+        case restaurantConstants.ADD_PAYMENT_ERROR:
+            return {
+                ...state,
+                isPaymentRequesting: false,
+            }
+        case restaurantConstants.DELETE_PAYMENT:
+            return {
+                ...state,
+                selectedRestaurant: {...state.selectedRestaurant, paymentOnline:false},
+                isPaymentRequesting: false,
             }
         case restaurantConstants.RESET:
             return initialState;

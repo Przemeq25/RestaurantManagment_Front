@@ -27,7 +27,7 @@ const AdminPanelPage = ({children,match}) => {
         return (
             <>
                  <AdminPanel match={match}>
-                     {children}
+                     {React.cloneElement(children,{match})}
                  </AdminPanel>
             </>
 

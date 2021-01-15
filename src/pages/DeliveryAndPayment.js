@@ -137,7 +137,7 @@ const DeliveryAndPayment = () =>{
                                             id={product.id}
                                         />
                                     ))}
-                                    <DeliveryAndPaymentWrapper restaurantId={restaurant.restaurantId}/>
+                                    <DeliveryAndPaymentWrapper paymentOnline={restaurant.paymentOnline} restaurantId={restaurant.restaurantId}/>
                                 </ShoppingBasketItemWrapper>
                             ))}
                         </Paper>

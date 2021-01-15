@@ -125,12 +125,20 @@ const getSingleRestaurantForAdmin = (restaurantID) =>{
     });
 }
 
-const isPaymentAvailable = (restaurantID) =>{
-    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantID}/payment`,{
+const addPaymentOnline = (paymentData,restaurantID)=>{
+    return axios.post(`${appUrl}/order-api/restaurants/${restaurantID}/payment`,paymentData,
+        {
+            headers:{
+                Authorization:`bearer ${ localStorage.getItem('access_token')}`
+            }
+        })
+}
+const deletePayment = (restaurantID)=>{
+    return axios.delete(`${appUrl}/order-api/restaurants/${restaurantID}/payment`,{
         headers: {
             Authorization: `bearer ${localStorage.getItem('access_token')}`
         }
-    });
+    })
 }
 const submitOrder = (order,restaurantID) =>{
     return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantID}/order`,order,
@@ -164,9 +172,10 @@ export const restaurantService ={
     addPicture,
     getAllRestaurants,
     getSingleRestaurant,
-    isPaymentAvailable,
     submitOrder,
     getSingleRestaurantForAdmin,
     submitPersonalOrder,
-    getRestaurantOpeningHours
+    getRestaurantOpeningHours,
+    addPaymentOnline,
+    deletePayment
 }

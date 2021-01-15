@@ -1,8 +1,9 @@
-import {paymentConstants} from "../types";
+import {basketConstants, paymentConstants} from "../types";
 import {history, orderType, paymentType} from "../../helpers/_helpers";
 import {restaurantService} from "../../services/restaurantService";
 import {routes} from "../../config/routes";
 import {errorAlert, successAlert} from "./alert";
+import {orderService} from "../../services/ordersService";
 
 
 export const getPersonalDataToPayment = (personalData) =>{
@@ -43,6 +44,14 @@ export const submitOrder = (order) =>{
             for (let i = 0; i < orders.length; i++) {
                 promises.push(
                     restaurantService.submitOrder(orders[i],orders[i].restaurantId)
+                        .then((response)=> {
+                            if (orders[i].paymentMethod === paymentType.ONLINE) {
+                                orderService.payOnline(orders[i].restaurantId,response.data.orderId)
+                                    .then((response)=>{
+                                        window.open(response.data.payUUrl, '_blank');
+                                    })
+                            }
+                        })
                         .then(()=>dispatch({type:paymentConstants.DELETE_SUCCESS_ORDER, payload:orders[i].restaurantId}))
                         .catch(()=>dispatch(errorAlert("Błąd w zamówieniu!")))
                 )
@@ -52,6 +61,7 @@ export const submitOrder = (order) =>{
                 .then(() => {
                     dispatch({type:paymentConstants.PAYMENT_END})
                     history.push(routes.MY_ORDERS)
+                    dispatch({type:basketConstants.RESET});
                     dispatch(successAlert("Zamówienie skompletowane!"))
                 })
                 .catch(()=>dispatch(errorAlert("Niektóre zamówienia nie zostały skompletowane! Spróbuj ponownie")))

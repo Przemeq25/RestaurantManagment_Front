@@ -31,18 +31,6 @@ const SingleRestaurantContact = () =>{
     const classes = useStyles();
     return (
         <>
-            <Box mt={3} mb={6}>
-                <LoadScript
-                    googleMapsApiKey="YOUR_API_KEY"
-                >
-                    <GoogleMap
-                        mapContainerStyle={containerStyle}
-                        center={center}
-                        zoom={10}
-                    >
-                    </GoogleMap>
-                </LoadScript>
-            </Box>
             <Box className={classes.contactBox}>
                 <Box display="flex" alignItems="center" flexDirection="column" m={2}>
                     <Typography variant="h4" paragraph>Godziny otwarcia:</Typography>

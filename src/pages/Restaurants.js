@@ -268,6 +268,7 @@ const Restaurants = ({location}) =>{
                                 <Box m={4} display="flex" justifyContent="center">
                                 <Pagination
                                     count={parseInt(totalPages)}
+                                    disabled={!restaurants.length}
                                     variant="outlined"
                                     color="secondary"
                                     page={Number(query.page)+1}

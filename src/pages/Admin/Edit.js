@@ -15,11 +15,11 @@ import {
     Accordion,
     CircularProgress,
     Backdrop,
-    Grow
+    Grow, TextField
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {getCuisineTypeValue, restaurantInitialValues} from "../../helpers/_helpers";
-import {restaurantValidationSchema} from "../../helpers/_validation";
+import {getCuisineTypeValue, paymentOnlineInitialValues, restaurantInitialValues} from "../../helpers/_helpers";
+import {paymentOnlineValidationSchema, restaurantValidationSchema} from "../../helpers/_validation";
 import {Formik} from "formik";
 import DeleteIcon from '@material-ui/icons/Delete';
 import CropIcon from '@material-ui/icons/Crop';
@@ -30,7 +30,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
 import AppLogo from "../../components/AppLogo";
 import {useDispatch, useSelector} from "react-redux";
-import {deleteRestaurant, editRestaurant} from "../../redux/actions/restaurant";
+import {addPaymentOnline, deletePaymentOnline, deleteRestaurant, editRestaurant} from "../../redux/actions/restaurant";
 import ProgressButton from "../../components/ProgressButton";
 
 const useStyles = makeStyles((theme)=>({
@@ -73,12 +73,14 @@ const Edit = ({match}) =>{
     const currentRestaurantData = useSelector(state=>state.restaurant.selectedRestaurant);
     const isDeleting = useSelector(state=>state.restaurant.isDeleteRequesting);
     const isEditing = useSelector(state=>state.restaurant.isRequesting)
+    const isPaymentRequesting = useSelector(state=>state.restaurant.isPaymentRequesting);
 
     useEffect(()=>{
          const data = Object.assign({},restaurantInitialValues)
          currentRestaurantData && Object.assign(data,currentRestaurantData,{category: getCuisineTypeValue(currentRestaurantData.category)});
          setCurrentData(data);
     },[currentRestaurantData])
+
 
     const handleToggleCollapse = () =>{
         setCollapseOpen(!isCollapseOpen);
@@ -211,6 +213,118 @@ const Edit = ({match}) =>{
                                                 <Divider/>
                                                 <CardContent>
                                                     <RestaurantContact padding={null}/>
+                                                </CardContent>
+                                            </Card>
+                                        </Grid>
+                                    </Box>
+                                    <Box mt={4} mb={4}>
+                                        <Grid item xs="auto">
+                                            <Card className={classes.root}>
+                                                <CardHeader
+                                                    title={
+                                                        <Typography
+                                                            className={"MuiTypography--heading"}
+                                                            variant={"h6"}
+                                                            gutterBottom
+                                                        >
+                                                            Płatność online
+                                                        </Typography>
+                                                    }
+                                                />
+                                                <Divider/>
+                                                <CardContent>
+                                                    <Accordion square elevation={0}>
+                                                        <AccordionSummary>
+                                                            <Box display = "flex" justifyContent="center" width="100%">
+                                                                <Button variant="contained" color="secondary" size="small">
+                                                                    { currentRestaurantData.paymentOnline ? "Usuń płatność online" : "Dodaj płatność online"}
+                                                                </Button>
+                                                            </Box>
+                                                        </AccordionSummary>
+                                                        <AccordionDetails>
+
+                                                       {currentRestaurantData.paymentOnline ? (
+                                                           <Box display="flex">
+                                                               <Typography paragraph>
+                                                                   Czy na pewno chcesz usunąć płatności online?
+                                                               </Typography>
+                                                               <Box mt={2}/>
+                                                               <Button
+                                                                   variant="text"
+                                                                   startIcon={<DoneIcon/>}
+                                                                   onClick={() => dispatch(deletePaymentOnline(match.params.restaurantId))}
+                                                               >
+                                                                Usuń
+                                                               </Button>
+                                                           </Box>
+                                                       ):(
+                                                               <Formik
+                                                                initialValues={paymentOnlineInitialValues}
+                                                                validationSchema={paymentOnlineValidationSchema}
+                                                                onSubmit={(values) => {
+                                                                    dispatch(addPaymentOnline(values,match.params.restaurantId))
+                                                                }}
+                                                                >
+                                                                    {({
+                                                                          errors,
+                                                                          handleSubmit,
+                                                                          handleChange,
+                                                                          handleBlur,
+                                                                          touched,
+                                                                      }) => (
+                                                                        <div>
+                                                                            <TextField
+                                                                                label="Id punktu płatności (pos_id):"
+                                                                                fullWidth
+                                                                                onChange={handleChange}
+                                                                                value={values.posId}
+                                                                                error = { errors.posId && touched.posId  ? true : false }
+                                                                                helperText={touched.posId && errors.posId}
+                                                                                onBlur={handleBlur}
+                                                                                margin="dense"
+                                                                                name="posId"
+                                                                            />
+                                                                            <TextField
+                                                                                label="Drugi klucz (MD5):"
+                                                                                fullWidth
+                                                                                margin="dense"
+                                                                                onChange={handleChange}
+                                                                                value={values.md5}
+                                                                                error = { errors.md5 && touched.md5  ? true : false }
+                                                                                helperText={touched.md5 && errors.md5}
+                                                                                onBlur={handleBlur}
+                                                                                name="md5"
+                                                                            />
+                                                                            <TextField
+                                                                                label="Protokół OAuth - client_id :"
+                                                                                fullWidth
+                                                                                margin="dense"
+                                                                                onChange={handleChange}
+                                                                                value={values.clientId}
+                                                                                error = { errors.clientId && touched.clientId  ? true : false }
+                                                                                helperText={touched.clientId && errors.clientId}
+                                                                                onBlur={handleBlur}
+                                                                                name="clientId"
+                                                                            />
+                                                                            <TextField
+                                                                                label="Protokół OAuth - client_secret:"
+                                                                                fullWidth
+                                                                                margin="dense"
+                                                                                onChange={handleChange}
+                                                                                value={values.clientSecret}
+                                                                                error = { errors.clientSecret && touched.clientSecret  ? true : false }
+                                                                                helperText={touched.clientSecret && errors.clientSecret}
+                                                                                onBlur={handleBlur}
+                                                                                name="clientSecret"
+                                                                            />
+                                                                                <ProgressButton label="Zatwierdź" size="small" variant="contained" loading={isPaymentRequesting} onClick={handleSubmit}/>
+                                                                        </div>
+                                                                        )}
+                                                                </Formik>
+                                                           )}
+                                                        </AccordionDetails>
+                                                    </Accordion>
+
                                                 </CardContent>
                                             </Card>
                                         </Grid>
