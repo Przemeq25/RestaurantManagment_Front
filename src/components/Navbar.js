@@ -27,6 +27,7 @@ import RestaurantIcon from '@material-ui/icons/Restaurant';
 import {useSelector,useDispatch} from "react-redux";
 import {history} from "../helpers/_helpers";
 import {logout} from '../redux/actions/auth';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import AppBarShoppingBasketItem from "./Restaurants/ShoppingBasket/AppBarShoppingBasketItem";
 import useMediaQuery from "@material-ui/core/useMediaQuery/useMediaQuery";
@@ -299,6 +300,18 @@ const Navbar = () =>{
                                                         <AssignmentOutlinedIcon fontSize="small" />
                                                     </ListItemIcon>
                                                     <Typography variant="h5" color = "inherit">Zamówienia</Typography>
+                                                </MenuItem>
+                                                <MenuItem
+                                                    onClick={handleCloseMenu}
+                                                    component={NavLink}
+                                                    to={routes.MY_RESERVATIONS}
+                                                    activeClassName={classes.selectedItem}
+                                                    className={classes.menuItem}
+                                                >
+                                                    <ListItemIcon className={classes.menuIcon}>
+                                                        <MailOutlineIcon fontSize="small" />
+                                                    </ListItemIcon>
+                                                    <Typography variant="h5" color = "inherit">Rezerwacje</Typography>
                                                 </MenuItem>
                                                 <MenuItem
                                                     onClick={handleCloseMenu}

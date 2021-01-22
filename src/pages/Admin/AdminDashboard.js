@@ -97,17 +97,11 @@ const AdminDashboard = ({match}) =>{
     };
 
     useEffect(()=>{
-        userType && userType.length <= 0 && dispatch(openAddRestaurantStepper());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[userType,dispatch]);
-
-    useEffect(()=>{
         if(!restaurants.length){
             for(let i = 0; i< userType.length; i++){
                 dispatch(getRestaurantForEmploee(userType[i].id));
             }
         }
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[dispatch])
 

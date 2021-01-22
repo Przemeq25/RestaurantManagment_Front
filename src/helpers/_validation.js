@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import moment from "moment";
 
 
 export const onlyNumbers = (e)=> {
@@ -80,6 +81,30 @@ export const personalDataValidationSchema = Yup.object().shape({
         .matches(/(?<!\w)(\(?(\+|00)?([0-9]{2})\)?)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}(?!\w)/, "Podany numer telefonu jest błędny")
         .required('Pole wymagane'),
     houseNumber: Yup.string()
+        .required('Pole wymagane'),
+});
+
+export const reservationValidationSchema = Yup.object().shape({
+    numberOfSeats: Yup.string()
+        .required("Pole wymagane"),
+    day: Yup.string()
+        .required("Pole wymagane"),
+    from: Yup.string()
+        .required("Pole wymagane"),
+    to : Yup.string()
+        .required("Pole wymagane")
+        .test("is-greater", "Godzina końcowa nie może być mniejsza niż początkowa", function(value) {
+            const { from } = this.parent;
+            return moment(value, "HH:mm").isSameOrAfter(moment(from, "HH:mm"));
+        })
+});
+export const reservationPersonalValidationSchema = Yup.object().shape({
+    forename: Yup.string()
+        .required('Pole wymagane'),
+    surname: Yup.string()
+        .required('Pole wymagane'),
+    phoneNumber: Yup.string()
+        .matches(/(?<!\w)(\(?(\+|00)?([0-9]{2})\)?)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}(?!\w)/, "Podany numer telefonu jest błędny")
         .required('Pole wymagane'),
 });
 

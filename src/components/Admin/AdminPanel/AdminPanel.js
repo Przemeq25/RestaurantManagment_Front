@@ -15,6 +15,7 @@ import {Box,Button, ClickAwayListener, Grow, Hidden, ListItemIcon, MenuList, Pap
 import {NavLink} from "react-router-dom";
 import {routes} from "../../../config/routes";
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import {logout} from "../../../redux/actions/auth";
 import {history} from "../../../helpers/_helpers";
@@ -209,6 +210,18 @@ const AdminPanel = ({children,match}) => {
                                                         <AssignmentOutlinedIcon fontSize="small" />
                                                     </ListItemIcon>
                                                     <Typography variant="h5" color = "inherit">Zamówienia</Typography>
+                                                </MenuItem>
+                                                <MenuItem
+                                                    onClick={handleClose}
+                                                    component={NavLink}
+                                                    to={routes.MY_RESERVATIONS}
+                                                    activeClassName={classes.selectedItem}
+                                                    className={classes.menuItem}
+                                                >
+                                                    <ListItemIcon className={classes.menuIcon}>
+                                                        <MailOutlineIcon fontSize="small" />
+                                                    </ListItemIcon>
+                                                    <Typography variant="h5" color = "inherit">Rezerwacje</Typography>
                                                 </MenuItem>
                                                 <MenuItem
                                                     onClick={(e)=> {
