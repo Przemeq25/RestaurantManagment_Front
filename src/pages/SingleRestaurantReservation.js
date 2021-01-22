@@ -62,6 +62,7 @@ const SingleRestaurantReservation = ({match}) =>{
                         .catch((err)=>{
                             if(err.response && err.response.status === 404){
                                 dispatch(errorAlert("W tym czasie restauracja jest zamknięta!"))
+                                setResult(null);
                             }
                             setSubmitting(false)
                         } )

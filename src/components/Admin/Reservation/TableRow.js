@@ -47,8 +47,12 @@ const useStyles = makeStyles(theme=>({
         flexWrap:'wrap',
     },
     formStyle:{
-        width:'40%',
-        padding:`0px ${theme.spacing(3)}px`
+        width:'100%',
+        display:'flex',
+        flexDirection:"column",
+        alignItems:"flex-start",
+        padding:`0px ${theme.spacing(3)}px`,
+        marginBottom: theme.spacing(1),
     }
 
 }));
@@ -86,6 +90,7 @@ const TableRow = ({table,restaurantId}) =>{
             ))}
         </AccordionDetails>
         <Box display="flex" justifyContent="center" pb={2}>
+            <Grid container item xs = {12} md = {4} spacing={2} alignItems="center" direction = "column">
             <Formik
                 innerRef={formRef}
                 initialValues={{
@@ -104,6 +109,8 @@ const TableRow = ({table,restaurantId}) =>{
                         .catch((err)=>{
                             if(err.response && err.response.status === 404){
                                 dispatch(errorAlert("W tym czasie restauracja jest zamknięta!"))
+                                setResult(null);
+
                             }
                             setSubmitting(false)
                         } )
@@ -120,64 +127,55 @@ const TableRow = ({table,restaurantId}) =>{
 
                   }) => (
                     <form onSubmit={handleSubmit} className={classes.formStyle}>
-                            <Grid container item xs = {12} md = {4} spacing={2} alignItems="flex-start" direction = "column">
-                                <Grid item>
-                                    <Typography variant="h6" color="secondary">Wyszukaj termin rezerwacji!</Typography>
-                                </Grid>
-                                <Grid item >
-                                    <TextField
-                                        size="small"
-                                        label="Data"
-                                        type="date"
-                                        name="day"
-                                        value={values.day}
-                                        InputLabelProps={{shrink: true}}
-                                        variant="outlined"
-                                        onChange={handleChange}
-                                        error = {errors.day && touched.day ? true : false}
-                                        helperText={touched.day  && errors.day}
-                                        onBlur={handleBlur}
-                                    />
-                                </Grid>
-                                <Grid container item direction="row" justify="flex-start">
-                                    <Grid item>
-                                        <TextField
-                                            size="small"
-                                            label="Od"
-                                            type="time"
-                                            name="from"
-                                            value={values.from}
-                                            InputLabelProps={{ shrink: true}}
-                                            variant="outlined"
-                                            onChange={handleChange}
-                                            error = {errors.from && touched.from ? true : false}
-                                            helperText={touched.from  && errors.from}
-                                            onBlur={handleBlur}
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField
-                                            size="small"
-                                            label="Do"
-                                            type="time"
-                                            name="to"
-                                            onChange={handleChange}
-                                            value={values.to}
-                                            InputLabelProps={{ shrink: true}}
-                                            variant="outlined"
-                                            error = {errors.to && touched.to ? true : false}
-                                            helperText={touched.to  && errors.to}
-                                            onBlur={handleBlur}
-                                        />
-                                    </Grid>
-                                </Grid>
-                                <Grid item>
-                                    <ProgressButton label="Sprawdź dostępność" variant="contained" color="secondary" loading={isSubmitting} size="small"/>
-                                </Grid>
-                            </Grid>
+                        <Typography variant="h6" color="secondary" paragraph>Wyszukaj termin rezerwacji!</Typography>
+                        <TextField
+                            size="small"
+                            label="Data"
+                            type="date"
+                            name="day"
+                            margin="dense"
+                            value={values.day}
+                            InputLabelProps={{shrink: true}}
+                            variant="outlined"
+                            onChange={handleChange}
+                            error = {errors.day && touched.day ? true : false}
+                            helperText={touched.day  && errors.day}
+                            onBlur={handleBlur}
+                        />
+                            <TextField
+                                size="small"
+                                label="Od"
+                                type="time"
+                                name="from"
+                                margin="dense"
+                                value={values.from}
+                                InputLabelProps={{ shrink: true}}
+                                variant="outlined"
+                                onChange={handleChange}
+                                error = {errors.from && touched.from ? true : false}
+                                helperText={touched.from  && errors.from}
+                                onBlur={handleBlur}
+                            />
+                            <TextField
+                                size="small"
+                                label="Do"
+                                type="time"
+                                name="to"
+                                margin="dense"
+                                onChange={handleChange}
+                                value={values.to}
+                                InputLabelProps={{ shrink: true}}
+                                variant="outlined"
+                                error = {errors.to && touched.to ? true : false}
+                                helperText={touched.to  && errors.to}
+                                onBlur={handleBlur}
+                            />
+                            <Box mt={1}/>
+                        <ProgressButton label="Sprawdź dostępność" variant="contained" color="secondary" loading={isSubmitting} size="small"/>
                     </form>
                     )}
                 </Formik>
+            </Grid>
                         <Grid container item xs = {12} md = {8} spacing={2} alignItems="center" direction = "column">
                             {result ? (
                                 <Grow in = {true} timeout = {500}>
