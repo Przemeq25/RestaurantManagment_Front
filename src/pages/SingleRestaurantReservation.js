@@ -59,7 +59,12 @@ const SingleRestaurantReservation = ({match}) =>{
                             setSubmitting(false);
                             setResult(response.data);
                         })
-                        .catch(()=>{setSubmitting(false)} )
+                        .catch((err)=>{
+                            if(err.response && err.response.status === 404){
+                                dispatch(errorAlert("W tym czasie restauracja jest zamknięta!"))
+                            }
+                            setSubmitting(false)
+                        } )
                 }}
             >
             {({
@@ -183,7 +188,7 @@ const SingleRestaurantReservation = ({match}) =>{
                                   }) => (
                                     <form onSubmit={handleSubmit}>
                                         <Box display="flex" flexDirection="column" alignItems="center">
-                                            <Typography variant ="h5">By zarezerwować stolik uzupełnij dane osobowe!</Typography>
+                                            <Typography variant ="h5" paragraph>By zarezerwować stolik podaj dane osobowe!</Typography>
                                                 <TextField
                                                     size="small"
                                                     name="forename"
