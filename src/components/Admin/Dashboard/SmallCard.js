@@ -22,12 +22,12 @@ const useStyles = makeStyles(theme=>({
 }));
 
 
-const SmallCard = ({title, firstLabel, secondLabel, firstValue, secondValue, icon, color, iconValue}) =>{
+const SmallCard = ({title, firstLabel, secondLabel, firstValue, secondValue, icon, color, iconValue, tertiaryValue, tertiaryLabel}) =>{
     const classes = useStyles({color:color});
     return (
         <Paper elevation={3} className={classes.smallCard}>
             <Typography variant="h4" paragraph>{title}</Typography>
-            <Box display = "flex" alignItems = "center"  mt={4} mb={2}>
+            <Box display = "flex" alignItems = "center" justifyContent="space-between" mt={4} mb={2} flexWrap="wrap">
                 <Box mr={4}>
                     <Typography variant="subtitle2">{firstLabel}</Typography>
                     <Box display = "flex" alignItems = "center">
@@ -45,6 +45,16 @@ const SmallCard = ({title, firstLabel, secondLabel, firstValue, secondValue, ico
                             <Typography variant="h6" color="secondary">{secondValue}</Typography>
                         </Box>
                     </Box>
+                }
+                {tertiaryValue &&
+                <Box>
+                    <Typography variant="subtitle2">{tertiaryLabel}</Typography>
+                    <Box display = "flex" alignItems = "center">
+                        {iconValue}
+                        <Box mr={1}/>
+                        <Typography variant="h6" color="secondary">{tertiaryValue}</Typography>
+                    </Box>
+                </Box>
                 }
             </Box>
             <Box className={classes.iconStyle}>

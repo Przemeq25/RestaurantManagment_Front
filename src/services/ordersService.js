@@ -51,11 +51,19 @@ const refreshOrders = (restaurantId) =>{
             }
         })
 }
+const getStats = (restaurantId) =>{
+    return axios.get(`${appUrl}/order-api/restaurants/${restaurantId}/stats`,{
+        headers:{
+            Authorization:`bearer ${ localStorage.getItem('access_token')}`
+        }
+    })
+}
 
 export const orderService = {
     getMyOrders,
     getOrdersForRestaurants,
     changeOrderStatus,
     payOnline,
-    refreshOrders
+    refreshOrders,
+    getStats,
 }
