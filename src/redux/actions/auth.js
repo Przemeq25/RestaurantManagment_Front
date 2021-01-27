@@ -21,7 +21,7 @@ export const login = (username, password)=>{
                     )
             })
             .catch(errorMessage=>{
-                if(errorMessage.response && errorMessage.response.status === 401){
+                if(errorMessage?.response.status === 400 || errorMessage?.response.status === 401){
                     dispatch(error("Błędne dane logowania"))
                 }
                 else{
@@ -48,7 +48,7 @@ export const refreshLogin = (refreshToken,dispatch) => new Promise((resolve, rej
 
             })
             .catch(errorMessage => {
-                if (errorMessage.response && errorMessage.response.status === 401) {
+                if (errorMessage?.response.status === 400 || errorMessage?.response.status === 401) {
                     dispatch(error("Błędne dane logowania"))
                 } else {
                     dispatch(error(500))
@@ -112,7 +112,7 @@ export const authorization = (dispatch) => new Promise((resolve, reject) =>{
                 resolve();
             })
             .catch((errorMessage)=>{
-                if(errorMessage.response && errorMessage.response.status === 401) {
+                if(errorMessage?.response.status === 400 || errorMessage?.response.status === 401) {
                     reject();
                     history.push(routes.LOGIN)
                 }else{
@@ -125,7 +125,7 @@ export const authorization = (dispatch) => new Promise((resolve, reject) =>{
                 resolve();
             })
             .catch((errorMessage)=>{
-                if(errorMessage.response && errorMessage.response.status === 401) {
+                if(errorMessage?.response.status === 400 || errorMessage?.response.status === 401) {
                     reject();
                     history.push(routes.LOGIN)
                 }else{
@@ -147,7 +147,7 @@ export const changePersonalData =(personalData)=>{
                 dispatch(success(response.data));
             })
             .catch((errorMessage)=>{
-                if(errorMessage.response && errorMessage.response.status === 401) {
+                if(errorMessage?.response.status === 400 || errorMessage?.response.status === 401) {
                     history.push(routes.LOGIN)
                 }else{
                     dispatch(error(500))
