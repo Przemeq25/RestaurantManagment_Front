@@ -22,38 +22,28 @@ const useStyles = makeStyles(theme=>({
 }));
 
 
-const SmallCard = ({title, firstLabel, secondLabel, firstValue, secondValue, icon, color, iconValue, tertiaryValue, tertiaryLabel}) =>{
+const SmallCard = ({title, firstLabel, secondLabel, icon, color,tertiaryLabel,firstChildren,secondChildren, tertiaryChildren}) =>{
     const classes = useStyles({color:color});
     return (
         <Paper elevation={3} className={classes.smallCard}>
             <Typography variant="h4" paragraph>{title}</Typography>
-            <Box display = "flex" alignItems = "center" justifyContent="space-between" mt={4} mb={2} flexWrap="wrap">
+            <Box display = "flex" alignItems = "center" justifyContent="space-between" mt={6} flexWrap="wrap">
                 <Box mr={4}>
                     <Typography variant="subtitle2">{firstLabel}</Typography>
-                    <Box display = "flex" alignItems = "center">
-                        {iconValue}
-                        <Box m={1}/>
-                        <Typography variant="h6" color="secondary">{firstValue}</Typography>
+                    <Box display="flex" flexDirection="column">
+                        {firstChildren}
                     </Box>
                 </Box>
-                {secondValue &&
+                {secondChildren &&
                     <Box>
                         <Typography variant="subtitle2">{secondLabel}</Typography>
-                        <Box display = "flex" alignItems = "center">
-                            {iconValue}
-                            <Box mr={1}/>
-                            <Typography variant="h6" color="secondary">{secondValue}</Typography>
-                        </Box>
+                        {secondChildren}
                     </Box>
                 }
-                {tertiaryValue &&
+                {tertiaryChildren &&
                 <Box>
                     <Typography variant="subtitle2">{tertiaryLabel}</Typography>
-                    <Box display = "flex" alignItems = "center">
-                        {iconValue}
-                        <Box mr={1}/>
-                        <Typography variant="h6" color="secondary">{tertiaryValue}</Typography>
-                    </Box>
+                    {tertiaryChildren}
                 </Box>
                 }
             </Box>

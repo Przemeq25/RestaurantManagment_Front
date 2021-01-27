@@ -26,10 +26,16 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import { Doughnut } from 'react-chartjs-2';
 import SmallCard from "../../components/Admin/Dashboard/SmallCard";
 import {orderService} from "../../services/ordersService";
-import {orderTypeTranslate, statsType} from "../../helpers/_helpers";
+import {orderType, orderTypeTranslate, paymentType, statsType} from "../../helpers/_helpers";
 import {useDispatch} from "react-redux";
-import {errorAlert} from "../../redux/actions/alert";
 import moment from 'moment';
+import {restaurantConstants} from "../../redux/types";
+import SmallCardElement from "../../components/Admin/Dashboard/SmallCardElement";
+import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
+import RestaurantIcon from '@material-ui/icons/Restaurant';
+import LocalMallIcon from '@material-ui/icons/LocalMall';
+import PaymentIcon from '@material-ui/icons/Payment';
+import MoneyIcon from '@material-ui/icons/Money';
 
 const useStyles = makeStyles(theme=>({
     middleCart:{
@@ -60,7 +66,7 @@ const RestaurantDashboard = ({match}) =>{
             })
             .catch(()=>{
                 setIsLoading(false);
-                dispatch(errorAlert("Błąd pobierania danych!"))
+                dispatch({type:restaurantConstants.GET_SINGLE_RESTAURANT_FOR_ADMIN_ERROR, payload:500})
             })
     },[match.params.restaurantId,dispatch])
 
@@ -85,29 +91,163 @@ const RestaurantDashboard = ({match}) =>{
                         <Grid item xs = {12} md = {6}>
                             <SmallCard
                                 color="secondary"
-                                iconValue={<AttachMoneyIcon color="secondary"/>}
                                 icon={<ShoppingCartIcon fontSize="inherit"/>}
                                 firstLabel="Dzisiejsze przychody"
-                                firstValue={`${stats?.profit.filter(item=>item.time === statsType.TODAY)[0].price} zł`}
+                                firstChildren={
+                                    <SmallCardElement
+                                        value={`${stats?.profit.filter(item=>item.time === statsType.TODAY)[0].price} zł`}
+                                        icon={<AttachMoneyIcon color="secondary"/>}
+                                    />
+                                }
                                 secondLabel="Miesięczne przychody"
-                                secondValue={`${stats?.profit.filter(item=>item.time === statsType.MONTH)[0].price} zł`}
+                                secondChildren={
+                                    <SmallCardElement
+                                        value={`${stats?.profit.filter(item=>item.time === statsType.MONTH)[0].price} zł`}
+                                        icon={<AttachMoneyIcon color="secondary"/>}
+                                    />
+                                    }
                                 title="Sprzedaż"
                                 tertiaryLabel="Całkowite przychody"
-                                tertiaryValue={`${stats?.profit.filter(item=>item.time === statsType.TOTAL)[0].price} zł`}
+                                tertiaryChildren={
+                                    <SmallCardElement
+                                        value={`${stats?.profit.filter(item=>item.time === statsType.TOTAL)[0].price} zł`}
+                                        icon={<AttachMoneyIcon color="secondary"/>}
+                                    />
+                                }
                             />
                         </Grid>
                         <Grid item xs = {12} md = {6}>
                             <SmallCard
-                                color="secondary"
-                                iconValue={<MenuBookIcon color="secondary"/>}
+                                color="primary"
                                 icon={<MenuBookIcon fontSize="inherit"/>}
                                 firstLabel="Dzisiejsze zamówienia"
-                                firstValue={stats?.counts.filter(item=>item.time === statsType.TODAY)[0].count}
+                                firstChildren={
+                                    <SmallCardElement
+                                        value={`${stats?.counts.filter(item=>item.time === statsType.TODAY)[0].count}`}
+                                        icon={<MenuBookIcon color="secondary"/>}
+                                    />
+                                }
                                 secondLabel="Miesięczne zamówienia"
-                                secondValue={`${stats?.counts.filter(item=>item.time === statsType.MONTH)[0].count}`}
+                                secondChildren={
+                                    <SmallCardElement
+                                        value={`${stats?.counts.filter(item=>item.time === statsType.MONTH)[0].count} `}
+                                        icon={<MenuBookIcon color="secondary"/>}
+                                    />
+                                }
                                 title="Zamówienia"
                                 tertiaryLabel="Wszystkie zamówienia"
-                                tertiaryValue={`${stats?.counts.filter(item=>item.time === statsType.TOTAL)[0].count} `}
+                                tertiaryChildren={
+                                    <SmallCardElement
+                                        value={`${stats?.counts.filter(item=>item.time === statsType.TOTAL)[0].count}`}
+                                        icon={<MenuBookIcon color="secondary"/>}
+                                    />
+                                }
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs = {12} md = {6}>
+                            <SmallCard
+                                color="primary"
+                                icon={<RestaurantIcon fontSize="inherit"/>}
+                                firstLabel="Dzisiejsze rodzaje dostaw"
+                                firstChildren={
+                                    <>
+                                        <SmallCardElement
+                                            value={`${stats?.typedCounts.filter(item=>item.time === statsType.TODAY && item.type=== orderType.DELIVERY)[0].count}`}
+                                            icon={<DirectionsCarIcon color="secondary"/>}
+                                        />
+                                        <SmallCardElement
+                                        value={`${stats?.typedCounts.filter(item=>item.time === statsType.TODAY && item.type=== orderType.IN_LOCAL)[0].count}`}
+                                        icon={<RestaurantIcon color="secondary"/>}
+                                        />
+                                        <SmallCardElement
+                                        value={`${stats?.typedCounts.filter(item=>item.time === statsType.TODAY && item.type=== orderType.TAKE_AWAY)[0].count}`}
+                                        icon={<LocalMallIcon color="secondary"/>}
+                                        />
+                                    </>
+                                }
+                                secondLabel="Miesięczne rodzaje dostaw"
+                                secondChildren={
+                                    <>
+                                        <SmallCardElement
+                                            value={`${stats?.typedCounts.filter(item=>item.time === statsType.MONTH && item.type=== orderType.DELIVERY)[0].count}`}
+                                            icon={<DirectionsCarIcon color="secondary"/>}
+                                        />
+                                        <SmallCardElement
+                                            value={`${stats?.typedCounts.filter(item=>item.time === statsType.MONTH && item.type=== orderType.IN_LOCAL)[0].count}`}
+                                            icon={<RestaurantIcon color="secondary"/>}
+                                        />
+                                        <SmallCardElement
+                                            value={`${stats?.typedCounts.filter(item=>item.time === statsType.MONTH && item.type=== orderType.TAKE_AWAY)[0].count}`}
+                                            icon={<LocalMallIcon color="secondary"/>}
+                                        />
+                                    </>
+                                }
+                                title="Rodzaje dostaw"
+                                tertiaryLabel="Całkowite rodzaje dostaw"
+                                tertiaryChildren={
+                                    <>
+                                        <SmallCardElement
+                                            value={`${stats?.typedCounts.filter(item=>item.time === statsType.TOTAL && item.type=== orderType.DELIVERY)[0].count}`}
+                                            icon={<DirectionsCarIcon color="secondary"/>}
+                                        />
+                                        <SmallCardElement
+                                            value={`${stats?.typedCounts.filter(item=>item.time === statsType.TOTAL && item.type=== orderType.IN_LOCAL)[0].count}`}
+                                            icon={<RestaurantIcon color="secondary"/>}
+                                        />
+                                        <SmallCardElement
+                                            value={`${stats?.typedCounts.filter(item=>item.time === statsType.TOTAL && item.type=== orderType.TAKE_AWAY)[0].count}`}
+                                            icon={<LocalMallIcon color="secondary"/>}
+                                        />
+                                    </>
+                                }
+                            />
+                        </Grid>
+                        <Grid item xs = {12} md = {6} >
+                            <SmallCard
+                                color="secondary"
+                                icon={<PaymentIcon fontSize="inherit"/>}
+                                firstLabel="Lb. dzisiejszych płatności"
+                                firstChildren={
+                                    <>
+                                        <SmallCardElement
+                                            value={`${stats?.paymentCount.filter(item=>item.time === statsType.TODAY && item.paymentMethod=== paymentType.CASH)[0].count}`}
+                                            icon={<MoneyIcon color="secondary"/>}
+                                        />
+                                        <SmallCardElement
+                                            value={`${stats?.paymentCount.filter(item=>item.time === statsType.TODAY && item.paymentMethod=== paymentType.ONLINE)[0].count}`}
+                                            icon={<PaymentIcon color="secondary"/>}
+                                        />
+                                    </>
+                                }
+                                secondLabel="Lb. miesięcznych płatności"
+                                secondChildren={
+                                    <>
+                                        <SmallCardElement
+                                            value={`${stats?.paymentCount.filter(item=>item.time === statsType.MONTH && item.paymentMethod=== paymentType.CASH)[0].count}`}
+                                            icon={<MoneyIcon color="secondary"/>}
+                                        />
+                                        <SmallCardElement
+                                            value={`${stats?.paymentCount.filter(item=>item.time === statsType.MONTH && item.paymentMethod=== paymentType.ONLINE)[0].count}`}
+                                            icon={<PaymentIcon color="secondary"/>}
+                                        />
+                                    </>
+                                }
+                                title="Rodzaje płatności"
+                                tertiaryLabel="Lb. wszystkich płatności"
+                                tertiaryChildren={
+                                    <>
+                                        <SmallCardElement
+                                            value={`${stats?.paymentCount.filter(item=>item.time === statsType.TOTAL && item.paymentMethod=== paymentType.CASH)[0].count}`}
+                                            icon={<MoneyIcon color="secondary"/>}
+                                        />
+                                        <SmallCardElement
+                                            value={`${stats?.paymentCount.filter(item=>item.time === statsType.TOTAL && item.paymentMethod=== paymentType.ONLINE)[0].count}`}
+                                            icon={<PaymentIcon color="secondary"/>}
+                                        />
+                                    </>
+                                }
                             />
                         </Grid>
                     </Grid>
@@ -196,20 +336,33 @@ const RestaurantDashboard = ({match}) =>{
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {stats?.lastOrders.map((row,index) => {
-                                            if(index < 9){
-                                                return(
-                                                    <TableRow key={row.id}>
-                                                        <TableCell align="left" component="th" scope="row"> {row.meals}</TableCell>
-                                                        <TableCell align="right">{moment(row.time).format("YYYY-MM-DD HH:mm")}</TableCell>
-                                                        <TableCell align="right">{row.price}</TableCell>
-                                                        <TableCell align="right">{orderTypeTranslate(row.orderType)}</TableCell>
-                                                    </TableRow>
-                                                )
-                                            }
+                                        { stats?.lastOrders.length ? (
+                                             stats.lastOrders.map((row,index) => {
+                                                    if(index < 9){
+                                                        return(
+                                                            <TableRow key={row.id}>
+                                                                <TableCell align="left"> {row.meals}</TableCell>
+                                                                <TableCell align="right">{moment(row.time).format("YYYY-MM-DD HH:mm")}</TableCell>
+                                                                <TableCell align="right">{row.price}</TableCell>
+                                                                <TableCell align="right">{orderTypeTranslate(row.orderType)}</TableCell>
+                                                            </TableRow>
+                                                        )
+                                                    }else{
+                                                        return null
+                                                    }
+                                                }
+                                            )
+                                        ):(
+                                                <TableRow>
+                                                    <TableCell colSpan={4}>
+                                                        <Box minHeight="250px" display="flex" alignItems="center" justifyContent="center">
+                                                            <Typography variant="h3" style={{color: "#e7e7e7"}}>Brak danych</Typography>
+                                                        </Box>
+                                                    </TableCell>
+                                                </TableRow>
+                                            )
                                         }
-                                        )}
-                                    </TableBody>
+                                        </TableBody>
                                 </Table>
                             </Paper>
                         </Grid>
