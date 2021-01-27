@@ -95,11 +95,11 @@ const deleteWorker = (restaurantID, workerID)=>{
 const addPicture = async(picture) =>{
     const fd = new FormData();
     fd.append("file", picture);
-    fd.append("tags", `przemeq`);
-    fd.append("upload_preset", `itsfqhtq`);
-    fd.append("api_key", "247926998118615");
+    fd.append("tags", `dyxioqimj`);
+    fd.append("upload_preset", `yh2ipl5c`);
+    fd.append("api_key", "249119979887559");
     fd.append("timestamp", (Date.now() / 1000) || 0);
-    return await axios.post("https://api.cloudinary.com/v1_1/przemeq25/image/upload", fd);
+    return await axios.post("https://api.cloudinary.com/v1_1/dyxioqimj/image/upload", fd);
 }
 
 const getAllRestaurants = ({page,name,category,city,open,rate,sort}) =>{
