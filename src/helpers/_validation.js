@@ -3,7 +3,7 @@ import moment from "moment";
 
 
 export const onlyNumbers = (e)=> {
-    e.target.value = e.target.value.replace(/[^0-9-]/g, '');
+    e.target.value = e.target.value.replace(/[^0-9-.]/g, '');
 }
 export const onlyLetters = (e)=>{
     e.target.value = e.target.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+/g, '');

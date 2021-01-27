@@ -44,15 +44,17 @@ const MyOrders = ({match}) =>{
 
         const fetchData = () =>{
             setIsLoading(true);
-            orderService.getMyOrders()
-                .then(response => {
-                    setMyOrders(response.data.content)
-                    setIsLoading(false);
-                })
-                .catch(()=>{
-                    dispatch(errorAlert("Wystąpił błąd"))
-                    setIsLoading(false);
-                })
+            setTimeout(()=>{
+                orderService.getMyOrders()
+                    .then(response => {
+                        setMyOrders(response.data.content)
+                        setIsLoading(false);
+                    })
+                    .catch(()=>{
+                        dispatch(errorAlert("Wystąpił błąd"))
+                        setIsLoading(false);
+                    })
+            },1000)
         }
         if(match.params.refresh){
             orderService.refreshOrders(match.params.refresh)
