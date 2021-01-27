@@ -42,7 +42,7 @@ const AuthContainer = ({title, children}) =>{
         isLoggedIn && !history.location.from && history.push(routes.HOMEPAGE)
         !isLoggedIn && dispatch({type:authConstants.RETURN_INITIAL_STATE})
         !isLoggedIn && dispatch({type:registerConstants.RETURN_INITIAL_STATE})
-    },[isLoggedIn])
+    },[isLoggedIn,dispatch])
     return(
         <>
             <Hidden mdDown>

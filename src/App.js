@@ -28,13 +28,14 @@ import MyOrders from "./pages/MyOrders";
 import AuthProvider from "./components/Auth/AuthProvider";
 import OwnerRoute from "./components/Auth/OwnerRoute";
 import {Redirect} from 'react-router-dom';
-import {checkIsLoggedIn} from "./redux/actions/auth";
+import TablesAndReservation from "./pages/Admin/TablesAndReservations";
+import SingleRestaurantReservation from "./pages/SingleRestaurantReservation";
+import MyReservations from "./pages/MyReservations";
 
 
 const App =()=>{
     const dispatch = useDispatch();
     useEffect(()=>{
-        checkIsLoggedIn(dispatch)
         dispatch(getBasket());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
@@ -54,6 +55,7 @@ const App =()=>{
                         </SingleRestaurantWrapper>
                     )}
                     />
+
                     <Route path={`${routes.SINGLERESTAURANTCONTACT}/:restaurantId`} exact render={(props)=>(
                         <SingleRestaurantWrapper {...props}>
                             <SingleRestaurantContact {...props} />
@@ -63,8 +65,15 @@ const App =()=>{
                     <Route path={routes.SHOPPINGBASKET} component={ShoppingBasket}/>
 
                     <AuthProvider>
+                        <Route path={`${routes.SINGLERESTAURANTRESERVATION}/:restaurantId`} exact render={(props)=>(
+                            <SingleRestaurantWrapper {...props}>
+                                <SingleRestaurantReservation {...props} />
+                            </SingleRestaurantWrapper>
+                        )}
+                        />
                         <Route path={routes.DELIVERYANDPAYMENT} component = {DeliveryAndPayment}/>
                         <Route exact path={routes.PROFILE} component = {UserAccount}/>
+                        <Route exact path={routes.MY_RESERVATIONS} component={MyReservations}/>
                         <Route exact path={`${routes.MY_ORDERS}/:refresh?`} component = {MyOrders}/>
                         <Route path={routes.ADMIN_PANEL} exact render={(props)=>(
                                 <AdminDashboard {...props} />
@@ -86,6 +95,12 @@ const App =()=>{
                             <Route path={`${routes.RESTAURANT_ORDERS}/:restaurantId`} exact render={(props)=>(
                                 <AdminPanelPage {...props}>
                                     <Orders {...props}/>
+                                </AdminPanelPage>
+                            )}
+                            />
+                            <Route path={`${routes.RESTAURANT_RESERVATION}/:restaurantId`} exact render={(props)=>(
+                                <AdminPanelPage {...props}>
+                                    <TablesAndReservation {...props}/>
                                 </AdminPanelPage>
                             )}
                             />

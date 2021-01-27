@@ -6,13 +6,12 @@ import {getSingleRestaurantForAdmin, setUserRole} from "../../redux/actions/rest
 
 
 const AdminPanelPage = ({children,match}) => {
-    const selectedRestaurant = useSelector(state=>state.restaurant.selectedRestaurant);
     const dispatch = useDispatch();
     const userType = useSelector(state=>state.auth.userType);
 
     useEffect(()=>{
-        !selectedRestaurant && match.params && match.params.restaurantId && dispatch(getSingleRestaurantForAdmin(match.params.restaurantId))
-    },[])
+        match.params.restaurantId && dispatch(getSingleRestaurantForAdmin(match.params.restaurantId))
+    },[match.params.restaurantId, dispatch])
 
     useEffect(()=>{
         const selectUserRole = () =>{
@@ -23,7 +22,7 @@ const AdminPanelPage = ({children,match}) => {
 
         }
         match.params.restaurantId && userType && selectUserRole();
-    },[])
+    },[match.params.restaurantId,dispatch,userType])
         return (
             <>
                  <AdminPanel match={match}>

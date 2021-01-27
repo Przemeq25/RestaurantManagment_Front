@@ -13,6 +13,7 @@ import {routes} from "../../../config/routes";
 import SettingsIcon from '@material-ui/icons/Settings';
 import AppLogo from "../../AppLogo";
 import {useSelector} from "react-redux";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 
 
 
@@ -102,6 +103,15 @@ const AdminDrawer = ({isDrawerOpen,closeDrawer,match}) =>{
                         </Desktop>
                     </ListItemIcon>
                     <ListItemText>Zamówienia</ListItemText>
+                </ListItem>
+                <ListItem disableGutters button component={NavLink} to={`${routes.RESTAURANT_RESERVATION}/${restaurantId}`} activeClassName="Mui-selected">
+                    <ListItemIcon className={classes.icon}>
+                        <AssignmentIcon/>
+                        <Desktop>
+                            {!isDrawerOpen && <Typography className={classes.iconText}>REZERWACJE</Typography>}
+                        </Desktop>
+                    </ListItemIcon>
+                    <ListItemText>Rezerwacje</ListItemText>
                 </ListItem>
                 <ListItem disableGutters button component={NavLink} to={`${routes.SINGLERESTAURANTMENU}/${restaurantId}`} activeClassName="Mui-selected">
                     <ListItemIcon className={classes.icon}>

@@ -13,12 +13,10 @@ import {
     Chip,
     Grid,
     Link,
-    Button
 } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import PhoneIcon from '@material-ui/icons/Phone';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import moment from 'moment';
 import {
     orderStatusTypeTranslate,
@@ -101,7 +99,7 @@ const OrderTableRow = ({row}) =>{
                                         <TableRow key={meal.id}>
                                             <TableCell component="th" scope="row">
                                                 {isValidUrl(meal.image) ? (
-                                                    <img src={meal.image} alt="image" style={{width:60,height:60}}/>
+                                                    <img src={meal.image} alt="Posiłek" style={{width:60,height:60}}/>
                                                 ) : (
                                                     <AppLogo size={10}/>
                                                 )

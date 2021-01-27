@@ -1,6 +1,5 @@
 import React from 'react';
 import {Box, Paper, Typography} from "@material-ui/core";
-import AttachMoneyIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme=>({
@@ -23,29 +22,29 @@ const useStyles = makeStyles(theme=>({
 }));
 
 
-const SmallCard = ({title, firstLabel, secondLabel, firstValue, secondValue, icon, color, iconValue}) =>{
+const SmallCard = ({title, firstLabel, secondLabel, icon, color,tertiaryLabel,firstChildren,secondChildren, tertiaryChildren}) =>{
     const classes = useStyles({color:color});
     return (
         <Paper elevation={3} className={classes.smallCard}>
             <Typography variant="h4" paragraph>{title}</Typography>
-            <Box display = "flex" alignItems = "center"  mt={4} mb={2}>
+            <Box display = "flex" alignItems = "center" justifyContent="space-between" mt={6} flexWrap="wrap">
                 <Box mr={4}>
                     <Typography variant="subtitle2">{firstLabel}</Typography>
-                    <Box display = "flex" alignItems = "center">
-                        {iconValue}
-                        <Box m={1}/>
-                        <Typography variant="h6" color="secondary">{firstValue}</Typography>
+                    <Box display="flex" flexDirection="column">
+                        {firstChildren}
                     </Box>
                 </Box>
-                {secondValue &&
+                {secondChildren &&
                     <Box>
                         <Typography variant="subtitle2">{secondLabel}</Typography>
-                        <Box display = "flex" alignItems = "center">
-                            {iconValue}
-                            <Box mr={1}/>
-                            <Typography variant="h6" color="secondary">{secondValue}</Typography>
-                        </Box>
+                        {secondChildren}
                     </Box>
+                }
+                {tertiaryChildren &&
+                <Box>
+                    <Typography variant="subtitle2">{tertiaryLabel}</Typography>
+                    {tertiaryChildren}
+                </Box>
                 }
             </Box>
             <Box className={classes.iconStyle}>

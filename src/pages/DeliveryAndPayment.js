@@ -8,7 +8,6 @@ import ShoppingBasketItem from "../components/Restaurants/ShoppingBasket/Shoppin
 import {useDispatch, useSelector} from "react-redux";
 import {countMinTimeToPrepare, history, personalDataInitialValues, renderBastekProducts} from "../helpers/_helpers";
 import {routes} from "../config/routes";
-import {authorization} from "../redux/actions/auth";
 import PersonalDataForm from "../components/PersonalDataForm";
 import clsx from "clsx";
 import DeliveryAndPaymentWrapper from "../components/Restaurants/DeliveryAndPaymentWrapper";
@@ -55,7 +54,7 @@ const DeliveryAndPayment = () =>{
     useEffect(()=>{
         dispatch(getPersonalDataToPayment(userData));
         dispatch(getOrdersToPayment(basket.basket));
-    },[userData])
+    },[userData,basket.basket,dispatch])
 
     const handleToggleUpdatePersonalData = () =>{
         setUpdatePersonalData(!updatePersonalData);

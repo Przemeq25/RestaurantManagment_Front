@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {fade, makeStyles} from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Navbar from "../Navbar";
-import {Box, Button, Container, ButtonGroup, Typography, Dialog, DialogTitle, DialogContent,Paper,Divider,TextField,Slide} from "@material-ui/core";
+import {Box, Button, Container, ButtonGroup, Typography,Slide} from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating/Rating";
 import {NavLink} from "react-router-dom";
 import {routes} from "../../config/routes";
@@ -100,11 +100,11 @@ const SingleRestaurantWrapper = ({children,match}) =>{
                 setIsLoading(false);
                 setRestaurant(res.data)
             })
-            .catch(err=>{
+            .catch(()=>{
                 setIsLoading(false);
-                console.log(err)
             })
-    },[]);
+        return ()=>setIsLoading(false);
+    },[match.params.restaurantId]);
 
     const {name,rate,category,image,id} = restaurant;
     return(
@@ -129,6 +129,7 @@ const SingleRestaurantWrapper = ({children,match}) =>{
                 <Box mt={4}>
                     <ButtonGroup variant="text" color="primary" >
                         <Button component={NavLink} to={`${routes.SINGLERESTAURANTMENU}/${id}`} activeClassName={classes.activeButton} >Menu</Button>
+                        <Button  component={NavLink} to={`${routes.SINGLERESTAURANTRESERVATION}/${id}`} activeClassName={classes.activeButton} >Rezerwacje</Button>
                         <Button component={NavLink} to={`${routes.SINGLERESTAURANTCONTACT}/${id}`} activeClassName={classes.activeButton}>Kontakt</Button>
                     </ButtonGroup>
                 </Box>

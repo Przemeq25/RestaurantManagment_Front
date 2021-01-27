@@ -57,10 +57,10 @@ const OpinionDialog = ({restaurantId,isOpinionsDialogOpen,handleToggleOpinionsDi
                 })
         }
         isOpinionsDialogOpen && getOpinions();
-    },[isOpinionsDialogOpen]);
+    },[isOpinionsDialogOpen,restaurantId]);
 
     const handleChangeOpinionValue = (e) =>{
-        setOpinionValue(e.target.value)
+        setOpinionValue(Number(e.target.value))
     }
     const handleChangeComment = (e) =>{
         setComment(e.target.value)

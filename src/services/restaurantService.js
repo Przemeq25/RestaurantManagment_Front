@@ -172,6 +172,51 @@ const submitOpinionOfRestaurant = (restaurantId,opinion) =>{
         }
     })
 }
+const addTablesToRestaurant = (restaurantId, tablesArray) =>{
+    return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantId}/tables`,{
+        tables:tablesArray
+    },{
+        headers:{
+            Authorization:`bearer ${ localStorage.getItem('access_token')}`
+        }
+    })
+}
+const getTablesForRestaurant = (restaurantId) =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantId}/tables`,{
+        headers: {
+            Authorization: `bearer ${localStorage.getItem('access_token')}`
+        }
+    });
+}
+
+const checkIfReservationAvailable = (restaurantId, searchingValues) =>{
+    return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantId}/reservations/status`,searchingValues,{
+        headers:{
+            Authorization:`bearer ${ localStorage.getItem('access_token')}`
+        }
+    })
+}
+const submitReservations = (restaurantId, reservationData) =>{
+    return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantId}/reservations`,reservationData,{
+        headers:{
+            Authorization:`bearer ${ localStorage.getItem('access_token')}`
+        }
+    })
+}
+const getReservationsForRestaurant = (restaurantId)=>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantId}/reservations`,{
+        headers: {
+            Authorization: `bearer ${localStorage.getItem('access_token')}`
+        }
+    });
+}
+const getMyReservations = () =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/my-reservations`,{
+        headers: {
+            Authorization: `bearer ${localStorage.getItem('access_token')}`
+        }
+    });
+}
 
 
 export const restaurantService ={
@@ -193,5 +238,11 @@ export const restaurantService ={
     deletePayment,
     getMenuCatogory,
     getRestaurantOpinions,
-    submitOpinionOfRestaurant
+    submitOpinionOfRestaurant,
+    addTablesToRestaurant,
+    getTablesForRestaurant,
+    checkIfReservationAvailable,
+    getReservationsForRestaurant,
+    submitReservations,
+    getMyReservations
 }

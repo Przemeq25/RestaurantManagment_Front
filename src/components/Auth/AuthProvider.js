@@ -17,6 +17,7 @@ const AuthProvider = ({children}) =>{
     const workersError = useSelector(state=>state.workers.error);
     const userType = useSelector(state=>state.auth.userType);
     const ordersError = useSelector(state=>state.orders.error);
+    const tablesError = useSelector(state=>state.tables.error);
     const [isLoading,setIsLoading] = useState(true);
 
     useEffect(()=>{
@@ -34,12 +35,12 @@ const AuthProvider = ({children}) =>{
         }
         checkAuth();
         return () => setIsLoading(true);
-    },[]);
+    },[dispatch,userType.length]);
 
 
-    if((authError || restaurantError || mealError || workersError || ordersError) === 500){
+    if((authError || restaurantError || mealError || workersError || ordersError || tablesError) === 500){
         return <Page500/>
-    }else if((authError || restaurantError || mealError || workersError || ordersError) === 404){
+    }else if((authError || restaurantError || mealError || workersError || ordersError|| tablesError) === 404){
         return <Page404/>
     }
 

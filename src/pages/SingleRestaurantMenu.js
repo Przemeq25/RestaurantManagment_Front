@@ -74,7 +74,7 @@ const SingleRestaurantMenu = ({restaurant,location,match}) =>{
                 .catch(()=>setMenuCategory([]))
         }
         getCategories();
-    },[]);
+    },[match.params.restaurantId]);
 
 
     const handleToggleFiltersDialog = () =>{

@@ -31,7 +31,7 @@ const RegisterConfirmation = ({location}) =>{
         ) : (
             history.push(routes.LOGIN))
 
-    },[])
+    },[dispatch,location.search])
 
     if(error === 500){
         return <Page500/>

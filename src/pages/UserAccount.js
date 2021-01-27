@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Box, Button, Container, Paper, Typography, useTheme} from "@material-ui/core";
 import Navbar from "../components/Navbar";
 import useMediaQuery from "@material-ui/core/useMediaQuery/useMediaQuery";
 import {makeStyles} from "@material-ui/core/styles";
 import PersonalDataForm from "../components/PersonalDataForm";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import CircularProgress from "../components/CircularProgress";
 import {routes} from "../config/routes";
 import DelayedRedirect from "../components/Auth/DelayedRedirect";
-import {authorization} from "../redux/actions/auth";
+
 
 const useStyles = makeStyles(theme=>({
     pageBackground:{

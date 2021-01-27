@@ -22,7 +22,7 @@ const PersonalDataForm = ({initial,update,handleClose, showUpdate}) =>{
     }
     return(
         <Formik
-            initialValues={initial}
+            initialValues={JSON.parse(JSON.stringify(initial).replace(/null/g, '""'))}
             validationSchema={personalDataValidationSchema}
             validateOnChange={false}
             validateOnBlur={false}

@@ -68,7 +68,7 @@ const MenuFilters = ({handleChangeFilters,query,categories}) =>{
             query.toTime && setPrepareTo(query.toTime);
             query.category && setCategory(query.category);
         }
-    },[]);
+    },[query]);
 
 
 
@@ -88,7 +88,6 @@ const MenuFilters = ({handleChangeFilters,query,categories}) =>{
             </Box>
             <Typography variant="body2" className={classes.filtersSubtitleStyle} paragraph>Kategoria:</Typography>
             <Select
-                value={'default'}
                 disableUnderline
                 MenuProps={{
                     anchorOrigin: {

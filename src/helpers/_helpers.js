@@ -302,5 +302,9 @@ export const orderStatusTypeTranslate = (status)=>{
             return "W trakcie"
     }
 }
-
+export const statsType = {
+    TODAY:"TODAY",
+    TOTAL:"TOTAL",
+    MONTH:"MONTH",
+}
 

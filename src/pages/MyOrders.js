@@ -1,10 +1,6 @@
 import React, {useEffect,useState} from 'react';
-import Navbar from "../components/Navbar";
 import {
     Box,
-    Container,
-    Typography,
-    useTheme,
     TableContainer,
     TableCell,
     TableRow,
@@ -14,7 +10,6 @@ import {
     TableHead,
     CircularProgress,
 } from "@material-ui/core";
-import useMediaQuery from "@material-ui/core/useMediaQuery/useMediaQuery";
 import {makeStyles} from "@material-ui/core/styles";
 import OrderTableRow from "../components/Orders&Reservations/OrderTableRow";
 import {useDispatch, useSelector} from "react-redux";
@@ -22,13 +17,10 @@ import {orderService} from "../services/ordersService";
 import {errorAlert} from "../redux/actions/alert";
 import Jumbotron from "../components/Jumbotron";
 import LayersClearIcon from '@material-ui/icons/LayersClear';
+import {ordersConstants} from "../redux/types";
+import UserPageWrapper from "../components/UserPageWrapper";
 
 const useStyle = makeStyles(theme=>({
-    pageBackground:{
-        backgroundColor:'rgba(248,248,248)',
-        minHeight:'100vh',
-        overflow:'hidden',
-    },
     paperStyle:{
         overflowX:'auto',
         boxShadow: "0 8px 40px -12px rgba(0,0,0,0.1)",
@@ -42,8 +34,6 @@ const useStyle = makeStyles(theme=>({
 }));
 
 const MyOrders = ({match}) =>{
-    const theme = useTheme();
-    const mdDown = useMediaQuery(theme.breakpoints.down('md'));
     const classes = useStyle();
     const dispatch = useDispatch();
     const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
@@ -59,7 +49,7 @@ const MyOrders = ({match}) =>{
                     setMyOrders(response.data.content)
                     setIsLoading(false);
                 })
-                .catch((err)=>{
+                .catch(()=>{
                     dispatch(errorAlert("Wystąpił błąd"))
                     setIsLoading(false);
                 })
@@ -67,20 +57,17 @@ const MyOrders = ({match}) =>{
         if(match.params.refresh){
             orderService.refreshOrders(match.params.refresh)
                 .then(()=>fetchData())
-                .catch(()=>dispatch(errorAlert("Wystąpił błąd! Odśwież stronę!")))
+                .catch(()=>{
+                    dispatch({type:ordersConstants.GET_ORDERS_ERROR, payload:404})
+                })
         }else{
             isLoggedIn && fetchData();
         }
 
-    },[isLoggedIn]);
+    },[isLoggedIn,dispatch,match.params.refresh]);
 
     return(
-        <Box className={classes.pageBackground}>
-            <Navbar/>
-            <Container>
-                <Box mt={mdDown ? 2 : 5} mb={mdDown ? 2 : 5}>
-                    <Typography variant="h3" color="secondary">Twoje zamówienia</Typography>
-                </Box>
+            <UserPageWrapper title="Twoje zamówienia">
                 <TableContainer component={Paper} className={classes.paperStyle} >
                     <Table>
                         <TableHead>
@@ -113,8 +100,7 @@ const MyOrders = ({match}) =>{
                         )
                     }
                 </TableContainer>
-            </Container>
-        </Box>
+            </UserPageWrapper>
     )
 }
 export default MyOrders;

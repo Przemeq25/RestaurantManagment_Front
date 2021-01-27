@@ -112,7 +112,7 @@ const Orders = ({match}) =>{
             dispatch(getMenu(restaurantID));
         }
         !menu.length && fetchMenu()
-    },[]);
+    },[dispatch, menu.length, restaurantID]);
 
     const handleChange = (event, newValue) => {
         dispatch(switchOrderStatus(newValue));
