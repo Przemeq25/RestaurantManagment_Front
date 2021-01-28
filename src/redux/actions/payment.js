@@ -51,6 +51,7 @@ export const submitOrder = (order) =>{
                                         .then((response)=>{
                                             window.open(response.data.payUUrl, '_blank');
                                         })
+                                        .catch(()=>dispatch(errorAlert("Płatność online nie jest w tej chwili możliwa")))
                                 },2000)
                             }
                         })

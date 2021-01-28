@@ -117,3 +117,6 @@ export const submitPersonalOrder = (order,restaurantID) =>{
 export const changeOrderComment = (comment)=>{
     return dispatch=>dispatch({type:ordersConstants.CHANGE_ORDER_COMMENT, payload:comment})
 }
+export const toggleAddOrderMenu = () =>{
+    return dispatch=>dispatch({type:ordersConstants.TOGGLE_ADD_ORDER_MENU})
+}

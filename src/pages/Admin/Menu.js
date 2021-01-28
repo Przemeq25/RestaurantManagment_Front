@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {Fab, Typography, Box, CircularProgress, Backdrop, Paper} from "@material-ui/core";
+import {Fab, Typography, Box, CircularProgress, Backdrop, Paper, Container} from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import {makeStyles} from "@material-ui/core/styles";
 import AddMenu from "../../components/Admin/Menu/AddMenu";
@@ -29,7 +29,6 @@ const useStyles = makeStyles(theme=>({
         padding:`${theme.spacing(1)}px ${theme.spacing(2)}px` ,
         borderRadius:theme.spacing(2),
         margin:`${theme.spacing(3)}px 0`,
-        marginRight:theme.spacing(3),
         backgroundColor:theme.palette.secondary.dark,
     }
 }));
@@ -68,19 +67,20 @@ const Menu = ({match}) =>{
     }
     return (
         <>
-                <AddMenu
-                    menuIsOpen = {menuIsOpen}
-                    handleCloseDrawer={handleCloseDrawer}
-                    handleSubmitForm={editedMeal ? handleEditMeal : handleAddMeal}
-                    handleDeleteMeal={handleDeleteMeal}
-                    isEditRequesting={isEditRequesting}
-                    isAddRequesting={isAddRequesting}
-                    menuInitialValues={editedMeal ? editedMeal : menuInitialValues}
-                    isEditing={Boolean(editedMeal)}
-                    isDeleteRequesting={isDeleteRequesting}
-                />
+            <AddMenu
+                menuIsOpen = {menuIsOpen}
+                handleCloseDrawer={handleCloseDrawer}
+                handleSubmitForm={editedMeal ? handleEditMeal : handleAddMeal}
+                handleDeleteMeal={handleDeleteMeal}
+                isEditRequesting={isEditRequesting}
+                isAddRequesting={isAddRequesting}
+                menuInitialValues={editedMeal ? editedMeal : menuInitialValues}
+                isEditing={Boolean(editedMeal)}
+                isDeleteRequesting={isDeleteRequesting}
+            />
             <Typography variant="h3">Menu:</Typography>
             <Typography variant="subtitle2" paragraph >Zarządzaj menu swojej restauracji!</Typography>
+            <Container>
             <Box className = {classes.menuStyle}>
                 {isRequesting ? (
                         <Backdrop className={classes.backdrop} open={isRequesting} invisible>
@@ -104,6 +104,7 @@ const Menu = ({match}) =>{
                     )
                 }
             </Box>
+            </Container>
             {ownerPermision(role) &&
                 <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleOpenDrawer} variant="extended"
                      size="small">

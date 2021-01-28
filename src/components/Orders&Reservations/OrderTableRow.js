@@ -29,6 +29,8 @@ import AppLogo from "../AppLogo";
 import {makeStyles} from "@material-ui/core/styles";
 import {routes} from "../../config/routes";
 import {orderService} from "../../services/ordersService";
+import {errorAlert} from "../../redux/actions/alert";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles(theme=>({
     typographyHidden:{
@@ -43,6 +45,7 @@ const useStyles = makeStyles(theme=>({
 const OrderTableRow = ({row}) =>{
     const classes = useStyles();
     const [open, setOpen] = useState(false);
+    const dispatch = useDispatch();
     return (
         <>
             <TableRow hover onClick={() => setOpen(!open)}>
@@ -131,6 +134,7 @@ const OrderTableRow = ({row}) =>{
                                                         .then((response)=>{
                                                             window.open(response.data.payUUrl, '_blank');
                                                         })
+                                                        .catch(()=>dispatch(errorAlert("Płatnośc online jest w tej chwili niemożliwa")))
                                                 }}}
                                         />
                                         <Box mb={2}/>

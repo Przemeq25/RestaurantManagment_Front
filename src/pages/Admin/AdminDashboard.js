@@ -124,10 +124,10 @@ const AdminDashboard = ({match}) =>{
             ):(
                 <>
                     <AddRestaurantStepper isDialogOpen={isDialogOpen} setDialogOpen={handleToggleDialog} firstRegister={Boolean(userType && userType.length <= 0)}/>
-                    <Grid container spacing={2} alignItems="flex-start">
+                    <Grid container spacing={2} alignItems="flex-start" justify="center">
                         {restaurants.length ? restaurants.map(restaurant=>(
                             <Grow in = {Boolean(restaurants.length > 0)} key={restaurant.id}>
-                            <Grid container item xs={12} sm = {6} md = {6} lg = {4} xl = {3} key={restaurant.id}>
+                            <Grid container item xs={12} sm = {6} md = {6} lg = {4} xl = {3} key={restaurant.id} >
                                 <Card className={classes.card}>
                                     <CardActionArea onClick={()=>{
                                         const userRole = userType.find(role=>restaurant.id === role.id).role;

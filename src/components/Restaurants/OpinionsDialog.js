@@ -16,6 +16,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import OpinionsCard from "./OpinionsCard";
 import {useDispatch} from "react-redux";
 import {errorAlert} from "../../redux/actions/alert";
+import {checkIsLoggedIn} from "../../redux/actions/auth";
 
 const useStyles = makeStyles(theme=>({
     paperStyle:{
@@ -71,21 +72,26 @@ const OpinionDialog = ({restaurantId,isOpinionsDialogOpen,handleToggleOpinionsDi
     }
 
     const submitOpinion = () =>{
-        restaurantService.submitOpinionOfRestaurant(restaurantId,{rate:Number(opinionValue), description:comment})
-            .then(res=>{
-                setOpinions([...opinions,res.data]);
-                clearForm()
+        checkIsLoggedIn(dispatch)
+            .then(()=>{
+                restaurantService.submitOpinionOfRestaurant(restaurantId,{rate:Number(opinionValue), description:comment})
+                    .then(res=>{
+                        setOpinions([...opinions,res.data]);
+                        clearForm()
+                    })
+                    .catch((err)=>{
+                        if(err.response && err.response.status === 401){
+                            dispatch(errorAlert("Zaloguj sie by móc dodać opinię!"))
+                        }else if(err.response && err.response.status === 409){
+                            dispatch(errorAlert("Dodałeś już opinię o tej restauracji!"))
+                            clearForm()
+                        }else{
+                            dispatch(errorAlert("Nie udało się dodać opinii! Spróbuj ponownie"))
+                        }
+                    })
             })
-            .catch((err)=>{
-                if(err.response && err.response.status === 401){
-                    dispatch(errorAlert("Zaloguj sie by móc dodać opinię!"))
-                }else if(err.response && err.response.status === 409){
-                    dispatch(errorAlert("Dodałeś już opinię o tej restauracji!"))
-                    clearForm()
-                }else{
-                    dispatch(errorAlert("Nie udało się dodać opinii! Spróbuj ponownie"))
-                }
-            })
+            .catch(()=> dispatch(errorAlert("By dodać opinię musisz być zalogowany")))
+
     }
     return(
         <Dialog
@@ -122,7 +128,9 @@ const OpinionDialog = ({restaurantId,isOpinionsDialogOpen,handleToggleOpinionsDi
                         <CircularProgress color="secondary"/>
                         ):(
                             opinions.length ? (
-                                opinions.map(opinion=>(<OpinionsCard comment={opinion.description} opinionValue={opinion.rate}/>))
+                                opinions.map((opinion,index)=>(
+                                    <OpinionsCard key = {index} comment={opinion.description} opinionValue={opinion.rate}/>)
+                                )
                             ) : (
                                     <Typography variant="h4" color="secondary" paragraph> Brak opini na temat tej restauracji!</Typography>
                                 )

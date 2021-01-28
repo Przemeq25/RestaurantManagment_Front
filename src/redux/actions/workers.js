@@ -26,14 +26,15 @@ export const addWorker = (email,restaurantID) =>{
         dispatch(request());
         restaurantService.addWorker(email,restaurantID)
             .then(response=>{
-                dispatch(successAlert(`Wysłano zaproszenie na email : ${email}`))
+                dispatch(successAlert(`Pomyślnie dodano pracownika`))
                 dispatch(success(response.data))
             })
             .catch((errorMessage)=>{
                 if(errorMessage.response && errorMessage.response.status === 500) {
                     dispatch(error(500))
                 }else{
-                    dispatch(errorAlert("Wystąpił błąd podczas dodawania pracownika, spróbuj ponownie!"))
+                    dispatch(error("Nie istnieje użytkownik z takim adresem email!"));
+                    dispatch(errorAlert("Nie istnieje użytkownik z takim adresem email!"))
                 }
             })
     };
@@ -54,6 +55,7 @@ export const deleteWorker = (workerID,restaurantID)=>{
                 if(errorMessage.response && errorMessage.response.status === 500) {
                     dispatch(error(500))
                 }else{
+                    dispatch(error("Wystąpił błąd podczas usuwania pracownika, spróbuj ponownie!"))
                     dispatch(errorAlert("Wystąpił błąd podczas usuwania pracownika, spróbuj ponownie!"))
                 }
             })

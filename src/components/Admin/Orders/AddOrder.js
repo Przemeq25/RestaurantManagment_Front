@@ -57,7 +57,7 @@ const useStyles = makeStyles(theme=>({
         backgroundColor: theme.palette.background.paper,
         position: 'relative',
         overflow: 'auto',
-        maxHeight: 300,
+        maxHeight: 350,
         minHeight:200,
         marginBottom:theme.spacing(2),
     },
@@ -90,6 +90,12 @@ const AddOrder =({addOrderIsOpen,handleToggleAddOrder,menu,restaurantId})=>{
     const currentOrder = useSelector(state=>state.orders.currentOrder);
     const isRequesting = useSelector(state=>state.orders.isRequesting);
     const [comment,setComment] = useState('');
+
+    const handleAddOrder = () =>{
+        dispatch(submitPersonalOrder(currentOrder, restaurantId));
+        setComment('');
+    }
+
     return(
         <>
             <Drawer open={addOrderIsOpen} anchor="right" variant="persistent" classes={{paper:classes.drawerStyle}}>
@@ -130,9 +136,9 @@ const AddOrder =({addOrderIsOpen,handleToggleAddOrder,menu,restaurantId})=>{
                     ))}
                 </List>
                 <Typography variant='h5'>Zamówienie:</Typography>
-                <List className={classes.listStyle} disablePadding>
+                <List  disablePadding>
                     {currentOrder.meals.length ? currentOrder.meals.map(meal=>(
-                        <ListItem disableGutters>
+                        <ListItem disableGutters key={meal.id}>
                             <ListItemText style={{width:'100%'}}>
                                 <Typography variant="body2" className={classes.typographyHidden}>{meal.name}</Typography>
                             </ListItemText>
@@ -195,9 +201,9 @@ const AddOrder =({addOrderIsOpen,handleToggleAddOrder,menu,restaurantId})=>{
                         label="Dodaj"
                         color="secondary"
                         loading={isRequesting}
-                        onClick={()=>{
+                        onClick={()=> {
                             currentOrder.meals.length ?
-                                dispatch(submitPersonalOrder(currentOrder,restaurantId))
+                                handleAddOrder()
                                 :
                                 dispatch(errorAlert("Utwórz zamówienie!"))
                         }}

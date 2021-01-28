@@ -4,7 +4,7 @@ import {
     Fab,
     Typography,
     Backdrop, CircularProgress, Box,
-    Button
+    Button, Container
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import AddTables from "../../components/Admin/Reservation/AddTables";
@@ -15,6 +15,7 @@ import TableRow from '../../components/Admin/Reservation/TableRow';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import ReservationDialog from "../../components/Admin/Reservation/ReservationDialog";
 import {toggleReservationDialog} from "../../redux/actions/reservations";
+import {ownerPermision} from "../../helpers/_helpers";
 
 const useStyles = makeStyles(theme=>({
     fab: {
@@ -26,7 +27,7 @@ const useStyles = makeStyles(theme=>({
 
 const TablesAndReservation = ({match}) =>{
     const classes = useStyles();
-
+    const role = useSelector(state=>state.restaurant.role);
     const dispatch = useDispatch();
     const isFetching = useSelector(state=>state.tables.isFetching);
     const tables = useSelector(state=>state.tables.tables);
@@ -58,28 +59,35 @@ const TablesAndReservation = ({match}) =>{
                     <CircularProgress color="inherit" />
                 </Backdrop>
             ):(
-                tables.length ?
-                    Object.values(tables.reduce(
-                        (acc, current)=> ({
-                            ...acc,
-                            [current['numberOfSeats']] :[
-                                ...(acc[current['numberOfSeats']] || []),current]
-                        })
-                        ,{})
-                    ).map(table=>(
-                            <TableRow table={table} key ={table[0].id} restaurantId={match.params.restaurantId}/>
+                <Container>
+                    {
+                    tables.length ? (
+                        Object.values(tables.reduce(
+                            (acc, current)=> ({
+                                ...acc,
+                                [current['numberOfSeats']] :[
+                                    ...(acc[current['numberOfSeats']] || []),current]
+                            })
+                            ,{})).map(table=>(
+                                        <TableRow table={table} key ={table[0].id} restaurantId={match.params.restaurantId}/>
+                                    ))
+                        ):(
+                            <Jumbotron text ="Brak stolików w restauracji" buttonText="Dodaj stoliki" icon={<AssignmentIcon fontSize="inherit"/>} handleClick={()=>dispatch(toggleAddTablesDrawer())}/>
                         )
-                    ):(
-                        <Jumbotron text ="Brak stolików w restauracji" buttonText="Dodaj stoliki" icon={<AssignmentIcon fontSize="inherit"/>} handleClick={()=>dispatch(toggleAddTablesDrawer())}/>
-                    )
+                    }
+                </Container>
             )
             }
-            <Fab color="primary" aria-label="add" className={classes.fab} onClick={()=>dispatch(toggleAddTablesDrawer())} variant="extended" size="small">
-                <AddIcon/>
-                Dodaj stoliki
-            </Fab>
-            <AddTables restaurantId={match.params.restaurantId}/>
+            {ownerPermision(role) &&
+                <>
+                    <Fab color="primary" aria-label="add" className={classes.fab} onClick={()=>dispatch(toggleAddTablesDrawer())} variant="extended" size="small">
+                    <AddIcon/>
+                    Dodaj stoliki
+                        </Fab>
+                    <AddTables restaurantId={match.params.restaurantId}/>
+                </>
+            }
         </>
     )
-}
+};
 export default TablesAndReservation;
