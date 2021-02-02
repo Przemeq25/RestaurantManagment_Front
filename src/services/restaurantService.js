@@ -95,11 +95,11 @@ const deleteWorker = (restaurantID, workerID)=>{
 const addPicture = async(picture) =>{
     const fd = new FormData();
     fd.append("file", picture);
-    fd.append("tags", `przemeq`);
-    fd.append("upload_preset", `itsfqhtq`);
-    fd.append("api_key", "247926998118615");
+    fd.append("tags", `dyxioqimj`);
+    fd.append("upload_preset", `yh2ipl5c`);
+    fd.append("api_key", "249119979887559");
     fd.append("timestamp", (Date.now() / 1000) || 0);
-    return await axios.post("https://api.cloudinary.com/v1_1/przemeq25/image/upload", fd);
+    return await axios.post("https://api.cloudinary.com/v1_1/dyxioqimj/image/upload", fd);
 }
 
 const getAllRestaurants = ({page,name,category,city,open,rate,sort}) =>{
@@ -172,6 +172,51 @@ const submitOpinionOfRestaurant = (restaurantId,opinion) =>{
         }
     })
 }
+const addTablesToRestaurant = (restaurantId, tablesArray) =>{
+    return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantId}/tables`,{
+        tables:tablesArray
+    },{
+        headers:{
+            Authorization:`bearer ${ localStorage.getItem('access_token')}`
+        }
+    })
+}
+const getTablesForRestaurant = (restaurantId) =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantId}/tables`,{
+        headers: {
+            Authorization: `bearer ${localStorage.getItem('access_token')}`
+        }
+    });
+}
+
+const checkIfReservationAvailable = (restaurantId, searchingValues) =>{
+    return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantId}/reservations/status`,searchingValues,{
+        headers:{
+            Authorization:`bearer ${ localStorage.getItem('access_token')}`
+        }
+    })
+}
+const submitReservations = (restaurantId, reservationData) =>{
+    return axios.post(`${appUrl}/restaurant-api/restaurants/${restaurantId}/reservations`,reservationData,{
+        headers:{
+            Authorization:`bearer ${ localStorage.getItem('access_token')}`
+        }
+    })
+}
+const getReservationsForRestaurant = (restaurantId)=>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/${restaurantId}/reservations`,{
+        headers: {
+            Authorization: `bearer ${localStorage.getItem('access_token')}`
+        }
+    });
+}
+const getMyReservations = () =>{
+    return axios.get(`${appUrl}/restaurant-api/restaurants/my-reservations`,{
+        headers: {
+            Authorization: `bearer ${localStorage.getItem('access_token')}`
+        }
+    });
+}
 
 
 export const restaurantService ={
@@ -193,5 +238,11 @@ export const restaurantService ={
     deletePayment,
     getMenuCatogory,
     getRestaurantOpinions,
-    submitOpinionOfRestaurant
+    submitOpinionOfRestaurant,
+    addTablesToRestaurant,
+    getTablesForRestaurant,
+    checkIfReservationAvailable,
+    getReservationsForRestaurant,
+    submitReservations,
+    getMyReservations
 }

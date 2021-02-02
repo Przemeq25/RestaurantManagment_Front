@@ -194,14 +194,6 @@ const AddMenu =({menuIsOpen,handleCloseDrawer,handleSubmitForm,isAddRequesting,i
                                     />
 
                                     <Box mt={2} display="flex" justifyContent ="space-between" alignItems = "center" >
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            size="small"
-                                            onClick={resetForm}
-                                        >
-                                            Reset
-                                        </Button>
                                         <ProgressButton
                                             color="secondary"
                                             variant = "contained"

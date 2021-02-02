@@ -97,17 +97,11 @@ const AdminDashboard = ({match}) =>{
     };
 
     useEffect(()=>{
-        userType && userType.length <= 0 && dispatch(openAddRestaurantStepper());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[userType,dispatch]);
-
-    useEffect(()=>{
         if(!restaurants.length){
             for(let i = 0; i< userType.length; i++){
                 dispatch(getRestaurantForEmploee(userType[i].id));
             }
         }
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[dispatch])
 
@@ -130,10 +124,10 @@ const AdminDashboard = ({match}) =>{
             ):(
                 <>
                     <AddRestaurantStepper isDialogOpen={isDialogOpen} setDialogOpen={handleToggleDialog} firstRegister={Boolean(userType && userType.length <= 0)}/>
-                    <Grid container spacing={2} alignItems="flex-start">
+                    <Grid container spacing={2} alignItems="flex-start" justify="center">
                         {restaurants.length ? restaurants.map(restaurant=>(
                             <Grow in = {Boolean(restaurants.length > 0)} key={restaurant.id}>
-                            <Grid container item xs={12} sm = {6} md = {6} lg = {4} xl = {3} key={restaurant.id}>
+                            <Grid container item xs={12} sm = {6} md = {6} lg = {4} xl = {3} key={restaurant.id} >
                                 <Card className={classes.card}>
                                     <CardActionArea onClick={()=>{
                                         const userRole = userType.find(role=>restaurant.id === role.id).role;

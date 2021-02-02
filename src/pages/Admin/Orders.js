@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {
     BottomNavigation,
     BottomNavigationAction,
@@ -18,7 +18,7 @@ import AddIcon from "@material-ui/icons/Add";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import {useDispatch, useSelector} from "react-redux";
 import {orderStatus} from "../../helpers/_helpers";
-import {getMenu, getOrders, switchOrderStatus} from "../../redux/actions/orders";
+import {getMenu, getOrders, switchOrderStatus, toggleAddOrderMenu} from "../../redux/actions/orders";
 import Jumbotron from "../../components/Jumbotron";
 import AddOrder from "../../components/Admin/Orders/AddOrder";
 
@@ -90,7 +90,7 @@ const Orders = ({match}) =>{
     const isFetching = useSelector(state=>state.orders.isFetching);
     const currentOrderStatus = useSelector(state=>state.orders.orderStatus);
     const orders = useSelector(state=>state.orders.orders);
-    const [addOrderIsOpen, setAddOrderIsOpen] = useState(false);
+    const addOrderIsOpen = useSelector(state=>state.orders.addOrderIsOpen);
     const menu = useSelector(state=>state.orders.menu);
 
     useEffect(()=>{
@@ -118,7 +118,7 @@ const Orders = ({match}) =>{
         dispatch(switchOrderStatus(newValue));
     };
     const handleToggleAddOrder = () =>{
-        setAddOrderIsOpen(!addOrderIsOpen);
+        dispatch(toggleAddOrderMenu());
     }
 
     return(

@@ -15,6 +15,7 @@ const initialState = {
         comment:"",
     },
     error:null,
+    addOrderIsOpen:false,
 }
 
 export const ordersReducer = (state=initialState, action) =>{
@@ -170,12 +171,19 @@ export const ordersReducer = (state=initialState, action) =>{
                 isRequesting:false,
                 orders: [...state.orders, {...state.currentOrder, id:action.payload.orderId, price:state.currentOrder.totalPrice, isAllMealsFinished:false, meals:mealsInNewOrder, orderStatus:orderStatus.IN_PROGRESS}],
                 currentOrder: initialState.currentOrder,
+                addOrderIsOpen: false,
             }
         }
         case ordersConstants.CHANGE_ORDER_COMMENT:{
             return {
                 ...state,
                 currentOrder: {...state.currentOrder,comment:action.payload}
+            }
+        }
+        case ordersConstants.TOGGLE_ADD_ORDER_MENU:{
+            return{
+                ...state,
+                addOrderIsOpen: !state.addOrderIsOpen,
             }
         }
 

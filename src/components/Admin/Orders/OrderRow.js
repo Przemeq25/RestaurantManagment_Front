@@ -111,7 +111,7 @@ const OrderRow = ({restaurantId,orderIndex,time,meals,price,...order}) =>{
                             <Grid container item xs = {5} sm = {3} justify="flex-end" alignItems="center">
                                 <PaymentIcon color="primary" fontSize="small"/>
                                 <Box ml={1} mr={1}>
-                                <Typography variant="body1" style={{fontWeight:500}}> {price} zł</Typography>
+                                <Typography variant="body1" style={{fontWeight:500}}> {price.toFixed(2)} zł</Typography>
                                 </Box>
                                 <Box>
                                     <Typography variant="h5"  color="secondary">{paymentTypeTranslate(order.paymentMethod)}</Typography>
